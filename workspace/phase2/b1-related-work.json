@@ -1,0 +1,546 @@
+{
+  "agent_id": "b1-related-work-analyst",
+  "phase": 2,
+  "status": "complete",
+  "timestamp": "2026-02-11T14:00:00Z",
+  "summary": "Systematic comparison of Smart Query against 4 categories of related work (NL2SQL: 10 papers, OBDA: 5 papers, LLM-MAS: 9 papers, KG+LLM: 6 papers) plus 5 cognitive architecture papers. Identified 8 unique contributions via gap analysis, 5 strongest competitors (MAC-SQL, DIN-SQL, Ontop, MetaGPT, Think-on-Graph), and drafted Related Work outline with 5 sections covering cross-cutting themes.",
+  "data": {
+    "comparison_matrix": {
+      "categories": [
+        {
+          "name": "NL2SQL Systems",
+          "papers": [
+            {"title": "DIN-SQL: Decomposed In-Context Learning of Text-to-SQL with Self-Correction", "authors": "Pourreza, M. and Rafiei, D.", "year": 2023, "venue": "NeurIPS 2023", "key_contribution": "Decomposes text-to-SQL into subtasks (schema linking, query classification, SQL generation, self-correction) via in-context learning with GPT-4"},
+            {"title": "DAIL-SQL: Efficient Few-Shot Text-to-SQL", "authors": "Gao, D., Wang, H., Li, Y., et al.", "year": 2024, "venue": "VLDB 2024", "key_contribution": "Systematic study of question representation and example selection for few-shot text-to-SQL"},
+            {"title": "C3: Zero-shot Text-to-SQL with ChatGPT", "authors": "Dong, X., Zhang, C., Ge, Y., et al.", "year": 2023, "venue": "arXiv", "key_contribution": "Clear prompting + calibration hints + consistency output for zero-shot SQL generation"},
+            {"title": "MAC-SQL: Multi-Agent Collaborative Framework for Text-to-SQL", "authors": "Wang, B., Ren, C., Yang, J., et al.", "year": 2024, "venue": "ACL 2024 Findings", "key_contribution": "Multi-agent framework with Selector, Decomposer, and Refiner agents for text-to-SQL"},
+            {"title": "CHESS: Contextual Harnessing for Efficient SQL Synthesis", "authors": "Talaei, S., Pourreza, M., Chang, Y., et al.", "year": 2024, "venue": "arXiv", "key_contribution": "Four-phase pipeline emphasizing contextual retrieval of database content for SQL generation"},
+            {"title": "RESDSQL: Decoupling Schema Linking and Skeleton Parsing", "authors": "Li, H., Zhang, J., Li, C., and Chen, H.", "year": 2023, "venue": "AAAI 2023", "key_contribution": "Ranking-enhanced schema linking decoupled from skeleton-aware SQL generation"},
+            {"title": "Spider: Large-Scale Text-to-SQL Benchmark", "authors": "Yu, T., Zhang, R., Yang, K., et al.", "year": 2018, "venue": "EMNLP 2018", "key_contribution": "Foundational cross-database text-to-SQL benchmark with 200 databases"},
+            {"title": "Bird: Big Bench for Large-Scale Database Grounded Text-to-SQL", "authors": "Li, J., Hui, B., Qu, G., et al.", "year": 2024, "venue": "NeurIPS 2024", "key_contribution": "Real-world benchmark with dirty values and external knowledge requirements"},
+            {"title": "SParC: Cross-Domain Semantic Parsing in Context", "authors": "Yu, T., Zhang, R., Yasunaga, M., et al.", "year": 2019, "venue": "ACL 2019", "key_contribution": "Multi-turn context-dependent text-to-SQL benchmark"},
+            {"title": "A Survey on Employing LLMs for Text-to-SQL Tasks", "authors": "Katsogiannis-Meimarakis, G. and Koutrika, G.", "year": 2023, "venue": "arXiv", "key_contribution": "Comprehensive survey identifying domain adaptation as key open challenge"}
+          ],
+          "smart_query_advantage": "Handles 35,000+ tables through ontology-guided navigation rather than brute-force schema encoding. Uses three-layer ontology as semantic mediator between business questions and physical schemas, enabling enterprise-scale operation that benchmark-focused systems cannot achieve.",
+          "smart_query_limitation": "Does not generate SQL directly from natural language; requires evidence pack as intermediate step. Not evaluated on standard benchmarks (Spider, Bird) making direct accuracy comparison impossible. Designed for single enterprise domain rather than cross-database generalization.",
+          "key_differences": [
+            "NL2SQL systems operate on raw database schemas; Smart Query navigates a structured ontology layer",
+            "NL2SQL systems target benchmark databases (5-200 tables); Smart Query targets enterprise scale (35,000+ tables)",
+            "NL2SQL systems produce SQL directly; Smart Query produces evidence packs that inform SQL generation",
+            "NL2SQL systems use statistical schema linking; Smart Query uses ontology-guided semantic navigation"
+          ],
+          "shared_approaches": [
+            "Task decomposition into specialized stages (DIN-SQL's 4 subtasks parallel Smart Query's 3 strategies)",
+            "Multi-agent collaboration for complex queries (MAC-SQL's 3 agents parallel Smart Query's 3 strategy agents)",
+            "Contextual retrieval to augment LLM reasoning (CHESS's context retrieval parallels Smart Query's hybrid retrieval)",
+            "Self-correction and validation mechanisms (DIN-SQL's self-correction parallels Smart Query's cross-validation adjudication)"
+          ]
+        },
+        {
+          "name": "Ontology-Based Data Access (OBDA)",
+          "papers": [
+            {"title": "Ontop: Answering SPARQL Queries over Relational Databases", "authors": "Calvanese, D., Cogrel, B., et al.", "year": 2017, "venue": "Semantic Web Journal", "key_contribution": "Leading open-source OBDA system using R2RML mappings for SPARQL-to-SQL translation"},
+            {"title": "Data Integration: A Theoretical Perspective", "authors": "Lenzerini, M.", "year": 2002, "venue": "PODS 2002", "key_contribution": "Foundational GAV/LAV framework for data integration through global schema mediation"},
+            {"title": "Linking Data to Ontologies: DL-LiteA", "authors": "Poggi, A., Lembo, D., et al.", "year": 2008, "venue": "Journal of Data Semantics", "key_contribution": "DL-Lite family enabling tractable OBDA with polynomial-time query answering"},
+            {"title": "Virtual Knowledge Graphs: Overview of Systems and Use Cases", "authors": "Xiao, G., Ding, L., et al.", "year": 2019, "venue": "Data Intelligence Journal", "key_contribution": "Overview of VKG systems providing unified access through ontology mappings without materialization"},
+            {"title": "Ontology-Based Access to Temporal Data with Ontop", "authors": "Calvanese, D., Kalayci, E.G., et al.", "year": 2019, "venue": "IJAMCS", "key_contribution": "Extension of OBDA to temporal data, revealing rigidity of formal mapping approaches"}
+          ],
+          "smart_query_advantage": "Replaces rigid SPARQL-to-SQL rewriting with LLM-based flexible reasoning over ontology structure. Handles ambiguous and incomplete queries through multi-strategy evidence collection rather than requiring complete formal mappings. Supports natural language input directly without requiring users to learn SPARQL.",
+          "smart_query_limitation": "Lacks the formal guarantees of traditional OBDA (completeness, soundness of query rewriting). LLM-based reasoning introduces non-determinism absent in formal OBDA systems. Cannot provide provably correct query translations as DL-Lite-based systems can.",
+          "key_differences": [
+            "Traditional OBDA requires formal query languages (SPARQL); Smart Query accepts natural language",
+            "OBDA uses rigid R2RML/DL-Lite mappings; Smart Query uses LLM-based flexible reasoning",
+            "OBDA provides formal correctness guarantees; Smart Query provides probabilistic evidence-based confidence",
+            "OBDA treats ontology as passive mapping layer; Smart Query treats ontology as active cognitive hub"
+          ],
+          "shared_approaches": [
+            "Ontology as mediator between user concepts and physical data (core OBDA principle retained)",
+            "Virtual access without data materialization (Smart Query queries Neo4j ontology, not materialized copies)",
+            "Global schema approach to data integration (three-layer ontology serves as global conceptual schema)",
+            "Separation of conceptual and physical layers (ontology abstracts over database implementation details)"
+          ]
+        },
+        {
+          "name": "LLM-Based Multi-Agent Systems (LLM-MAS)",
+          "papers": [
+            {"title": "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation", "authors": "Wu, Q., Bansal, G., et al.", "year": 2023, "venue": "arXiv (Microsoft Research)", "key_contribution": "Framework for multi-agent conversation with flexible communication patterns"},
+            {"title": "MetaGPT: Meta Programming for Multi-Agent Collaborative Framework", "authors": "Hong, S., Zhuge, M., et al.", "year": 2023, "venue": "ICLR 2024", "key_contribution": "SOP-based multi-agent workflow with role specialization for software development"},
+            {"title": "ChatDev: Communicative Agents for Software Development", "authors": "Qian, C., Cong, X., et al.", "year": 2023, "venue": "ACL 2024", "key_contribution": "Sequential chat chain paradigm with role-playing agent pairs"},
+            {"title": "CAMEL: Communicative Agents for Mind Exploration", "authors": "Li, G., Hammoud, H., et al.", "year": 2023, "venue": "NeurIPS 2023", "key_contribution": "Role-playing framework with inception prompting for cooperative agent behavior"},
+            {"title": "Improving Factuality through Multiagent Debate", "authors": "Du, Y., Li, S., et al.", "year": 2023, "venue": "ICML 2024", "key_contribution": "Multi-agent debate for improving factual accuracy through diverse perspectives"},
+            {"title": "The Rise and Potential of LLM-Based Agents: A Survey", "authors": "Xi, Z., Chen, W., et al.", "year": 2023, "venue": "arXiv", "key_contribution": "Comprehensive taxonomy of LLM agent architectures and collaboration patterns"},
+            {"title": "Voyager: Open-Ended Embodied Agent with LLMs", "authors": "Wang, G., Xie, Y., et al.", "year": 2023, "venue": "NeurIPS 2023", "key_contribution": "Skill library for lifelong learning in embodied agents"},
+            {"title": "Toolformer: Language Models Can Teach Themselves to Use Tools", "authors": "Schick, T., et al.", "year": 2023, "venue": "NeurIPS 2023", "key_contribution": "Self-supervised tool use learning for language models"},
+            {"title": "ReAct: Synergizing Reasoning and Acting in Language Models", "authors": "Yao, S., Zhao, J., et al.", "year": 2023, "venue": "ICLR 2023", "key_contribution": "Interleaved reasoning-action paradigm for grounded LLM decision-making"}
+          ],
+          "smart_query_advantage": "Introduces implicit context inheritance through shared conversation history (digital stigmergy) — a novel coordination mechanism not present in any existing MAS framework. Serial execution with cumulative semantic enrichment is formally justified via information theory. Evidence pack fusion provides structured cross-validation absent in debate or voting approaches.",
+          "smart_query_limitation": "Serial execution introduces latency overhead compared to parallel agent execution. Fixed three-strategy ordering may not be optimal for all query types. Implicit context inheritance depends on LLM's ability to extract relevant information from conversation history, which may degrade with very long contexts.",
+          "key_differences": [
+            "Existing MAS use explicit message passing (AutoGen) or shared pools (MetaGPT); Smart Query uses implicit context inheritance",
+            "Existing MAS target general tasks (coding, math); Smart Query targets domain-specific data querying with ontology",
+            "Existing MAS lack formal justification for execution ordering; Smart Query provides information-theoretic proof",
+            "Existing MAS use parallel debate or voting; Smart Query uses serial execution with cumulative enrichment"
+          ],
+          "shared_approaches": [
+            "Role specialization with dedicated agent capabilities (all MAS frameworks share this principle)",
+            "Tool use for external knowledge access (Voyager's skill library, Toolformer's API calls parallel MCP tools)",
+            "ReAct-style reasoning-action loops within each agent (Smart Query agents reason then invoke MCP tools)",
+            "Structured workflows for complex task decomposition (MetaGPT's SOPs parallel Smart Query's strategy ordering)"
+          ]
+        },
+        {
+          "name": "Knowledge Graph + LLM Integration (KG+LLM)",
+          "papers": [
+            {"title": "Unifying Large Language Models and Knowledge Graphs: A Roadmap", "authors": "Pan, S., Luo, L., et al.", "year": 2024, "venue": "IEEE TKDE 2024", "key_contribution": "Comprehensive roadmap for LLM-KG integration covering enhancement, construction, and synergy"},
+            {"title": "Think-on-Graph: Deep and Responsible Reasoning on Knowledge Graph", "authors": "Sun, J., Xu, C., et al.", "year": 2024, "venue": "ICLR 2024", "key_contribution": "LLM beam search on KG for multi-hop reasoning grounded in graph structure"},
+            {"title": "Graph RAG: From Local to Global Query-Focused Summarization", "authors": "Edge, D., Trinh, H., et al.", "year": 2024, "venue": "arXiv (Microsoft Research)", "key_contribution": "Hierarchical KG with community detection for local and global query answering"},
+            {"title": "RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", "authors": "Lewis, P., Perez, E., et al.", "year": 2020, "venue": "NeurIPS 2020", "key_contribution": "Foundational RAG paradigm combining parametric and non-parametric memory"},
+            {"title": "StructGPT: LLM Reasoning over Structured Data", "authors": "Jiang, J., Zhou, K., et al.", "year": 2023, "venue": "EMNLP 2023", "key_contribution": "Specialized interfaces for LLM reasoning over tables, KGs, and databases"},
+            {"title": "Knowledge Graph-Enhanced Large Language Models: A Survey", "authors": "Ren, J., Guo, J., and Zhang, Y.", "year": 2024, "venue": "arXiv", "key_contribution": "Survey of KG-LLM integration methods showing 25-60% hallucination reduction"}
+          ],
+          "smart_query_advantage": "Uses a purpose-built enterprise ontology (314K nodes, 623K relationships) as an active cognitive hub rather than a passive retrieval source. Multi-layer ontology with cross-layer associations enables three independent navigation strategies. Pre-computed indicator-field mappings and lineage relationships provide enterprise-specific capabilities absent in general KG+LLM approaches.",
+          "smart_query_limitation": "Ontology is domain-specific (banking) and requires significant construction effort (21-step ETL pipeline). Does not address general knowledge graph question answering. Cannot handle queries outside the ontology's coverage without graceful fallback to general LLM reasoning.",
+          "key_differences": [
+            "KG+LLM systems use general KGs (Wikidata, Freebase); Smart Query uses enterprise-specific ontology",
+            "KG+LLM systems treat KG as passive retrieval source; Smart Query treats ontology as active cognitive hub",
+            "KG+LLM systems use single retrieval strategy; Smart Query uses three independent navigation strategies",
+            "KG+LLM systems build KGs dynamically (GraphRAG) or use existing ones; Smart Query uses ETL-constructed ontology"
+          ],
+          "shared_approaches": [
+            "Graph-guided LLM reasoning (Think-on-Graph's beam search parallels Smart Query's path navigation)",
+            "Hierarchical knowledge organization (GraphRAG's community hierarchy parallels Smart Query's ontology layers)",
+            "Structured interfaces for KG access (StructGPT's interfaces parallel Smart Query's MCP tools)",
+            "Hybrid retrieval combining structural and semantic search (shared with RAG and GraphRAG approaches)"
+          ]
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "Schema Scale",
+          "smart_query": "35,000+ tables across 9 schemas with 83 table topics; ontology-guided navigation eliminates need to encode full schema",
+          "best_nl2sql": "Spider: 200 databases (avg <10 tables each); Bird: 95 databases (33.4 GB total). No system tested at 35K+ table scale",
+          "best_obda": "Ontop: demonstrated on databases with millions of rows but typically <100 tables per deployment",
+          "best_mas": "MAC-SQL: tested on Spider/Bird scale databases; no MAS framework addresses enterprise-scale schema navigation",
+          "best_kg_llm": "GraphRAG: scales to large document collections but not tested on enterprise database schemas"
+        },
+        {
+          "name": "Multi-Strategy Search",
+          "smart_query": "Three independent strategies (Indicator, Scenario, Term) exploring orthogonal knowledge dimensions with serial execution",
+          "best_nl2sql": "DIN-SQL: 4 sequential subtasks but single search strategy; MAC-SQL: 3 agents but single schema-based approach",
+          "best_obda": "Single strategy: formal query rewriting through ontology mappings",
+          "best_mas": "Multi-agent debate (Du et al.): multiple perspectives but same knowledge source; no orthogonal dimension separation",
+          "best_kg_llm": "Think-on-Graph: single beam search strategy over KG; no multi-strategy fusion"
+        },
+        {
+          "name": "Ontology Integration",
+          "smart_query": "Three-layer ontology (314K nodes, 623K relationships) as active cognitive hub with cross-layer associations",
+          "best_nl2sql": "No ontology integration; schema metadata used directly. CHESS uses database content retrieval but not structured ontology",
+          "best_obda": "Full ontology integration (Ontop, DL-Lite) but as passive mapping layer, not active cognitive component",
+          "best_mas": "No ontology integration in general MAS frameworks (AutoGen, MetaGPT, ChatDev)",
+          "best_kg_llm": "Think-on-Graph: uses general KG but not domain-specific ontology; GraphRAG: builds KG dynamically from text"
+        },
+        {
+          "name": "Serial Context Inheritance",
+          "smart_query": "Implicit context inheritance through shared conversation history (digital stigmergy); formally proven semantic cumulative effect",
+          "best_nl2sql": "DIN-SQL: sequential stages but explicit parameter passing between subtasks, not implicit context inheritance",
+          "best_obda": "Not applicable; single-pass query rewriting without iterative refinement",
+          "best_mas": "MetaGPT: shared message pool with subscription (explicit); ChatDev: sequential chat chains (explicit pairwise); no implicit inheritance",
+          "best_kg_llm": "Think-on-Graph: iterative graph exploration but single-agent, not multi-agent context inheritance"
+        },
+        {
+          "name": "Evidence-Based Verification",
+          "smart_query": "Cross-validation adjudication across 3 evidence packs with graded confidence (3-strategy=high, 2=medium-high, 1=cautious)",
+          "best_nl2sql": "DIN-SQL: self-correction module checks SQL syntax/execution; C3: consistency via multiple SQL candidates. Neither uses multi-perspective evidence fusion",
+          "best_obda": "Formal correctness guarantees through sound query rewriting (stronger than probabilistic but inflexible)",
+          "best_mas": "Multi-agent debate (Du et al.): iterative refinement through debate rounds; closest to evidence-based verification but lacks structured evidence packs",
+          "best_kg_llm": "No evidence-based verification in current KG+LLM approaches; single-path reasoning without cross-validation"
+        },
+        {
+          "name": "Domain Adaptation",
+          "smart_query": "Requires ontology construction (21-step ETL pipeline) but no model retraining; ontology independently updatable",
+          "best_nl2sql": "Few-shot prompting (DAIL-SQL): requires example selection per domain; fine-tuning (RESDSQL): requires labeled data per domain",
+          "best_obda": "Requires complete R2RML mapping specification per domain; formal but labor-intensive",
+          "best_mas": "General frameworks (AutoGen, MetaGPT): domain-agnostic but lack domain-specific knowledge integration",
+          "best_kg_llm": "GraphRAG: automatic KG construction from text; Think-on-Graph: requires existing KG per domain"
+        },
+        {
+          "name": "Isolated Table Filtering",
+          "smart_query": "Automated graph-theoretic detection via lineage heat analysis (in-degree + out-degree = 0 → isolated)",
+          "best_nl2sql": "No automated deprecated table detection in any NL2SQL system",
+          "best_obda": "No automated quality filtering; relies on manually curated ontology mappings",
+          "best_mas": "No data quality filtering in general MAS frameworks",
+          "best_kg_llm": "No equivalent capability in KG+LLM approaches"
+        },
+        {
+          "name": "Lineage-Driven JOIN",
+          "smart_query": "Uses pre-computed UPSTREAM relationships (50,509 edges) for JOIN condition inference based on actual ETL data flow",
+          "best_nl2sql": "Foreign key-based JOIN (when available) or LLM-inferred JOIN conditions; no lineage-based approach",
+          "best_obda": "JOIN conditions derived from formal ontology mappings (R2RML); correct but requires manual specification",
+          "best_mas": "No JOIN discovery capability in general MAS frameworks",
+          "best_kg_llm": "No JOIN discovery capability in KG+LLM approaches"
+        }
+      ]
+    },
+    "positioning": {
+      "unique_contributions": [
+        {
+          "contribution": "Cognitive Hub Architecture",
+          "description": "Domain ontology transformed from passive knowledge storage into an active cognitive layer through the duality of declarative memory (ontology) and procedural memory (skills), with the LLM as pattern-matching engine",
+          "closest_existing": "Ontop (OBDA) uses ontology as passive mapping layer; CoALA framework identifies memory types but does not instantiate ontology-as-cognitive-hub",
+          "why_different": "Smart Query's ontology actively participates in reasoning through skill-mediated navigation, not just passive query rewriting. The ontology-skill duality is formalized through cognitive architecture theory (ACT-R, SOAR) and instantiated with 29+ MCP tools"
+        },
+        {
+          "contribution": "Three-Strategy Serial Execution with Implicit Context Inheritance",
+          "description": "Three cognitively specialized agents execute in fixed serial order, communicating implicitly through shared conversation history (digital stigmergy) rather than explicit message passing",
+          "closest_existing": "MetaGPT uses shared message pool with subscription; ChatDev uses sequential chat chains with explicit pairwise communication",
+          "why_different": "Smart Query exploits the LLM's native ability to extract information from conversation history as a coordination mechanism, requiring no predefined message formats. This is formalized as digital stigmergy — a concept from swarm intelligence applied to LLM agents"
+        },
+        {
+          "contribution": "Semantic Cumulative Effect (Information-Theoretic Formalization)",
+          "description": "Formal proof that serial execution with context inheritance monotonically reduces information entropy: H(I|S1,S2,S3) ≤ H(I|S1,S2) ≤ H(I|S1) ≤ H(I), with conditions for strict inequality",
+          "closest_existing": "No existing work provides information-theoretic justification for serial vs. parallel agent execution in LLM-MAS",
+          "why_different": "Transforms an engineering observation (serial execution works better) into a theoretically justified design principle with formal conditions for when it holds (orthogonal knowledge dimensions) and when it fails (redundancy, noise)"
+        },
+        {
+          "contribution": "Evidence Pack Fusion with Cross-Validation Adjudication",
+          "description": "Three independent evidence packs cross-validated through structured adjudication with graded confidence scoring based on cross-strategy consensus",
+          "closest_existing": "Multi-agent debate (Du et al. 2023) uses iterative refinement through debate rounds; MAC-SQL uses sequential agent refinement",
+          "why_different": "Smart Query preserves complete reasoning chains from each perspective and uses structured evidence packs (not just predictions) for adjudication. Graded confidence scoring (3/2/1 strategy consensus) provides calibrated confidence absent in debate approaches"
+        },
+        {
+          "contribution": "Three-Layer Ontology with Cross-Layer Associations",
+          "description": "314K-node ontology organized into Business Indicator, Data Asset, and Term/Standard layers with 623K cross-layer relationships enabling three independent navigation strategies",
+          "closest_existing": "GraphRAG uses hierarchical community structure; traditional OBDA uses single-layer ontology",
+          "why_different": "The three-layer separation is specifically designed to support three orthogonal navigation strategies for multi-agent NL2SQL. Cross-layer associations (HAS_INDICATOR, HAS_TERM, BELONGS_TO_STANDARD) enable multi-perspective discovery of the same physical tables"
+        },
+        {
+          "contribution": "Dual Retrieval Mechanism (Convergent Path + Hybrid Search)",
+          "description": "Mandatory parallel execution of structural ontology navigation (Schema→Topic→Table) and semantic vector search with principled fusion",
+          "closest_existing": "CHESS uses contextual retrieval from database content; RAG uses vector retrieval over documents",
+          "why_different": "Smart Query mandates both structural and semantic retrieval paths simultaneously, demonstrating they are complementary rather than substitutable. Convergent path ensures domain coverage while hybrid search discovers alternative expressions"
+        },
+        {
+          "contribution": "Isolated Table Filtering via Lineage Heat Analysis",
+          "description": "Automated detection and exclusion of deprecated/orphan tables using graph-theoretic analysis of lineage topology (in-degree + out-degree = 0)",
+          "closest_existing": "No existing NL2SQL or OBDA system provides automated deprecated table detection",
+          "why_different": "Zero-maintenance quality filter that leverages pre-existing lineage graph structure. Analogous to ACT-R's base-level activation decay — tables not reinforced through data flow are automatically deprioritized"
+        },
+        {
+          "contribution": "Lineage-Driven JOIN Discovery",
+          "description": "Uses pre-computed UPSTREAM relationships (50,509 edges reflecting actual ETL data flow) for JOIN condition inference",
+          "closest_existing": "Traditional NL2SQL uses foreign key constraints; LLM-based approaches infer JOINs from schema similarity",
+          "why_different": "Lineage relationships encode structural facts about actual data flow, making JOIN conditions more reliable than foreign key analysis (which may be incomplete) or semantic similarity (which may be misleading)"
+        }
+      ],
+      "shared_with_existing": [
+        {
+          "feature": "Task decomposition into specialized stages",
+          "shared_with": "DIN-SQL (4 subtasks), MAC-SQL (3 agents), MetaGPT (role-based SOPs)",
+          "smart_query_variant": "Smart Query decomposes by knowledge dimension (indicators, scenarios, terms) rather than by processing stage (linking, generation, correction)"
+        },
+        {
+          "feature": "Ontology as mediator between users and data",
+          "shared_with": "Ontop, DL-Lite, Virtual Knowledge Graphs (OBDA tradition)",
+          "smart_query_variant": "Smart Query retains the ontology-as-mediator principle but replaces formal query rewriting with LLM-based flexible reasoning"
+        },
+        {
+          "feature": "Graph-guided LLM reasoning",
+          "shared_with": "Think-on-Graph (beam search on KG), GraphRAG (community-based retrieval)",
+          "smart_query_variant": "Smart Query uses domain-specific ontology with pre-computed relationships rather than general knowledge graphs"
+        },
+        {
+          "feature": "ReAct-style reasoning-action loops",
+          "shared_with": "ReAct, Toolformer, Voyager (tool-augmented LLM reasoning)",
+          "smart_query_variant": "Each Smart Query strategy follows ReAct pattern internally but adds cross-strategy cumulative context"
+        },
+        {
+          "feature": "Hybrid retrieval combining keyword and vector search",
+          "shared_with": "RAG, GraphRAG, CHESS (contextual retrieval approaches)",
+          "smart_query_variant": "Smart Query applies hybrid retrieval over structured ontology data with field-level vectorization rather than unstructured documents"
+        },
+        {
+          "feature": "Multi-perspective reasoning for improved accuracy",
+          "shared_with": "Multi-agent debate (Du et al.), C3 consistency mechanism",
+          "smart_query_variant": "Smart Query uses serial execution with structured evidence packs rather than parallel debate with text-based refinement"
+        }
+      ],
+      "positioning_statement": "Smart Query introduces a Cognitive Hub architecture that transforms a domain ontology from passive knowledge storage into an active cognitive layer for LLM-based enterprise data querying. By combining three-layer ontology navigation (314K nodes across Business Indicator, Data Asset, and Term/Standard layers) with multi-agent serial execution featuring implicit context inheritance (digital stigmergy), Smart Query addresses the fundamental gap between benchmark-focused NL2SQL systems (limited to <200 tables) and enterprise-scale data environments (35,000+ tables). The system's evidence pack fusion with cross-validation adjudication provides calibrated confidence scoring absent in existing multi-agent approaches, while the information-theoretic formalization of the semantic cumulative effect offers the first principled justification for serial over parallel agent execution in LLM-based multi-agent systems."
+    },
+    "gaps": [
+      {
+        "gap": "No NL2SQL system uses structured ontology as cognitive mediator at enterprise scale (35K+ tables)",
+        "how_smart_query_fills": "Three-layer ontology (314K nodes) provides structured semantic mediation between business questions and physical tables, enabling navigation rather than brute-force schema encoding",
+        "evidence": "P01-P06 operate on raw schemas; P07-P08 benchmarks contain small databases (avg <10 tables); P10 survey confirms domain adaptation as open challenge",
+        "closest_approach": "MAC-SQL (P04) uses multi-agent schema selection but operates on raw schema without ontology guidance",
+        "remaining_distance": "Smart Query's ontology requires significant construction effort (21-step ETL pipeline); MAC-SQL's approach is more lightweight but less scalable"
+      },
+      {
+        "gap": "No MAS framework uses implicit context inheritance through LLM conversation history as coordination mechanism",
+        "how_smart_query_fills": "Serial execution with shared conversation history enables implicit context inheritance (digital stigmergy) — later strategies observe earlier discoveries without explicit message passing",
+        "evidence": "P16 (AutoGen) uses explicit messages; P17 (MetaGPT) uses shared pool with subscription; P18 (ChatDev) uses pairwise chat chains; none model implicit inheritance",
+        "closest_approach": "MetaGPT (P17) shared message pool is closest — agents can read shared messages — but requires structured message formats rather than implicit extraction",
+        "remaining_distance": "MetaGPT's explicit subscription mechanism is more predictable; Smart Query's implicit inheritance depends on LLM's contextual understanding quality"
+      },
+      {
+        "gap": "No formal information-theoretic justification for serial vs. parallel agent execution in LLM-MAS",
+        "how_smart_query_fills": "Proves H(I|S1,S2,S3) ≤ H(I|S1,S2) ≤ H(I|S1) ≤ H(I) via chain rule of conditional entropy; establishes conditions for strict inequality (orthogonal knowledge dimensions)",
+        "evidence": "No paper in the survey provides formal analysis of serial vs. parallel execution tradeoffs in LLM-MAS",
+        "closest_approach": "Multi-agent debate (P20) empirically shows multi-perspective reasoning improves accuracy but lacks formal justification for execution ordering",
+        "remaining_distance": "Smart Query's proof assumes orthogonal knowledge dimensions; empirical validation of the entropy reduction is needed"
+      },
+      {
+        "gap": "No system combines structured evidence pack fusion with cross-validation adjudication for NL2SQL table localization",
+        "how_smart_query_fills": "Three strategies produce independent JSON evidence packs; adjudication cross-validates with graded confidence scoring (3-strategy=high, 2=medium-high, 1=cautious)",
+        "evidence": "P04 (MAC-SQL) uses sequential refinement not independent fusion; P20 (debate) uses text-based debate not structured evidence packs",
+        "closest_approach": "C3 (P03) consistency mechanism selects among multiple SQL candidates via execution consistency — closest to multi-perspective validation",
+        "remaining_distance": "C3 validates at SQL execution level; Smart Query validates at evidence/table level before SQL generation — different granularity"
+      },
+      {
+        "gap": "Traditional OBDA lacks LLM integration for flexible reasoning over ontology structure",
+        "how_smart_query_fills": "Replaces rigid SPARQL-to-SQL rewriting with LLM-based reasoning that can handle ambiguous queries, incomplete mappings, and natural language input",
+        "evidence": "P11 (Ontop) requires complete R2RML mappings; P13 (DL-Lite) assumes formal query rewriting; P15 shows difficulty extending to new query types",
+        "closest_approach": "Ontop (P11) is the most mature OBDA system but requires formal SPARQL queries and complete mappings",
+        "remaining_distance": "Ontop provides formal correctness guarantees that Smart Query cannot; Smart Query trades formal guarantees for flexibility"
+      },
+      {
+        "gap": "No KG+LLM system uses multi-layer enterprise ontology as active cognitive hub with multiple navigation strategies",
+        "how_smart_query_fills": "Three-layer ontology with cross-layer associations enables three independent navigation strategies (indicator-driven, scenario-driven, term-driven) over the same physical data",
+        "evidence": "P25-P30 focus on general KGs; P26 (ToG) uses single beam search; P27 (GraphRAG) builds KG dynamically; none use enterprise ontology with multiple strategies",
+        "closest_approach": "Think-on-Graph (P26) performs graph-guided reasoning but uses single strategy over general KG, not multi-strategy over domain ontology",
+        "remaining_distance": "ToG's beam search is more flexible for general KGs; Smart Query's multi-strategy approach is optimized for enterprise data querying"
+      },
+      {
+        "gap": "No automated mechanism for detecting deprecated tables based on lineage graph topology",
+        "how_smart_query_fills": "Graph-theoretic isolated table filtering: tables with in-degree=0 AND out-degree=0 in lineage graph are classified as deprecated and excluded",
+        "evidence": "No paper in the survey addresses automated deprecated table detection in NL2SQL or OBDA systems",
+        "closest_approach": "No directly comparable approach exists; data quality literature addresses data profiling but not lineage-based table deprecation detection",
+        "remaining_distance": "The mechanism is simple (degree check) and may produce false positives for genuinely standalone tables"
+      },
+      {
+        "gap": "No NL2SQL system uses data lineage relationships for JOIN condition inference",
+        "how_smart_query_fills": "Pre-computed UPSTREAM relationships (50,509 edges) encode actual ETL data flow, providing structural facts for JOIN discovery rather than semantic guesses",
+        "evidence": "NL2SQL systems use foreign keys (when available) or LLM-inferred JOINs; no system leverages data lineage for JOIN discovery",
+        "closest_approach": "Traditional database systems use foreign key constraints for JOIN inference; OBDA systems derive JOINs from formal mappings",
+        "remaining_distance": "Foreign key-based JOINs are formally guaranteed correct; lineage-based JOINs are structurally grounded but may not always produce valid SQL JOINs"
+      }
+    ],
+    "strongest_competitors": [
+      {
+        "system": "MAC-SQL",
+        "category": "NL2SQL",
+        "strengths": [
+          "Multi-agent architecture with specialized roles (Selector, Decomposer, Refiner) — closest architectural parallel to Smart Query",
+          "Strong benchmark performance (86.8% on Spider dev) demonstrating multi-agent collaboration effectiveness",
+          "Handles complex queries through question decomposition and SQL refinement",
+          "Lightweight deployment — no ontology construction required"
+        ],
+        "smart_query_advantages": [
+          "Ontology-guided navigation enables 35K+ table scale vs. MAC-SQL's benchmark-scale operation",
+          "Three orthogonal knowledge dimensions vs. MAC-SQL's single schema-based approach",
+          "Evidence pack fusion with cross-validation vs. MAC-SQL's sequential refinement without cross-validation",
+          "Implicit context inheritance vs. MAC-SQL's explicit parameter passing between agents",
+          "Isolated table filtering and lineage-based JOIN discovery — capabilities MAC-SQL lacks entirely"
+        ],
+        "smart_query_limitations": [
+          "Requires significant ontology construction effort (21-step ETL pipeline) vs. MAC-SQL's zero-setup approach",
+          "Not evaluated on standard benchmarks, making direct accuracy comparison impossible",
+          "Serial execution introduces latency overhead vs. MAC-SQL's more efficient pipeline",
+          "Domain-specific design vs. MAC-SQL's cross-database generalization"
+        ],
+        "fair_comparison": false,
+        "comparison_notes": "Different problem scopes: MAC-SQL targets cross-database benchmark performance while Smart Query targets single-enterprise-domain scale. A fair comparison would require evaluating both on an enterprise-scale dataset with 35K+ tables, which does not currently exist as a public benchmark."
+      },
+      {
+        "system": "DIN-SQL",
+        "category": "NL2SQL",
+        "strengths": [
+          "Clean decomposition of text-to-SQL into four well-defined subtasks with self-correction",
+          "Strong benchmark results (85.3% on Spider dev) with pure prompting approach",
+          "Self-correction module that detects and fixes SQL errors — a form of verification",
+          "No training required — pure in-context learning with GPT-4"
+        ],
+        "smart_query_advantages": [
+          "Ontology provides structured domain knowledge vs. DIN-SQL's reliance on schema-only context",
+          "Multi-strategy evidence fusion vs. DIN-SQL's single-path sequential processing",
+          "Enterprise-scale operation (35K+ tables) vs. DIN-SQL's benchmark-scale operation",
+          "Cross-validation across three perspectives vs. DIN-SQL's single-perspective self-correction"
+        ],
+        "smart_query_limitations": [
+          "DIN-SQL's self-correction operates on actual SQL execution feedback; Smart Query's cross-validation operates on evidence packs before SQL generation",
+          "DIN-SQL is evaluated on standard benchmarks with clear accuracy metrics; Smart Query lacks comparable evaluation",
+          "DIN-SQL requires no domain-specific setup; Smart Query requires ontology construction"
+        ],
+        "fair_comparison": false,
+        "comparison_notes": "DIN-SQL and Smart Query solve related but distinct problems. DIN-SQL optimizes SQL generation accuracy on benchmarks; Smart Query optimizes table/field localization in enterprise environments. The comparison is most meaningful at the architectural level (decomposition strategies) rather than accuracy metrics."
+      },
+      {
+        "system": "Ontop (OBDA)",
+        "category": "OBDA",
+        "strengths": [
+          "Formal correctness guarantees through sound SPARQL-to-SQL rewriting based on DL-Lite",
+          "Mature, production-deployed system with enterprise adoption (Statoil, Siemens)",
+          "Complete theoretical foundation with proven computational complexity bounds (AC0 data complexity)",
+          "Efficient query optimization for relational backends"
+        ],
+        "smart_query_advantages": [
+          "Natural language input vs. Ontop's requirement for SPARQL queries",
+          "Flexible LLM-based reasoning vs. Ontop's rigid formal mappings",
+          "Handles ambiguous and incomplete queries vs. Ontop's requirement for precise formal queries",
+          "Multi-strategy evidence collection vs. Ontop's single-pass query rewriting",
+          "Active cognitive hub vs. Ontop's passive mapping layer"
+        ],
+        "smart_query_limitations": [
+          "No formal correctness guarantees — LLM reasoning is probabilistic, not provably sound",
+          "Non-deterministic results vs. Ontop's deterministic query translation",
+          "Less mature system without Ontop's decades of theoretical and engineering refinement",
+          "Higher computational cost (LLM inference) vs. Ontop's efficient SQL rewriting"
+        ],
+        "fair_comparison": true,
+        "comparison_notes": "Both systems use ontology as mediator between users and data, making this a meaningful architectural comparison. Smart Query can be viewed as a next-generation OBDA system that trades formal guarantees for flexibility and natural language support. The comparison highlights a fundamental tradeoff: formal correctness vs. flexible reasoning."
+      },
+      {
+        "system": "MetaGPT",
+        "category": "LLM-MAS",
+        "strengths": [
+          "Sophisticated SOP-based workflow encoding human-like collaboration patterns",
+          "Shared message pool with subscription mechanism for structured inter-agent communication",
+          "Role specialization with clear responsibility boundaries (Product Manager, Architect, Engineer, QA)",
+          "Demonstrated effectiveness in reducing code hallucination by 50%+ through structured workflows"
+        ],
+        "smart_query_advantages": [
+          "Implicit context inheritance (digital stigmergy) vs. MetaGPT's explicit message subscription",
+          "Information-theoretic justification for serial execution vs. MetaGPT's engineering-driven workflow design",
+          "Domain-specific ontology integration vs. MetaGPT's domain-agnostic framework",
+          "Evidence pack fusion with cross-validation vs. MetaGPT's sequential artifact production"
+        ],
+        "smart_query_limitations": [
+          "MetaGPT is a general-purpose framework applicable to any domain; Smart Query is domain-specific",
+          "MetaGPT's explicit message passing is more predictable and debuggable than implicit context inheritance",
+          "MetaGPT supports more complex workflow patterns (parallel, nested); Smart Query uses fixed serial ordering",
+          "MetaGPT has broader community adoption and more extensive evaluation"
+        ],
+        "fair_comparison": true,
+        "comparison_notes": "Both are multi-agent systems with serial execution and role specialization. The key architectural difference is the coordination mechanism: explicit message subscription (MetaGPT) vs. implicit context inheritance (Smart Query). This comparison is most meaningful for understanding different approaches to multi-agent coordination."
+      },
+      {
+        "system": "Think-on-Graph (ToG)",
+        "category": "KG+LLM",
+        "strengths": [
+          "Elegant beam search mechanism for multi-hop reasoning grounded in KG structure",
+          "10-20% accuracy improvement over retrieval-only methods on KGQA benchmarks",
+          "Generalizable to any knowledge graph without domain-specific customization",
+          "Responsible reasoning with traceable decision paths through KG"
+        ],
+        "smart_query_advantages": [
+          "Multi-strategy navigation (3 strategies) vs. ToG's single beam search strategy",
+          "Enterprise-specific ontology with pre-computed relationships vs. ToG's general KG navigation",
+          "Evidence pack fusion with cross-validation vs. ToG's single-path beam search selection",
+          "Lineage-based JOIN discovery and isolated table filtering — capabilities ToG lacks"
+        ],
+        "smart_query_limitations": [
+          "ToG generalizes to any KG without domain-specific setup; Smart Query requires enterprise ontology construction",
+          "ToG's beam search is more flexible for exploratory reasoning; Smart Query's strategies are fixed",
+          "ToG is evaluated on standard KGQA benchmarks; Smart Query lacks comparable evaluation",
+          "ToG handles multi-hop reasoning naturally; Smart Query's multi-hop capability depends on ontology structure"
+        ],
+        "fair_comparison": true,
+        "comparison_notes": "Both use graph-guided LLM reasoning but at different scales and for different purposes. ToG navigates general KGs for question answering; Smart Query navigates enterprise ontologies for table/field localization. The comparison highlights the tradeoff between generality (ToG) and domain optimization (Smart Query)."
+      }
+    ],
+    "related_work_outline": {
+      "sections": [
+        {
+          "title": "2.1 Natural Language to SQL: From Benchmarks to Enterprise Scale",
+          "subsections": [
+            "2.1.1 Benchmark-Driven NL2SQL Systems",
+            "2.1.2 LLM-Based Decomposition and Multi-Agent Approaches",
+            "2.1.3 The Enterprise Scale Gap"
+          ],
+          "papers_to_cite": ["DIN-SQL (P01)", "DAIL-SQL (P02)", "C3 (P03)", "MAC-SQL (P04)", "CHESS (P05)", "RESDSQL (P06)", "Spider (P07)", "Bird (P08)", "SParC (P09)", "LLM-SQL Survey (P10)"],
+          "narrative": "Begin with the evolution of NL2SQL from fine-tuned models to LLM-based approaches, highlighting the rapid accuracy improvements on Spider (70% → 87%+). Introduce multi-agent approaches (MAC-SQL) as the current frontier. Then pivot to the enterprise scale gap: Bird benchmark reveals that real-world performance lags significantly (54-73%), and no existing system addresses the 35K+ table enterprise scenario. This gap motivates Smart Query's ontology-guided approach.",
+          "transition_to_next": "While NL2SQL systems struggle with schema complexity, the OBDA community has long used ontologies to mediate between users and data — but with rigid formal methods that lack the flexibility of LLM-based reasoning."
+        },
+        {
+          "title": "2.2 Ontology-Based Data Access: From Formal Mappings to Flexible Reasoning",
+          "subsections": [
+            "2.2.1 Classical OBDA Frameworks and Theoretical Foundations",
+            "2.2.2 Virtual Knowledge Graphs in Enterprise Settings",
+            "2.2.3 Limitations of Formal Approaches for Natural Language Access"
+          ],
+          "papers_to_cite": ["Ontop (P11)", "Lenzerini (P12)", "DL-Lite (P13)", "VKG Overview (P14)", "Temporal OBDA (P15)"],
+          "narrative": "Present the OBDA tradition as the intellectual ancestor of Smart Query's ontology-mediated approach. Acknowledge the formal correctness guarantees of DL-Lite and Ontop. Then identify the fundamental limitation: rigid formal mappings cannot handle ambiguous natural language queries, incomplete metadata, or the flexibility required for enterprise data exploration. The temporal OBDA extension (P15) illustrates the difficulty of extending formal approaches to new requirements.",
+          "transition_to_next": "The rigidity of formal OBDA motivates the use of LLM-based reasoning, but deploying LLMs for complex enterprise tasks requires sophisticated multi-agent architectures — the focus of recent LLM-MAS research."
+        },
+        {
+          "title": "2.3 LLM-Based Multi-Agent Systems: Coordination and Collaboration Patterns",
+          "subsections": [
+            "2.3.1 Multi-Agent Frameworks and Communication Mechanisms",
+            "2.3.2 Role Specialization and Workflow Patterns",
+            "2.3.3 Multi-Perspective Reasoning and Evidence Fusion",
+            "2.3.4 Tool Use and External Knowledge Access"
+          ],
+          "papers_to_cite": ["AutoGen (P16)", "MetaGPT (P17)", "ChatDev (P18)", "CAMEL (P19)", "Multi-Agent Debate (P20)", "LLM Agent Survey (P21)", "Voyager (P22)", "Toolformer (P23)", "ReAct (P24)"],
+          "narrative": "Survey the landscape of LLM-MAS frameworks, organizing by coordination mechanism: explicit message passing (AutoGen), shared message pools (MetaGPT), pairwise chat chains (ChatDev), and parallel debate (Du et al.). Highlight that no existing framework uses implicit context inheritance through conversation history. Discuss tool use (Voyager, Toolformer, ReAct) as enabling technology for agent-environment interaction. Identify the gap: no formal justification exists for choosing serial vs. parallel execution in LLM-MAS.",
+          "transition_to_next": "While MAS frameworks provide the coordination infrastructure, the knowledge source that agents reason over is equally critical. The convergence of knowledge graphs and LLMs offers a promising foundation for grounded, domain-specific reasoning."
+        },
+        {
+          "title": "2.4 Knowledge Graph-Enhanced LLM Reasoning",
+          "subsections": [
+            "2.4.1 KG-LLM Integration Paradigms",
+            "2.4.2 Graph-Guided Reasoning and Retrieval",
+            "2.4.3 From General KGs to Enterprise Ontologies"
+          ],
+          "papers_to_cite": ["KG-LLM Roadmap (P25)", "Think-on-Graph (P26)", "GraphRAG (P27)", "RAG (P28)", "StructGPT (P29)", "KG-Enhanced LLM Survey (P30)"],
+          "narrative": "Present the KG+LLM convergence as a major trend, with surveys documenting 25-60% hallucination reduction. Discuss graph-guided reasoning (Think-on-Graph) and hierarchical retrieval (GraphRAG) as the most relevant approaches. Then identify the gap: existing work focuses on general KGs (Wikidata, Freebase) or dynamically constructed KGs, not purpose-built enterprise ontologies with pre-computed relationships. Smart Query's multi-layer ontology with cross-layer associations represents a domain-specific instantiation of KG-enhanced LLM reasoning.",
+          "transition_to_next": "The theoretical foundations for understanding Smart Query's architecture draw from cognitive science, where classical cognitive architectures provide frameworks for organizing knowledge and reasoning."
+        },
+        {
+          "title": "2.5 Cognitive Architecture Foundations for Language Agents",
+          "subsections": [
+            "2.5.1 Classical Cognitive Architectures (ACT-R, SOAR, Global Workspace)",
+            "2.5.2 Modern Cognitive Frameworks for LLM Agents (CoALA)",
+            "2.5.3 Blackboard Systems and Multi-Source Knowledge Integration"
+          ],
+          "papers_to_cite": ["CoALA (P31)", "SOAR (P32)", "ACT-R (P33)", "Global Workspace Theory (P34)", "Blackboard Systems (P35)"],
+          "narrative": "Present cognitive architecture theory as the theoretical foundation for Smart Query's design. Map Smart Query's components to cognitive architecture concepts: ontology as declarative memory (ACT-R), skills as procedural memory (SOAR), conversation history as global workspace (Baars), and multi-strategy evidence collection as blackboard system (Nii). Introduce CoALA as the modern bridge between classical cognitive architectures and LLM agents. Position Smart Query as a concrete instantiation of CoALA's framework with domain-specific extensions.",
+          "transition_to_next": "Having surveyed these four pillars and their cognitive foundations, we now position Smart Query at their intersection — combining ontology-mediated access (OBDA), multi-agent serial execution (MAS), knowledge graph-guided reasoning (KG+LLM), and cognitive architecture principles into a unified Cognitive Hub architecture for enterprise-scale natural language data querying."
+        }
+      ]
+    },
+    "comparison_tables": [
+      {
+        "title": "Table 1: System-Level Architectural Comparison",
+        "columns": ["System", "Ontology Integration", "Multi-Agent", "Serial Execution", "Evidence Fusion", "Schema Scale", "Domain Adaptation", "Natural Language Input"],
+        "rows": [
+          ["Smart Query", "Three-layer ontology (314K nodes) as cognitive hub", "3 specialized strategy agents", "Serial with implicit context inheritance", "Cross-validation adjudication with graded confidence", "35,000+ tables (9 schemas)", "Ontology construction (21-step ETL)", "Yes (natural language)"],
+          ["MAC-SQL", "None (raw schema)", "3 agents (Selector, Decomposer, Refiner)", "Sequential pipeline with explicit passing", "Sequential refinement (no cross-validation)", "Benchmark scale (<200 tables)", "Zero-setup (schema-only)", "Yes (natural language)"],
+          ["DIN-SQL", "None (raw schema)", "Single agent, 4 subtasks", "Sequential subtask decomposition", "Self-correction on SQL execution", "Benchmark scale (<200 tables)", "Zero-setup (prompting)", "Yes (natural language)"],
+          ["CHESS", "None (database content retrieval)", "Single agent, 4 phases", "Sequential pipeline", "SQL revision with execution feedback", "Benchmark scale (Bird)", "Zero-setup (content retrieval)", "Yes (natural language)"],
+          ["Ontop", "OWL 2 QL ontology (passive mapping)", "None (single system)", "Single-pass query rewriting", "Formal correctness guarantee", "Millions of rows, <100 tables typical", "R2RML mapping specification", "No (SPARQL required)"],
+          ["MetaGPT", "None", "Role-specialized agents (PM, Arch, Eng, QA)", "SOP-based sequential workflow", "Structured artifact review", "N/A (software development)", "Domain-agnostic framework", "Yes (natural language)"],
+          ["Think-on-Graph", "General KG (passive navigation)", "Single agent with beam search", "Iterative graph exploration", "Beam search path selection", "General KG scale", "Requires existing KG", "Yes (natural language)"],
+          ["GraphRAG", "Dynamically constructed KG with communities", "Single agent", "Two-stage (build + query)", "Community-based summarization", "Document collection scale", "Automatic KG construction", "Yes (natural language)"]
+        ],
+        "caption": "Architectural comparison of Smart Query against representative systems from NL2SQL, OBDA, LLM-MAS, and KG+LLM categories. Smart Query is unique in combining three-layer ontology integration, multi-agent serial execution with implicit context inheritance, and evidence pack fusion with cross-validation adjudication."
+      },
+      {
+        "title": "Table 2: Capability Comparison Across Key Dimensions",
+        "columns": ["Capability", "Smart Query", "Best NL2SQL (MAC-SQL)", "Best OBDA (Ontop)", "Best MAS (MetaGPT)", "Best KG+LLM (ToG)"],
+        "rows": [
+          ["Schema Scale (tables)", "35,000+", "<200 (benchmark)", "<100 (typical)", "N/A", "General KG"],
+          ["Multi-Strategy Search", "3 orthogonal strategies", "Single schema-based", "Single formal rewriting", "Role-based (not search)", "Single beam search"],
+          ["Ontology as Cognitive Hub", "Yes (active, 314K nodes)", "No", "Yes (passive mapping)", "No", "No (passive KG)"],
+          ["Implicit Context Inheritance", "Yes (digital stigmergy)", "No (explicit passing)", "N/A", "No (explicit subscription)", "N/A (single agent)"],
+          ["Evidence Cross-Validation", "3-strategy consensus scoring", "Sequential refinement", "Formal guarantee", "Artifact review", "Beam selection"],
+          ["Isolated Table Filtering", "Yes (lineage heat analysis)", "No", "No", "No", "No"],
+          ["Lineage-Driven JOIN", "Yes (50,509 UPSTREAM edges)", "No (FK or LLM-inferred)", "Yes (formal mappings)", "No", "No"],
+          ["Formal Correctness Guarantee", "No (probabilistic)", "No (probabilistic)", "Yes (DL-Lite sound)", "No", "No"],
+          ["Cross-Database Generalization", "No (single domain)", "Yes (benchmark-trained)", "Yes (with new mappings)", "Yes (domain-agnostic)", "Yes (any KG)"],
+          ["Natural Language Input", "Yes", "Yes", "No (SPARQL)", "Yes", "Yes"],
+          ["Domain Setup Cost", "High (ETL pipeline)", "None", "Medium (R2RML)", "None", "Low (existing KG)"]
+        ],
+        "caption": "Capability comparison highlighting Smart Query's strengths (enterprise scale, multi-strategy search, ontology integration, evidence fusion) and limitations (no formal guarantees, single-domain focus, high setup cost) relative to the best system in each category."
+      }
+    ]
+  }
+}

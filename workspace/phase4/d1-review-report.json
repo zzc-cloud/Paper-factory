@@ -1,0 +1,280 @@
+{
+  "agent_id": "d1-peer-reviewer",
+  "phase": 4,
+  "iteration": 3,
+  "status": "complete",
+  "summary": "Final peer review (iteration 3) completed with 3 independent reviewers. Average score: 7.3/10. Recommendation: minor revision (accept-leaning). Improved from iteration 2 (6.7/10) and iteration 1 (6.0/10). The paper has addressed all critical and most important issues from prior rounds. Remaining issues are minor polish items and inherent scope limitations acknowledged by the authors.",
+  "data": {
+    "paper_title": "Cognitive Hub: A Multi-Agent Architecture for Ontology-Driven Natural Language Data Querying at Enterprise Scale",
+    "reviewers": [
+      {
+        "id": "R1",
+        "role": "Technical Expert",
+        "focus": "correctness",
+        "score": 7.5,
+        "recommendation": "minor_revision",
+        "strengths": [
+          "Well-designed ablation study (A1-A6) with clear hierarchy of component importance and appropriate statistical testing (paired bootstrap, Bonferroni correction, effect sizes)",
+          "Information-theoretic analysis is now correctly scoped: the entropy chain is presented as applying standard tools (chain rule, non-negativity of mutual information) to a new architectural context, not as novel theory",
+          "Serial vs. parallel comparison is honestly framed as a hypothesis validated empirically rather than a proven theorem, with the intuitive argument clearly separated from the formal derivation",
+          "Failure mode analysis (redundancy, noise introduction, context degradation) is technically valuable and grounded in the information-theoretic framework",
+          "Lineage-driven JOIN discovery is well-motivated with concrete comparison to column-name matching (JA-F1 = 0.81 vs 0.58, p < 0.01, d = 0.89)",
+          "Entropy measurement methodology includes an honest circularity caveat about LLM-generated confidence scores",
+          "Formalization CH = (O, S, T, L) is now consistent with the implicit context inheritance mechanism through the H_{k-1} notation clarification",
+          "B3 vs B4 baseline distinction is now clear (sequential-without-context vs concurrent-without-context)"
+        ],
+        "weaknesses": [
+          "Dataset size (100 queries, 80 test) remains the primary limitation; while honestly acknowledged, the wide confidence intervals (±0.10 for Complex, ±0.30 for Adversarial) limit the strength of fine-grained conclusions",
+          "The serial vs. parallel accuracy gap (Δ = +0.06, d = 0.35) is small-to-medium effect size — the latency-accuracy tradeoff discussion is welcome but a formal Pareto analysis remains future work",
+          "Strategy ordering sensitivity is discussed but not empirically evaluated — the claim that S₁ provides the most informative initial constraint is plausible but unvalidated",
+          "The probability distribution construction for entropy measurement (normalizing LLM confidence scores, assigning ε = 0.001/N to unmentioned tables) involves methodological choices that could influence results; sensitivity analysis to ε is not provided",
+          "No cross-validation or held-out test methodology beyond the 20/80 dev-test split — with only 80 test queries, overfitting to the test distribution is a concern despite the stated protocol"
+        ],
+        "comments": [
+          {
+            "section": "Section 1 (Introduction)",
+            "comment": "The cognitive architecture framing is well-scoped with appropriate citations (ACT-R, SOAR, CoALA). The entropy chain is correctly presented. The five contributions are now consistently enumerated. The terminology distinction (Cognitive Hub = architecture, Smart Query = system) resolves prior confusion.",
+            "severity": "minor",
+            "suggestion": "No changes needed. The introduction is now clear and well-structured."
+          },
+          {
+            "section": "Section 3 (Architecture)",
+            "comment": "The three-strategy design is well-motivated with complementary coverage clearly demonstrated. The formalization using H_{k-1} notation correctly represents the implicit context mechanism. The instruction compliance claims are now appropriately softened to 'empirically improves' and 'substantially improved'. The stigmergy analogy is now honestly framed as an analogy rather than a novel mechanism.",
+            "severity": "minor",
+            "suggestion": "Consider adding a brief note on how the 50/50 keyword-vector ratio in hybrid retrieval was determined (was it tuned on the dev set?)."
+          },
+          {
+            "section": "Section 4 (Theory)",
+            "comment": "Significantly improved across all three iterations. The information-theoretic analysis is now correctly positioned as applying standard tools to a specific architectural context. The CRR metric is well-defined. The parallel vs. serial comparison is appropriately framed as a hypothesis. The failure mode analysis adds genuine technical value.",
+            "severity": "minor",
+            "suggestion": "The CRR assumes uniform prior over 35,287 tables. A brief note on how non-uniform priors (e.g., based on table popularity) would affect the analysis would strengthen the formalization."
+          },
+          {
+            "section": "Section 5 (Experiments)",
+            "comment": "The experimental design is sound with well-chosen baselines spanning the design space. Statistical reporting is rigorous. The dataset limitation is now thoroughly acknowledged with specific confidence interval calculations. The entropy measurement caveat is welcome. The development set protocol (no iterative refinement on test) is clearly stated.",
+            "severity": "minor",
+            "suggestion": "Report the actual p-values for the Smart Query vs. B4 comparison rather than just p < 0.05, given the modest effect size (d = 0.35)."
+          },
+          {
+            "section": "Section 6 (Discussion)",
+            "comment": "The latency-accuracy tradeoff analysis is a valuable addition. The strategy ordering sensitivity discussion addresses a legitimate concern. Limitations are honestly and thoroughly discussed. The generalizability section is appropriately speculative.",
+            "severity": "minor",
+            "suggestion": "No substantive changes needed."
+          }
+        ],
+        "questions": [
+          "How does the system degrade when the ontology is partially incomplete (e.g., 50% of indicators missing)? Is there a graceful degradation curve?",
+          "What is the variance in performance across different LLM backends? The paper uses Claude 3.5 Sonnet — would GPT-4 or open-source models yield similar results?",
+          "For the 13% of queries where monotonic entropy decrease fails, is there a pattern in which strategy pair causes the violation (S1→S2 vs S2→S3)?",
+          "How was the ε = 0.001/N background probability chosen for entropy measurement, and how sensitive are the entropy results to this choice?"
+        ]
+      },
+      {
+        "id": "R2",
+        "role": "Novelty Expert",
+        "focus": "contribution",
+        "score": 7.0,
+        "recommendation": "minor_revision",
+        "strengths": [
+          "The enterprise-scale NL2SQL problem (35K+ tables) is genuinely underserved in the literature — this paper addresses a real gap that benchmark-focused systems do not tackle",
+          "Lineage-driven JOIN discovery using pre-computed ETL relationships is a genuinely novel and practically valuable contribution with clear advantages over semantic similarity approaches",
+          "Evidence pack fusion with graded confidence scoring (three-strategy consensus → high, two-strategy → medium-high, single → cautious) is more sophisticated than existing voting/averaging and the ECS-accuracy correlation (ρ = 0.67) validates its utility",
+          "The three-layer ontology design enabling orthogonal navigation strategies is a well-motivated architectural contribution — the separation of indicators, data assets, and terms is not arbitrary but reflects genuine knowledge dimensions",
+          "Explicit technical comparisons with GraphRAG and Think-on-Graph (Table 7 and Section 2.4) clearly differentiate the approach along three dimensions each",
+          "The Pipeline-Blackboard Hybrid with Context Inheritance label (revised from 'Stigmergic') is now more honest about the mechanism while preserving the useful analogy",
+          "The cognitive architecture framing (Table 8) is now condensed and positioned as analogical rather than formal, which is more intellectually honest"
+        ],
+        "weaknesses": [
+          "The core contribution remains a novel configuration of known components (ontology + multi-agent + LLM) rather than a fundamental conceptual advance — this is acknowledged implicitly but could be stated more directly",
+          "Single-domain evaluation (banking only) limits assessment of the claimed domain-agnostic architecture — the healthcare and manufacturing examples in Section 6.3 are speculative",
+          "The paper does not compare against any existing enterprise-scale NL2SQL system (if any exist in industry) — the baselines are all constructed by the authors, which is understandable but limits external validity",
+          "The information-theoretic analysis, while correctly scoped, provides limited actionable insight beyond confirming that more evidence reduces uncertainty — the CRR metric is descriptive rather than prescriptive",
+          "Reproducibility is limited: proprietary dataset, proprietary ontology, specific LLM (Claude 3.5 Sonnet) — another team cannot replicate the core results"
+        ],
+        "comments": [
+          {
+            "section": "Section 1 (Introduction)",
+            "comment": "The problem motivation is compelling and the scale comparison with Spider/Bird is effective. The five contributions are now clearly enumerated and appropriately scoped. The 'to our knowledge, this is the first system' claim is reasonable given the literature survey.",
+            "severity": "minor",
+            "suggestion": "Consider softening 'to our knowledge, this is the first system' to 'to our knowledge, this is among the first systems' to hedge against unpublished industry systems."
+          },
+          {
+            "section": "Section 2 (Related Work)",
+            "comment": "Comprehensive and well-structured across four research areas. The explicit GraphRAG and Think-on-Graph comparisons are valuable. Table 7 provides clear positioning. The discussion of OBDA limitations is fair and well-articulated.",
+            "severity": "minor",
+            "suggestion": "A brief mention of industry NL2SQL tools (e.g., Salesforce Einstein, Databricks AI SQL) would acknowledge the commercial landscape, even if direct comparison is infeasible."
+          },
+          {
+            "section": "Section 4 (Theory)",
+            "comment": "The information-theoretic analysis is now appropriately scoped as applying standard tools to a new context. The condensed cognitive architecture mapping (Table 8) is much improved — it preserves the useful analogies without overclaiming formal implementation. The 'Engineering Innovations Beyond Classical Architectures' section correctly identifies what is genuinely new.",
+            "severity": "minor",
+            "suggestion": "No changes needed."
+          },
+          {
+            "section": "Section 5 (Experiments)",
+            "comment": "The evaluation is thorough within its constraints. The honest acknowledgment of dataset limitations and the Adversarial category's statistical underpoweredness is commendable. The ablation study effectively isolates component contributions.",
+            "severity": "minor",
+            "suggestion": "Consider adding a brief discussion of what a synthetic benchmark for enterprise-scale NL2SQL might look like, to help future researchers build on this work."
+          },
+          {
+            "section": "Section 6 (Discussion)",
+            "comment": "The generalizability discussion is appropriately speculative. The multi-scenario extension idea is interesting and well-motivated. The limitations section is thorough and honest.",
+            "severity": "minor",
+            "suggestion": "No changes needed."
+          }
+        ],
+        "questions": [
+          "Could the Cognitive Hub architecture be validated on a publicly available large-schema dataset (e.g., a subset of a public data warehouse) to improve reproducibility?",
+          "How does the system handle queries that span knowledge dimensions not captured by the three-layer ontology (e.g., temporal queries about data freshness)?",
+          "What is the marginal contribution of the cognitive architecture framing beyond providing useful vocabulary? Would the system work equally well without the ACT-R/SOAR analogies?",
+          "Is there evidence that the three-layer structure (indicators, data assets, terms) generalizes beyond banking, or is this an empirical observation from one domain?"
+        ]
+      },
+      {
+        "id": "R3",
+        "role": "Clarity Expert",
+        "focus": "presentation",
+        "score": 7.5,
+        "recommendation": "minor_revision",
+        "strengths": [
+          "The paper is well-organized with a logical flow: Introduction → Related Work → Architecture → Theory → Experiments → Discussion → Conclusion",
+          "The terminology distinction (Cognitive Hub = architecture, Smart Query = system) introduced in the abstract and Section 1.1 resolves the dual-naming confusion from earlier iterations",
+          "The abstract is now well-structured in three paragraphs (problem, approach, results) with the key result (82% TLA@1) prominently placed",
+          "Table 8 (cognitive architecture mapping) is a significant improvement over the verbose subsections in earlier iterations — it conveys the same information in a scannable format",
+          "Case studies in Section 5.5 are effective at illustrating how architectural components work in practice, and the failure case adds credibility",
+          "The formalization in Section 3.1 is now consistent with the implicit context mechanism, resolving the notation tension from iteration 2",
+          "Section 2.4's explicit comparisons with GraphRAG and Think-on-Graph use a clear three-point structure that is easy to follow",
+          "Statistical reporting is consistent throughout (mean ± SE, p-values, effect sizes)"
+        ],
+        "weaknesses": [
+          "Several tables are referenced as '(see Table X)' placeholders without inline rendering — Tables 2, 3, 4, 5, 6 are described in text but not formatted as actual tables, which hinders readability",
+          "Figures are ASCII art placeholders (Figures 2, 5, 6, 7, 8, 9) — while understandable for a draft, they significantly reduce the paper's visual communication effectiveness",
+          "The paper is long (~8,800 words excluding references) — some sections could be tightened further, particularly the Discussion (Section 6) which repeats findings already presented in Section 5",
+          "Section 3.3 remains verbose in places — the description of each strategy follows a repetitive template (phases, evidence pack, effectiveness statement) that could be streamlined",
+          "The Chinese query examples, while authentic, may be inaccessible to non-Chinese-reading reviewers — the English translations are provided but the Chinese text takes up visual space"
+        ],
+        "comments": [
+          {
+            "section": "Abstract",
+            "comment": "Well-structured three-paragraph format. The key result is prominent. The terminology is clear. Minor: the phrase 'to our knowledge' appears twice in the abstract and introduction — consider removing one instance.",
+            "severity": "minor",
+            "suggestion": "Remove the second 'to our knowledge' instance to avoid repetition."
+          },
+          {
+            "section": "Section 1 (Introduction)",
+            "comment": "Clear problem motivation with effective scale comparison. The five contributions are well-enumerated. Section 1.4 (Paper Organization) is standard but could be shortened to 2-3 sentences since the structure is conventional.",
+            "severity": "minor",
+            "suggestion": "Shorten Section 1.4 to a brief paragraph."
+          },
+          {
+            "section": "Section 2 (Related Work)",
+            "comment": "Well-structured across four subsections. The explicit comparisons with GraphRAG and Think-on-Graph are clear and effective. Table 7 is a useful summary. Minor: the transition from Section 2.3 to 2.4 could be smoother.",
+            "severity": "minor",
+            "suggestion": "Add a brief transition sentence between Sections 2.3 and 2.4."
+          },
+          {
+            "section": "Section 3 (Architecture)",
+            "comment": "The architecture is clearly described with appropriate detail. The formalization is now consistent. The three-strategy descriptions follow a clear template. However, the template itself is repetitive — consider whether a unified description with a comparison table would be more efficient.",
+            "severity": "minor",
+            "suggestion": "Consider adding Table 2 (strategy comparison) inline rather than as a placeholder to reduce the need for repetitive prose descriptions."
+          },
+          {
+            "section": "Section 5 (Experiments)",
+            "comment": "The experimental setup is clearly described. The dataset limitations are honestly acknowledged. The entropy analysis section is well-written. However, the missing inline tables (Tables 3-6) force the reader to reconstruct results from prose, which is cognitively demanding.",
+            "severity": "important",
+            "suggestion": "Render Tables 3-6 inline as formatted tables rather than '(see Table X)' placeholders. This is the single most impactful presentation improvement remaining."
+          },
+          {
+            "section": "Section 6 (Discussion)",
+            "comment": "Thorough but somewhat repetitive of Section 5 findings. The latency-accuracy tradeoff analysis is a valuable addition. The generalizability discussion is appropriately speculative.",
+            "severity": "minor",
+            "suggestion": "Tighten Section 6.1 by reducing repetition of results already presented in Section 5.2-5.4. Focus the discussion on interpretation and implications rather than restating numbers."
+          }
+        ],
+        "questions": [
+          "Will the final submission include proper vector graphics for all figures? The ASCII art placeholders significantly reduce visual communication effectiveness.",
+          "Can Tables 2-6 be rendered inline in the manuscript rather than as placeholders?",
+          "Would a notation table or glossary help readers track the various symbols (H, I, S, E, CRR, ECS, TLA, FCR, etc.)?",
+          "Is the paper length appropriate for the target venue, or should it be condensed?"
+        ]
+      }
+    ],
+    "consolidated": {
+      "average_score": 7.3,
+      "overall_recommendation": "minor_revision",
+      "priority_actions": [
+        {
+          "action": "Render Tables 2-6 as formatted inline tables instead of '(see Table X)' placeholders — results tables are essential for reader comprehension",
+          "severity": "important",
+          "section": "Sections 3.3, 5.1, 5.2, 5.3",
+          "raised_by": ["R3"],
+          "rationale": "The experimental results are currently described only in prose, forcing readers to mentally reconstruct tabular data. This is the single most impactful presentation improvement remaining."
+        },
+        {
+          "action": "Replace ASCII art figure placeholders with proper vector graphics (TikZ, draw.io, or similar) for camera-ready submission",
+          "severity": "important",
+          "section": "Figures 2, 5, 6, 7, 8, 9",
+          "raised_by": ["R3"],
+          "rationale": "ASCII art figures are acceptable for draft review but inadequate for publication. The architecture diagram (Figure 2) and results visualizations (Figures 7-9) are critical for communication."
+        },
+        {
+          "action": "Report exact p-values for the Smart Query vs. B4 (Parallel) comparison rather than p < 0.05, given the modest effect size (d = 0.35)",
+          "severity": "minor",
+          "section": "Section 5.2",
+          "raised_by": ["R1"],
+          "rationale": "With a small-to-medium effect size, the exact p-value helps readers assess the strength of evidence for the serial vs. parallel advantage."
+        },
+        {
+          "action": "Add a brief note on how the 50/50 keyword-vector ratio in hybrid retrieval was determined and whether it was tuned on the development set",
+          "severity": "minor",
+          "section": "Section 3.3 (Strategy 1)",
+          "raised_by": ["R1"],
+          "rationale": "This is a design choice that could affect results; transparency about its origin improves reproducibility."
+        },
+        {
+          "action": "Add a brief note on how non-uniform priors (e.g., table popularity) would affect the CRR calculation and entropy analysis",
+          "severity": "minor",
+          "section": "Section 4.1",
+          "raised_by": ["R1"],
+          "rationale": "The uniform prior assumption (H₀ = log₂(35,287)) is a simplification; acknowledging this strengthens the formalization."
+        },
+        {
+          "action": "Consider softening 'to our knowledge, this is the first system' to 'among the first systems' to hedge against unpublished industry systems",
+          "severity": "minor",
+          "section": "Abstract, Section 1.3",
+          "raised_by": ["R2"],
+          "rationale": "Enterprise NL2SQL systems may exist in industry without publication; a slight hedge is more defensible."
+        },
+        {
+          "action": "Tighten Section 6.1 by reducing repetition of numerical results already presented in Sections 5.2-5.4; focus on interpretation and implications",
+          "severity": "minor",
+          "section": "Section 6.1",
+          "raised_by": ["R3"],
+          "rationale": "The Discussion currently restates many numbers from the Results section. Focusing on interpretation rather than repetition would tighten the paper."
+        },
+        {
+          "action": "Shorten Section 1.4 (Paper Organization) to 2-3 sentences since the structure is conventional",
+          "severity": "minor",
+          "section": "Section 1.4",
+          "raised_by": ["R3"],
+          "rationale": "The current paragraph-length roadmap is standard boilerplate that adds little value for an experienced reader."
+        },
+        {
+          "action": "Consider adding a brief mention of industry NL2SQL tools (Salesforce Einstein, Databricks AI SQL) in the Related Work to acknowledge the commercial landscape",
+          "severity": "minor",
+          "section": "Section 2.1",
+          "raised_by": ["R2"],
+          "rationale": "Acknowledging commercial systems, even without direct comparison, shows awareness of the broader ecosystem."
+        },
+        {
+          "action": "Remove one instance of 'to our knowledge' — it appears in both the abstract and introduction",
+          "severity": "minor",
+          "section": "Abstract or Section 1.3",
+          "raised_by": ["R3"],
+          "rationale": "Minor repetition that is easy to fix."
+        }
+      ],
+      "overall_assessment": "This paper has improved substantially across three review iterations (6.0 → 6.7 → 7.3). The core contribution — transforming a domain ontology into an active cognitive layer for LLM-based enterprise-scale data querying — addresses a genuine gap in the literature. The paper's strengths include a well-designed evaluation with appropriate baselines and ablations, honest acknowledgment of limitations (dataset size, reproducibility, latency tradeoffs), correctly scoped theoretical analysis, and clear differentiation from prior work. The revisions have successfully addressed all critical issues from prior rounds: the information-theoretic claims are now appropriately positioned as applying standard tools to a new context, the stigmergy framing has been tempered, the formalization is internally consistent, and the contribution counts are aligned. The remaining weaknesses are inherent scope limitations (single-domain evaluation, small dataset, proprietary data) that the authors acknowledge transparently, plus presentation polish items (inline tables, proper figures) needed for camera-ready preparation. The panel recommends minor revision with an accept-leaning disposition. The paper makes a solid contribution to the intersection of NL2SQL, knowledge representation, and multi-agent systems, with practical relevance for enterprise AI deployment. The primary value lies in the architectural design and empirical validation rather than theoretical novelty, which is appropriate for a systems-oriented contribution."
+    }
+  }
+}

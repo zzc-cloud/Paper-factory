@@ -1,0 +1,411 @@
+{
+  "agent_id": "a2-engineering-analyst",
+  "phase": 1,
+  "status": "complete",
+  "summary": "Deep engineering analysis of the Smart Query codebase across 11 source files (7,367 total lines). Extracted architecture patterns, quantitative metrics, and mapped all 13 innovations to specific code/skill locations with line ranges.",
+  "data": {
+    "architecture": {
+      "layers": [
+        {
+          "name": "Cognitive Hub Layer",
+          "description": "Ontology Layer (Neo4j knowledge graph) + Skills (cognitive frameworks) = Cognitive Hub that activates static knowledge into systematic domain cognition",
+          "components": ["Ontology Layer (Neo4j)", "Skills (SKILL.md files)", "MCP Tools (29 tools)", "LLM (final adjudication)"]
+        },
+        {
+          "name": "Ontology Layer (Three-Layer Knowledge Graph)",
+          "description": "Three-layer hierarchical knowledge graph stored in Neo4j with cross-layer associations",
+          "sub_layers": [
+            {"name": "Magic Number Indicator Layer", "nodes": 163284, "hierarchy": "SECTOR -> CATEGORY -> THEME -> SUBPATH -> INDICATOR"},
+            {"name": "Data Asset Layer", "nodes": 35379, "hierarchy": "SCHEMA -> TABLE_TOPIC -> TABLE"},
+            {"name": "Term Standard Layer", "nodes": 40319, "hierarchy": "TABLE -> TERM -> DATA_STANDARD"}
+          ]
+        },
+        {
+          "name": "Skill Orchestration Layer",
+          "description": "Main orchestrator (smart-query) dispatches to three independent strategy skills in serial, then performs comprehensive adjudication",
+          "components": ["smart-query (orchestrator)", "smart-query-indicator (strategy 1)", "smart-query-scenario (strategy 2)", "smart-query-term (strategy 3)", "sql-generation (SQL architect)"]
+        },
+        {
+          "name": "MCP Tool Layer",
+          "description": "29 MCP tools across two servers providing ontology navigation and data querying capabilities",
+          "servers": [
+            {"name": "ontology_server.py", "tool_count": 21, "backend": "Neo4j"},
+            {"name": "simple_resources_server.py", "tool_count": 8, "backend": "MySQL"}
+          ]
+        }
+      ],
+      "components": [
+        {"name": "Smart Query Orchestrator", "file": ".claude/skills/smart-query/SKILL.md", "lines": 790, "role": "Main entry point, three-strategy serial dispatch, evidence fusion, lineage analysis"},
+        {"name": "Indicator Strategy Skill", "file": ".claude/skills/smart-query-indicator/SKILL.md", "lines": 455, "role": "Magic Number indicator layer search, business path location, candidate field semantic enhancement"},
+        {"name": "Scenario Strategy Skill", "file": ".claude/skills/smart-query-scenario/SKILL.md", "lines": 454, "role": "Schema->Topic->Table convergent path navigation, dual retrieval mechanism"},
+        {"name": "Term Strategy Skill", "file": ".claude/skills/smart-query-term/SKILL.md", "lines": 508, "role": "Business term search, data standard semantics, field-level distribution discovery"},
+        {"name": "SQL Generation Skill", "file": ".claude/skills/sql-generation/SKILL.md", "lines": 1258, "role": "Two-phase architecture: evidence pack construction via Smart Query + SQL structure design and code generation"},
+        {"name": "Ontology ETL Pipeline", "file": "ontology-layer/src/load/main.py", "steps": 21, "role": "21-step ETL pipeline for building the three-layer ontology from MySQL sources into Neo4j"}
+      ],
+      "information_flow": {
+        "user_query_to_evidence": "User NL Query -> Phase 0 (Clarification) -> Strategy 1 (Indicator) -> Strategy 2 (Scenario) -> Strategy 3 (Term) -> Comprehensive Adjudication -> Evidence Pack",
+        "evidence_to_sql": "Evidence Pack (primary table + related tables + JOIN conditions) -> SQL Generation Skill -> Executable SQL",
+        "ontology_navigation_paths": {
+          "indicator_driven": "keyword_search -> get_indicator_full_path -> get_indicator_field_mapping -> get_table_terms",
+          "topic_driven": "list_schemas -> get_schema_topics -> get_topic_tables -> get_topic_tables_with_columns",
+          "term_driven": "search_terms_by_keyword -> get_tables_by_term -> get_table_terms -> get_standard_info",
+          "hybrid_retrieval": "hybrid_search_tables(keyword_limit=50, vector_limit=10) + convergent_path -> fusion"
+        },
+        "context_inheritance": "Strategy 1 output -> conversation history -> Strategy 2 implicitly reads -> conversation history -> Strategy 3 implicitly reads -> all three evidence packs -> LLM adjudication"
+      }
+    },
+    "patterns": [
+      {
+        "name": "Main Orchestrator Pattern",
+        "description": "A master SKILL.md dispatches to independent sub-skills via synchronous Skill() calls, collecting structured evidence packs from each",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "98-147"
+      },
+      {
+        "name": "Serial Execution with Synchronous Wait",
+        "description": "Each Skill call is synchronous - must wait for return before proceeding to next. This ensures deterministic execution order and enables implicit context inheritance",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "360-410"
+      },
+      {
+        "name": "Implicit Context Inheritance via Conversation History",
+        "description": "Although args only passes user_question, each sub-Skill can access the full conversation history. Later strategies implicitly extract and infer prior strategy discoveries",
+        "code_location": "docs/knowledge/research-exploration.md",
+        "line_range": "791-815"
+      },
+      {
+        "name": "Evidence Pack as Inter-Component Communication",
+        "description": "Structured JSON evidence packs serve as the communication protocol between strategies and between Smart Query and SQL Generation",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "608-667"
+      },
+      {
+        "name": "Convergent Path Navigation",
+        "description": "Schema -> Topic -> Table progressive narrowing avoids searching all 35,000+ tables globally",
+        "code_location": ".claude/skills/smart-query-scenario/SKILL.md",
+        "line_range": "80-100"
+      },
+      {
+        "name": "Dual Retrieval Mechanism",
+        "description": "Strategy 2 must simultaneously execute convergent path navigation AND hybrid search, then fuse results with fusion_score weighting",
+        "code_location": "docs/knowledge/smart-query-design.md",
+        "line_range": "454-489"
+      },
+      {
+        "name": "Lineage-Driven Related Table Discovery",
+        "description": "In comprehensive adjudication phase, execute blood lineage analysis on the final primary table to discover upstream/downstream tables for JOIN",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "473-509"
+      },
+      {
+        "name": "Isolated Table Filtering",
+        "description": "Tables with total_downstream_count=0 AND upstream_count=0 are classified as isolated (deprecated) and excluded from recommendations",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "511-519"
+      },
+      {
+        "name": "Cognitive Modular Architecture",
+        "description": "Each strategy skill is ~400 lines focused on a single cognitive task, achieving 100% instruction-following attention. Intelligence = modularity x context_inheritance_efficiency x task_focus",
+        "code_location": "docs/knowledge/smart-query-design.md",
+        "line_range": "131-187"
+      },
+      {
+        "name": "Pre-computed Indicator Field Mappings",
+        "description": "Indicator-to-physical-field mappings are pre-computed during ETL and stored in Neo4j, eliminating runtime expression parsing",
+        "code_location": "docs/knowledge/ontology-graph-building.md",
+        "line_range": "199-298"
+      }
+    ],
+    "metrics": {
+      "ontology_nodes_total": 314680,
+      "ontology_relationships_total": 623118,
+      "nodes_by_layer": {
+        "magic_number_indicator_layer": 163284,
+        "data_asset_layer": 35379,
+        "term_standard_layer": 40319
+      },
+      "nodes_by_type": {
+        "INDICATOR": 155767,
+        "SUBPATH": 6221,
+        "THEME": 961,
+        "CATEGORY": 301,
+        "SECTOR": 34,
+        "SCHEMA": 9,
+        "TABLE_TOPIC": 83,
+        "TABLE": 35287,
+        "TERM": 39558,
+        "DATA_STANDARD": 761
+      },
+      "relationships_by_type": {
+        "HAS_CHILD": 163283,
+        "HAS_TOPIC": 83,
+        "HAS_TABLE": 3385,
+        "UPSTREAM": 50509,
+        "HAS_INDICATOR": 147464,
+        "HAS_TERM": 251227,
+        "BELONGS_TO_STANDARD": 7167
+      },
+      "lineage_by_type": {
+        "TableDirectTable": 43880,
+        "TableIndirectTable": 6629
+      },
+      "tools_total": 29,
+      "tools_by_server": {
+        "ontology_server_neo4j": 21,
+        "simple_resources_server_mysql": 8
+      },
+      "tools_by_category": {
+        "smart_query_core": 16,
+        "general_purpose": 11,
+        "vector_retrieval": 3
+      },
+      "strategies": 3,
+      "skill_count": 5,
+      "skill_lines": {
+        "smart-query (orchestrator)": 790,
+        "smart-query-indicator": 455,
+        "smart-query-scenario": 454,
+        "smart-query-term": 508,
+        "sql-generation": 1258,
+        "total_skill_lines": 3465
+      },
+      "knowledge_doc_lines": {
+        "CLAUDE.md": 246,
+        "smart-query-design.md": 557,
+        "research-exploration.md": 1438,
+        "sql-generation-design.md": 327,
+        "ontology-graph-building.md": 419,
+        "mcp-tools.md": 915,
+        "total_knowledge_lines": 3902
+      },
+      "total_analyzed_lines": 7367,
+      "etl_steps": 21,
+      "schemas": 9,
+      "table_topics": 83,
+      "tables": 35287,
+      "terms_total_in_glossary": 63338,
+      "terms_matched_to_fields": 39558,
+      "terms_unmatched": 23780,
+      "terms_unmatched_percentage": 37.5,
+      "avg_terms_per_table": 8.7,
+      "median_terms_per_table": 3,
+      "p90_terms_per_table": 22,
+      "max_terms_single_table": 492,
+      "tables_with_term_associations": 28851,
+      "expression_types_supported": 8,
+      "hybrid_retrieval_default_ratio": 0.5,
+      "hybrid_retrieval_max_results": 30,
+      "table_hybrid_keyword_limit": 50,
+      "table_hybrid_vector_limit": 10,
+      "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+      "embedding_dimensions": 384,
+      "neo4j_version": "5.25 Community Edition",
+      "similarity_function": "COSINE",
+      "vector_indexes": ["indicator_vector_index", "table_vector_index", "term_vector_index"]
+    },
+    "innovations": [
+      {
+        "id": 1,
+        "name": "Cognitive Hub Layer Architecture",
+        "code_location": "docs/knowledge/research-exploration.md",
+        "line_range": "61-125",
+        "description": "The ontology layer is the digital twin of business knowledge (static), while Skills are cognitive frameworks that 'activate' the ontology into a Cognitive Hub. Formula: Ontology Layer (knowledge structure) + Skills (cognitive framework) = Cognitive Hub Layer (domain cognition capability). This separates static knowledge storage from dynamic reasoning.",
+        "academic_significance": "Proposes a novel architecture paradigm where domain ontology serves as a digital twin and instruction-following Skills provide the cognitive activation layer, creating a systematic domain cognition capability that neither component achieves alone. Distinct from RAG which treats knowledge as flat documents.",
+        "supporting_files": ["docs/knowledge/research-exploration.md", "CLAUDE.md"],
+        "key_formula": "Ontology Layer (static knowledge) + Skills (cognitive framework) = Cognitive Hub Layer (domain cognition)"
+      },
+      {
+        "id": 2,
+        "name": "Three-Strategy Serial Execution with Implicit Context Inheritance",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "98-147, 360-410",
+        "description": "Three independent strategy Skills execute serially via synchronous Skill() calls. Although args only passes user_question, each sub-Skill accesses the full conversation history, enabling implicit context inheritance. Strategy 2 can infer Strategy 1's Schema/Topic discoveries; Strategy 3 can infer all prior discoveries. This leverages the LLM's natural ability to extract information from conversation history.",
+        "academic_significance": "Demonstrates a novel approach to multi-agent coordination that exploits LLM conversation history as an implicit communication channel, avoiding explicit parameter passing while achieving semantic cumulative effects. Combines the benefits of independent execution (testability, isolation) with shared context (semantic accumulation).",
+        "supporting_files": [".claude/skills/smart-query/SKILL.md", "docs/knowledge/research-exploration.md", "docs/knowledge/smart-query-design.md"],
+        "key_mechanism": "Synchronous Skill() calls + conversation history as implicit context channel"
+      },
+      {
+        "id": 3,
+        "name": "Semantic Cumulative Effect",
+        "code_location": "docs/knowledge/research-exploration.md",
+        "line_range": "654-783",
+        "description": "Formalized as information entropy reduction: H(I|S1) < H(I), H(I|S1,S2) < H(I|S1), H(I|S1,S2,S3) < H(I|S1,S2). Each strategy progressively reduces uncertainty about the user's intent. In shared context mode, cumulative effect > sum of independent effects. Demonstrated with concrete example: Strategy 1 identifies business domain -> Strategy 2 narrows Schema search -> Strategy 3 achieves precise field matching.",
+        "academic_significance": "Provides a formal information-theoretic framework for understanding why serial shared-context execution outperforms parallel independent execution in domain-specific NL-to-SQL tasks. The entropy reduction model is quantifiable and experimentally testable.",
+        "supporting_files": ["docs/knowledge/research-exploration.md"],
+        "key_formula": "H(I|S1,S2,S3) < H(I|S1,S2) < H(I|S1) < H(I)"
+      },
+      {
+        "id": 4,
+        "name": "Evidence Pack Fusion with Cross-Validation Adjudication",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "453-605",
+        "description": "Three strategies independently collect structured evidence packs (JSON). Evidence strength is graded: 3 strategies agree = high confidence, 2 = medium-high, 1 = cautious. Cross-validation checks table consistency, field coverage, and conflict resolution. The LLM performs final adjudication based on complete evidence from all three perspectives.",
+        "academic_significance": "Introduces a multi-perspective evidence fusion mechanism where independent cognitive agents provide structured evidence that is cross-validated before LLM adjudication. This is more rigorous than simple voting or ranking, as it preserves the reasoning chain and enables conflict resolution.",
+        "supporting_files": [".claude/skills/smart-query/SKILL.md", "docs/knowledge/research-exploration.md", "docs/knowledge/smart-query-design.md"],
+        "evidence_strength_levels": {"three_strategies": "high", "two_strategies": "medium-high", "one_strategy": "cautious"}
+      },
+      {
+        "id": 5,
+        "name": "Three-Layer Ontology with Cross-Layer Associations",
+        "code_location": "docs/knowledge/ontology-graph-building.md",
+        "line_range": "1-16, 337-366",
+        "description": "Three specialized layers (Magic Number Indicator: 163,284 nodes; Data Asset: 35,379 nodes; Term Standard: 40,319 nodes) connected by cross-layer associations (HAS_INDICATOR: 147,464; HAS_TERM: 251,227; UPSTREAM: 50,509). Total: 314,680 nodes, 623,118 relationships. Each layer serves a distinct navigation purpose while cross-layer edges enable multi-perspective discovery.",
+        "academic_significance": "Demonstrates a scalable multi-layer ontology design for banking domain with 300K+ nodes that supports three independent navigation paths while maintaining cross-layer semantic coherence through 600K+ relationships.",
+        "supporting_files": ["docs/knowledge/ontology-graph-building.md", "CLAUDE.md"],
+        "scale": {"total_nodes": 314680, "total_relationships": 623118}
+      },
+      {
+        "id": 6,
+        "name": "Fixed-Ratio Hybrid Retrieval with Field-Level Vectorization",
+        "code_location": "docs/knowledge/smart-query-design.md",
+        "line_range": "204-297",
+        "description": "TABLE embeddings are generated by concatenating table description + all column descriptions (field-level vectorization). Fixed 50/50 ratio hybrid retrieval: 15 keyword results + 15 vector results. Design philosophy: vector search is complementary (not replacement) to keyword search - they recall different dimensions of relevance. Both-recalled nodes get fusion_score=1.0. Embedding model: paraphrase-multilingual-MiniLM-L12-v2 (384-dim, bilingual CN/EN).",
+        "academic_significance": "Proposes field-level vectorization for table retrieval (embedding table+columns together) and a fixed-ratio hybrid strategy that treats keyword and vector retrieval as complementary rather than competing approaches. The fusion scoring mechanism provides a principled way to combine heterogeneous retrieval signals.",
+        "supporting_files": ["docs/knowledge/smart-query-design.md", "docs/knowledge/mcp-tools.md"],
+        "parameters": {"keyword_ratio": 0.5, "max_results": 30, "embedding_dim": 384}
+      },
+      {
+        "id": 7,
+        "name": "Dual Retrieval Mechanism",
+        "code_location": "docs/knowledge/smart-query-design.md",
+        "line_range": "454-489",
+        "description": "Strategy 2 MUST simultaneously execute two retrieval paths: (1) Convergent path navigation (Schema->Topic->Table) for structured coverage of the target business domain, and (2) Hybrid search (keyword_limit=50, vector_limit=10) for semantic expansion discovering synonyms and alternative expressions. Results are fused with deduplication and fusion_score weighting. Tables recalled by both methods get highest confidence.",
+        "academic_significance": "Demonstrates that structured ontology navigation and semantic vector search are complementary rather than substitutable. The dual mechanism ensures both precision (convergent path) and recall (semantic expansion), with fusion scoring providing a principled combination.",
+        "supporting_files": ["docs/knowledge/smart-query-design.md", ".claude/skills/smart-query-scenario/SKILL.md", "docs/knowledge/mcp-tools.md"],
+        "retrieval_paths": {"convergent": "Schema->Topic->Table", "hybrid": "keyword(50)+vector(10)"}
+      },
+      {
+        "id": 8,
+        "name": "Progressive Degradation Search",
+        "code_location": ".claude/skills/smart-query-indicator/SKILL.md",
+        "line_range": "84-100",
+        "description": "Strategy 1 uses layered_keyword_search with fixed-ratio hybrid (50% exact + 50% vector). If indicator search yields no results, falls back to find_indicators_by_name for fuzzy matching. If still no results, the strategy gracefully degrades and reports findings to the orchestrator. The orchestrator continues with remaining strategies rather than failing entirely.",
+        "academic_significance": "Implements a graceful degradation pattern where each strategy can partially fail without blocking the overall system. This robustness property is critical for production NL-to-SQL systems where user queries may not match any single strategy perfectly.",
+        "supporting_files": [".claude/skills/smart-query-indicator/SKILL.md", ".claude/skills/smart-query/SKILL.md"],
+        "fallback_chain": "layered_keyword_search -> find_indicators_by_name -> graceful degradation"
+      },
+      {
+        "id": 9,
+        "name": "Isolated Table Filtering via Lineage Heat Analysis",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "486-519",
+        "description": "Isolated tables are defined as: total_downstream_count=0 AND upstream_count=0 (is_isolated=true). These represent deprecated/abandoned tables with no data flow. Filtering is applied during comprehensive adjudication phase on candidate related tables (not during strategy execution). Source tables (downstream=0, upstream>0) and normal downstream tables (downstream>0, upstream=0) are preserved.",
+        "academic_significance": "Introduces a graph-theoretic approach to data quality in ontology-based systems. By analyzing the lineage graph topology (in-degree and out-degree), the system automatically identifies and excludes deprecated tables without requiring manual curation, improving recommendation quality.",
+        "supporting_files": [".claude/skills/smart-query/SKILL.md", "docs/knowledge/smart-query-design.md"],
+        "filter_rule": "is_isolated = (total_downstream_count == 0 AND upstream_count == 0)"
+      },
+      {
+        "id": 10,
+        "name": "Lineage-Driven Related Table Discovery with Automatic JOIN",
+        "code_location": ".claude/skills/smart-query/SKILL.md",
+        "line_range": "473-555",
+        "description": "After primary table is determined via cross-validation, the system executes get_table_dependencies(direction='all') to discover upstream/downstream tables via pre-computed lineage relationships. For each candidate related table: (1) check isolation status, (2) get terms/columns, (3) identify matching fields via shared term_en_name, (4) determine JOIN type (INNER/LEFT). Key insight: lineage relationships reflect actual ETL data flow, making JOIN conditions more reliable than vector-search-based table discovery.",
+        "academic_significance": "Demonstrates that pre-computed data lineage (reflecting actual ETL pipelines) provides more reliable JOIN condition discovery than semantic similarity search. This is a fundamental insight: structural facts (lineage) outperform semantic guesses (vector similarity) for relational operations.",
+        "supporting_files": [".claude/skills/smart-query/SKILL.md", "docs/knowledge/sql-generation-design.md", "docs/knowledge/smart-query-design.md"],
+        "key_insight": "Lineage = structural facts about data flow; Vector search = semantic guesses about relatedness"
+      },
+      {
+        "id": 11,
+        "name": "Pre-computed Indicator Field Mappings",
+        "code_location": "docs/knowledge/ontology-graph-building.md",
+        "line_range": "199-312",
+        "description": "The c_expression field in t_bizattr contains complex expressions (8 format types: standard, missing caret, function-wrapped, arithmetic, CASE WHEN, REF, C_BIZATTR, BizView). An expression parser with 7-step priority chain extracts physical table.column references. These mappings are pre-computed during ETL (step 11-16) and stored as HAS_INDICATOR relationships (147,464 edges) in Neo4j. At query time, get_indicator_field_mapping() reads directly from Neo4j without re-parsing.",
+        "academic_significance": "Addresses the challenge of mapping business indicators to physical database fields through complex expression parsing. The pre-computation strategy converts a runtime O(n) parsing problem into an O(1) graph lookup, enabling real-time indicator-to-field resolution at scale.",
+        "supporting_files": ["docs/knowledge/ontology-graph-building.md"],
+        "expression_types": 8,
+        "parser_priority_steps": 7,
+        "precomputed_mappings": 147464
+      },
+      {
+        "id": 12,
+        "name": "Cognitive Modular Architecture with Instruction-Following Optimization",
+        "code_location": "docs/knowledge/smart-query-design.md",
+        "line_range": "131-187",
+        "description": "Each strategy is an independent Skill (~400 lines) focused on a single cognitive task. This achieves 100% attention on current instructions. Key formula: Intelligence = modularity x context_inheritance_efficiency x task_focus. Instruction-following quality = context_focus x instruction_clarity x task_complexity. By splitting a 2000+ line monolithic skill into 4-5 focused skills, each skill achieves near-perfect instruction compliance.",
+        "academic_significance": "Provides empirical evidence and a theoretical framework for optimizing LLM instruction-following in complex multi-step tasks. The modular decomposition principle - that smaller, focused instruction sets yield better compliance than large monolithic ones - has broad implications for LLM-based system design.",
+        "supporting_files": ["docs/knowledge/smart-query-design.md", ".claude/skills/smart-query/SKILL.md"],
+        "key_formulas": [
+          "Intelligence = modularity x context_inheritance_efficiency x task_focus",
+          "Instruction-following quality = context_focus x instruction_clarity x task_complexity"
+        ],
+        "avg_skill_lines": 400
+      },
+      {
+        "id": 13,
+        "name": "Multi-Scenario Unified Ontology",
+        "code_location": "docs/knowledge/research-exploration.md",
+        "line_range": "979-1411",
+        "description": "Proposes extending the single-scenario (Smart Query) ontology into a unified ontology supporting three scenarios: Smart Query, Data Development, and Data Governance. Architecture: shared foundation layer (TABLE, FIELD, TERM, STANDARD, SCHEMA) + three scenario-specific layers. Cross-scenario associations enable synergistic effects: Smart Query identifies hot data -> Data Governance prioritizes quality -> Data Development optimizes -> standards improve. This creates a flywheel effect.",
+        "academic_significance": "Proposes a multi-scenario ontology fusion architecture with a shared foundation layer and scenario-specific extensions. The flywheel effect between data querying, development, and governance represents a novel contribution to enterprise data management theory.",
+        "supporting_files": ["docs/knowledge/research-exploration.md"],
+        "scenarios": ["Smart Query (user perspective)", "Data Development (implementation perspective)", "Data Governance (management perspective)"],
+        "status": "Smart Query implemented; Data Development and Data Governance are proposed extensions"
+      }
+    ],
+    "ontology_etl": {
+      "steps": 21,
+      "description": "21-step ETL pipeline: Steps 1-9 (Magic Number Indicator Layer extraction/transformation/loading), Step 10 (data cleaning - remove temporary sectors), Steps 11-16 (Data Asset Layer extraction/transformation/loading including expression parsing for indicator-field mappings), Step 17 (clean empty SCHEMAs), Steps 18-21 (Term Standard Layer extraction/transformation/loading)",
+      "data_sources": [
+        {"table": "t_restree", "purpose": "Magic Number indicator tree structure"},
+        {"table": "t_bizattr", "purpose": "Indicator to physical field mapping expressions"},
+        {"table": "bigmeta_entity_table", "purpose": "Table metadata and lineage (Input/Output)"},
+        {"table": "t_schema_topic_config", "purpose": "Schema-Topic configuration"},
+        {"table": "data_business_glossary", "purpose": "Business terms (63,338 total, 39,558 matched)"},
+        {"table": "data_standard", "purpose": "Data standards (761)"}
+      ],
+      "expression_parser": {
+        "supported_formats": 8,
+        "priority_chain": ["_parse_cbizattr (stats only)", "_parse_standard_format", "_parse_missing_caret", "_parse_function_wrapped", "_parse_arithmetic", "_parse_case_when", "_extract_all_c_fields (fallback)"],
+        "key_insight": "C_BIZATTR uses Chinese names (stats only, not for mapping); C_FIELD uses standard schema.table.column format (primary mapping source)"
+      },
+      "lineage_construction": {
+        "total_upstream_relationships": 50509,
+        "direct_lineage": 43880,
+        "indirect_lineage": 6629,
+        "strategy": "Only build relationships between tables that exist in bigmeta_entity_table; skip external references"
+      }
+    },
+    "design_decisions": [
+      {
+        "decision": "Serial execution over parallel execution",
+        "rationale": "Enables semantic cumulative effect where each strategy benefits from prior discoveries via conversation history",
+        "location": "docs/knowledge/research-exploration.md:654-783"
+      },
+      {
+        "decision": "Independent Skills over monolithic skill",
+        "rationale": "Each ~400 line skill achieves 100% instruction-following attention vs degraded compliance in 2000+ line monolithic skill",
+        "location": "docs/knowledge/smart-query-design.md:131-187"
+      },
+      {
+        "decision": "Implicit context inheritance over explicit parameter passing",
+        "rationale": "Leverages LLM's natural conversation history understanding; maintains backward compatibility; reduces inter-skill coupling",
+        "location": "docs/knowledge/research-exploration.md:791-968"
+      },
+      {
+        "decision": "Lineage-driven JOIN over vector-search-based JOIN",
+        "rationale": "Lineage reflects actual ETL data flow (structural facts) vs vector search (semantic guesses); more precise and reliable",
+        "location": "docs/knowledge/sql-generation-design.md:99-198"
+      },
+      {
+        "decision": "Pre-computed indicator mappings over runtime parsing",
+        "rationale": "Converts O(n) runtime expression parsing to O(1) graph lookup; supports 8 expression format types",
+        "location": "docs/knowledge/ontology-graph-building.md:199-312"
+      },
+      {
+        "decision": "Fixed-ratio hybrid retrieval over adaptive retrieval",
+        "rationale": "50/50 split provides consistent complementary coverage; keyword and vector recall different relevance dimensions",
+        "location": "docs/knowledge/smart-query-design.md:228-268"
+      },
+      {
+        "decision": "Blood lineage analysis in adjudication phase (not in individual strategies)",
+        "rationale": "Must be based on final primary table (determined after cross-validation); avoids premature exploration of candidate tables",
+        "location": ".claude/skills/smart-query/SKILL.md:288-356"
+      },
+      {
+        "decision": "SQL Generation calls Smart Query internally (not direct MCP tools)",
+        "rationale": "Avoids duplication of business understanding logic; single source of truth; consistent results across callers",
+        "location": "docs/knowledge/sql-generation-design.md:90-98"
+      }
+    ]
+  }
+}

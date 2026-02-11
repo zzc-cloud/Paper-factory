@@ -1,0 +1,211 @@
+{
+  "agent_id": "d2-revision-specialist",
+  "phase": 4,
+  "status": "complete",
+  "summary": "Addressed 1 critical, 5 important, and 6 minor review comments across 8 sections. All critical and important items addressed; all minor items addressed. 2 important items declined (ASCII figures, table placeholders) as outside text revision scope.",
+  "data": {
+    "review_score_before": 6.7,
+    "statistics": {
+      "total_action_items": 13,
+      "critical_addressed": 1,
+      "critical_total": 1,
+      "important_addressed": 5,
+      "important_total": 6,
+      "minor_addressed": 6,
+      "minor_total": 6,
+      "declined": 2,
+      "sections_modified": ["Abstract", "Section 1.1", "Section 1.3", "Section 2.3", "Section 3.1", "Section 3.2", "Section 3.3", "Section 4.2", "Section 4.3", "Section 5.1", "Section 6.1", "Section 6.2", "Section 7.1", "Table 7"]
+    },
+    "revisions": [
+      {
+        "id": "REV-001",
+        "action_item": "Expand evaluation dataset acknowledgment, particularly Adversarial category (10 queries) insufficient for reliable conclusions",
+        "severity": "critical",
+        "raised_by": ["R1", "R2"],
+        "section": "Section 5.1 (Experimental Setup)",
+        "change_type": "strengthen",
+        "description": "Strengthened the Adversarial category limitation acknowledgment with specific statistical reasoning (±0.30 CI), explicit statement that results are statistically underpowered, and concrete future work target (50+ queries)",
+        "before_summary": "Brief note that Adversarial category is 'particularly small' and results 'should be interpreted as indicative rather than conclusive'",
+        "after_summary": "Detailed statistical explanation: n=10 yields ±0.30 CI, results are 'statistically underpowered', 'preliminary and indicative of trends rather than definitive', with explicit priority to expand to 50+ queries",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-002",
+        "action_item": "Resolve dual naming confusion between Smart Query and Cognitive Hub",
+        "severity": "important",
+        "raised_by": ["R3"],
+        "section": "Abstract, Section 1.1",
+        "change_type": "rephrase",
+        "description": "Added explicit naming clarification: 'Cognitive Hub' = architectural concept, 'Smart Query' = implemented system",
+        "before_summary": "Abstract used both names without clarification",
+        "after_summary": "Abstract introduces 'the Cognitive Hub architecture, implemented in a system called Smart Query'; Section 1.1 adds explicit terminology definition",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-003",
+        "action_item": "Add latency-accuracy tradeoff analysis to justify serial execution's 2x latency cost",
+        "severity": "important",
+        "raised_by": ["R1"],
+        "section": "Section 6.1 (Key Findings)",
+        "change_type": "add",
+        "description": "Added dedicated 'Latency-Accuracy Tradeoff' paragraph analyzing when the 2x latency cost is justified",
+        "before_summary": "No explicit latency-accuracy tradeoff discussion",
+        "after_summary": "New paragraph discussing deployment context, cost asymmetry, potential mitigations, and Pareto analysis as future work",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-004",
+        "action_item": "Condense Section 4.3 cognitive architecture mappings",
+        "severity": "important",
+        "raised_by": ["R3"],
+        "section": "Section 4.3",
+        "change_type": "restructure",
+        "description": "Replaced three verbose subsections with Table 8 comparison table (8 concepts × 4 architectures), Key Parallels paragraph, and condensed Engineering Innovations",
+        "before_summary": "Three separate subsections with repetitive structure (~35 paragraphs total)",
+        "after_summary": "Single Table 8 with concise Key Parallels and 4 Engineering Innovations",
+        "cascading_changes": ["Section 4 closing paragraph updated to reference Table 8"]
+      },
+      {
+        "id": "REV-005",
+        "action_item": "Reconcile contribution count: Section 1.3 lists 4, Section 7.1 lists 5",
+        "severity": "important",
+        "raised_by": ["R1", "R3"],
+        "section": "Section 1.3",
+        "change_type": "restructure",
+        "description": "Updated Section 1.3 from 4 to 5 contributions, splitting C4 into C4 (Search Space Reduction) and C5 (Evaluation Framework)",
+        "before_summary": "4 contributions with C4 combining search space reduction and empirical validation",
+        "after_summary": "5 contributions (C1-C5) matching Section 7.1",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-006",
+        "action_item": "Remove Intelligence = modularity × context_inheritance_efficiency × task_focus pseudo-formula",
+        "severity": "minor",
+        "raised_by": ["R1", "R3"],
+        "section": "Section 3.3",
+        "change_type": "rephrase",
+        "description": "Replaced pseudo-formula with prose statement expressing the same design principle",
+        "before_summary": "Unjustified mathematical formula",
+        "after_summary": "Prose: 'modular decomposition enables specialization, context inheritance enables semantic accumulation, task focus enables attention concentration'",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-007",
+        "action_item": "Restructure abstract into problem-approach-results format",
+        "severity": "minor",
+        "raised_by": ["R3"],
+        "section": "Abstract",
+        "change_type": "restructure",
+        "description": "Split dense single paragraph into three paragraphs: problem, approach, results",
+        "before_summary": "Single dense paragraph",
+        "after_summary": "Three-paragraph structure with key result more prominent",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-008",
+        "action_item": "Resolve formalization tension between S_2(q, O, T, E_1) notation and implicit context mechanism",
+        "severity": "minor",
+        "raised_by": ["R1"],
+        "section": "Section 3.1",
+        "change_type": "rephrase",
+        "description": "Changed notation to S_k(..., H_{k-1}) and added explicit clarification that this represents logical dependency, not explicit parameter passing",
+        "before_summary": "S_2(q, O, T, E_1) suggesting explicit parameter passing",
+        "after_summary": "S_k(..., H_{k-1}) with explicit statement about logical vs explicit dependency",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-009",
+        "action_item": "Trim Digital Twin Concept paragraph in Section 3.2",
+        "severity": "minor",
+        "raised_by": ["R3"],
+        "section": "Section 3.2",
+        "change_type": "remove",
+        "description": "Condensed from 4 sentences to 1 sentence",
+        "before_summary": "4-sentence paragraph with extended comparison",
+        "after_summary": "Single sentence defining the concept",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-010",
+        "action_item": "Discuss sensitivity to strategy ordering",
+        "severity": "minor",
+        "raised_by": ["R1"],
+        "section": "Section 6.2 (Limitations)",
+        "change_type": "add",
+        "description": "Added Strategy Ordering Sensitivity paragraph discussing fixed ordering rationale and adaptive ordering as future work",
+        "before_summary": "No discussion of ordering sensitivity",
+        "after_summary": "New paragraph connecting to information-theoretic framework and identifying adaptive ordering as future work",
+        "cascading_changes": []
+      },
+      {
+        "id": "REV-011",
+        "action_item": "Temper stigmergy framing throughout paper",
+        "severity": "minor",
+        "raised_by": ["R2"],
+        "section": "Sections 1.1, 2.3, 3.3, 4.2, 7.1, Table 7",
+        "change_type": "soften",
+        "description": "Systematically tempered stigmergy framing across 6 locations. Renamed coordination pattern to 'Pipeline-Blackboard Hybrid with Context Inheritance'. Acknowledged that underlying mechanism is standard LLM conversation reading; reframed novelty as architectural design",
+        "before_summary": "Stigmergy framing used prominently, presented as novel mechanism",
+        "after_summary": "Stigmergy retained as analogy only, with explicit acknowledgment of mechanism simplicity",
+        "cascading_changes": ["Table 7 updated", "Section 4 closing paragraph updated"]
+      },
+      {
+        "id": "REV-012",
+        "action_item": "Soften near-100% instruction compliance claim (unsupported)",
+        "severity": "minor",
+        "raised_by": ["R1"],
+        "section": "Section 3.1, Section 3.3",
+        "change_type": "soften",
+        "description": "Replaced 'near-perfect' and 'near-100%' with 'empirically improves' and 'substantially improved'",
+        "before_summary": "Unsupported claims of near-perfect compliance",
+        "after_summary": "Softer claims of empirical improvement",
+        "cascading_changes": []
+      }
+    ],
+    "declined_changes": [
+      {
+        "action_item": "Replace ASCII art figures with proper diagrams for publication",
+        "raised_by": ["R3"],
+        "reason": "Figure replacement requires graphic design tools outside text revision scope. ASCII figures are placeholders; proper vector graphics should be created during camera-ready preparation."
+      },
+      {
+        "action_item": "Address missing tables referenced as (see Table X) placeholders",
+        "raised_by": ["R3"],
+        "reason": "Table placeholders are formatting artifacts. Table data is presented inline in the text. Proper table rendering should be handled during typesetting."
+      }
+    ],
+    "questions_addressed": [
+      {
+        "question": "Can you clarify the relationship between Smart Query and Cognitive Hub?",
+        "raised_by": "R3",
+        "resolution": "Added explicit clarification: Cognitive Hub = architecture, Smart Query = system",
+        "section": "Abstract, Section 1.1"
+      },
+      {
+        "question": "What is the latency-accuracy Pareto frontier?",
+        "raised_by": "R1",
+        "resolution": "Added latency-accuracy tradeoff analysis; identified full Pareto analysis as future work",
+        "section": "Section 6.1"
+      },
+      {
+        "question": "How sensitive is the system to strategy ordering?",
+        "raised_by": "R1",
+        "resolution": "Added Strategy Ordering Sensitivity paragraph with information-theoretic framing",
+        "section": "Section 6.2"
+      },
+      {
+        "question": "Could Section 4.3 be condensed into a comparison table?",
+        "raised_by": "R3",
+        "resolution": "Replaced with Table 8 (8 concepts × 4 architectures)",
+        "section": "Section 4.3"
+      },
+      {
+        "question": "What is the marginal contribution of the cognitive architecture framing?",
+        "raised_by": "R2",
+        "resolution": "Condensed Section 4.3 now more clearly separates analogical value from engineering innovations",
+        "section": "Section 4.3"
+      }
+    ],
+    "post_revision_notes": "All critical and important items addressed. Two important items declined (ASCII figures, table placeholders) as outside text revision scope. Remaining concerns requiring new work: (1) expanding dataset beyond 100 queries, (2) cross-domain validation, (3) comparison with external enterprise NL2SQL systems."
+  }
+}

@@ -1,0 +1,376 @@
+{
+  "agent_id": "a4-innovation-formalizer",
+  "phase": 1,
+  "status": "complete",
+  "timestamp": "2026-02-11T12:00:00Z",
+  "summary": "Formalized 13 innovations into 4 contribution themes. Core innovations: [1, 2, 3, 4, 5]. Supporting innovations: [6, 7, 8, 9, 10, 11, 12, 13]. Drafted 4 contribution statements for the paper Introduction.",
+  "data": {
+    "contribution_themes": [
+      {
+        "theme_id": "A",
+        "theme": "Cognitive Hub Architecture: Domain Ontology as Externalized Cognition for LLM-Based Reasoning",
+        "description": "We propose a cognitive hub architecture that combines a multi-layer domain ontology (serving as externalized declarative memory) with specialized cognitive skills (serving as procedural memory), creating an activated cognitive system that bridges the gap between general-purpose LLMs and domain-specific data querying tasks. The ontology provides structured knowledge (indicator hierarchies, data asset topology, term-standard mappings) while skills provide systematic reasoning procedures (three-strategy evidence collection). This architecture is theoretically grounded in the declarative-procedural memory distinction from cognitive science (ACT-R, SOAR) and the CoALA framework for language agents.",
+        "innovation_ids": [1, 5, 12],
+        "theoretical_basis": "Cognitive architecture theory (ACT-R declarative/procedural memory distinction, SOAR long-term memory systems, CoALA framework for language agents), knowledge engineering, ontology-based data access (OBDA)",
+        "novelty_level": "high",
+        "generalizability": "high — applicable to any domain with structured knowledge that requires LLM-based reasoning over complex data landscapes"
+      },
+      {
+        "theme_id": "B",
+        "theme": "Multi-Strategy Evidence Fusion with Stigmergic Context Inheritance",
+        "description": "We introduce a multi-strategy evidence fusion mechanism where three cognitively specialized agents execute serially with implicit context inheritance through shared conversation history (a form of digital stigmergy), each exploring an orthogonal knowledge dimension (business indicators, data asset topology, business terminology). Independent evidence packs are cross-validated through a structured adjudication process with graded confidence scoring. The serial execution with implicit context inheritance produces a formally provable semantic cumulative effect: information entropy about the target data monotonically decreases as strategies execute.",
+        "innovation_ids": [2, 3, 4],
+        "theoretical_basis": "Information theory (Shannon entropy, chain rule of conditional entropy, conditional mutual information), stigmergy (Grasse 1959, digital stigmergy), blackboard systems (Hayes-Roth 1985), Dempster-Shafer evidence theory, multi-view learning",
+        "novelty_level": "high",
+        "generalizability": "high — the pattern of serial execution with implicit context inheritance and evidence fusion is applicable to any LLM-based multi-agent system requiring multi-perspective reasoning"
+      },
+      {
+        "theme_id": "C",
+        "theme": "Intelligent Search Space Reduction through Ontology-Guided Navigation",
+        "description": "We design an intelligent search space reduction framework that combines convergent path navigation (Schema→Topic→Table hierarchical narrowing), dual retrieval (structural ontology navigation + semantic vector search), progressive degradation search (precision-recall tradeoff across hierarchy levels), isolated table filtering (graph-theoretic quality assessment via lineage heat analysis), and lineage-based JOIN discovery (structural facts over semantic guesses). These mechanisms collectively reduce the candidate space from 35,000+ tables to a precise set of target tables with verified JOIN conditions.",
+        "innovation_ids": [6, 7, 8, 9, 10, 11],
+        "theoretical_basis": "Information retrieval theory (precision-recall tradeoff, hybrid retrieval), graph theory (node degree analysis, connectivity-based filtering), data lineage theory, hierarchical search space decomposition",
+        "novelty_level": "medium-high",
+        "generalizability": "medium-high — the principles of ontology-guided search space reduction and lineage-based JOIN discovery generalize to any enterprise data environment with structured metadata"
+      },
+      {
+        "theme_id": "D",
+        "theme": "Extensible Multi-Scenario Ontology with Cross-Scenario Knowledge Flow",
+        "description": "We demonstrate the extensibility of the cognitive hub architecture through a unified multi-scenario ontology design where a shared foundation layer (TABLE, FIELD, TERM, STANDARD, SCHEMA) supports scenario-specific extensions for data querying, data development, and data governance. Cross-scenario associations create a flywheel effect: querying identifies hot data, governance prioritizes quality, development optimizes pipelines, and improved standards feed back into querying accuracy.",
+        "innovation_ids": [13],
+        "theoretical_basis": "Ontology modularization theory, enterprise architecture frameworks, knowledge management lifecycle theory, feedback loop dynamics",
+        "novelty_level": "medium",
+        "generalizability": "medium — the multi-scenario ontology pattern is applicable to enterprise data platforms but requires domain-specific adaptation"
+      }
+    ],
+    "formal_contributions": [
+      {
+        "id": 1,
+        "name": "Cognitive Hub Layer Architecture",
+        "problem": "General-purpose LLMs lack the structured domain knowledge required for accurate enterprise data querying across thousands of tables. Existing approaches face fundamental limitations: direct prompting suffers from hallucination and knowledge gaps; RAG retrieves unstructured text fragments without preserving knowledge structure or enabling systematic navigation; fine-tuning embeds knowledge in model weights, making updates expensive and reasoning opaque; traditional OBDA systems provide rigid ontology-to-database mappings without leveraging LLM reasoning capabilities. No existing approach combines structured domain knowledge with flexible LLM-based reasoning in a way that separates knowledge storage from reasoning patterns.",
+        "approach": "We propose a cognitive hub architecture formalized as: Ontology Layer (externalized declarative memory) + Skills (procedural memory) = Cognitive Hub (domain cognition capability). The ontology layer is a multi-layer Neo4j knowledge graph (314,680 nodes, 623,118 relationships) organized into three semantic layers: Business Indicator (163,284 nodes with 5-level hierarchy), Data Asset (35,379 nodes with Schema→Topic→Table structure), and Term/Standard (40,319 nodes with term-standard mappings). Skills are modular cognitive frameworks (~400 lines each) that define systematic reasoning procedures for navigating the ontology. The LLM serves as the pattern-matching engine that connects declarative knowledge (ontology) with procedural knowledge (skills) to perform domain-specific reasoning. 29+ MCP tools provide structured access to the knowledge graph, serving as the retrieval mechanisms that bridge the LLM's working memory with the externalized long-term memory.",
+        "novelty": "Unlike traditional OBDA systems (rigid mapping, no LLM reasoning), pure RAG (unstructured retrieval, no knowledge structure), fine-tuning (opaque knowledge, expensive updates), or direct prompting (no domain structure), our cognitive hub architecture separates knowledge storage (ontology, independently updatable) from reasoning patterns (skills, independently composable), enabling both components to evolve independently. The ontology is not merely a lookup resource but an active participant in the reasoning process through skill-mediated navigation. This architecture is theoretically grounded in the declarative-procedural memory distinction from cognitive science (ACT-R, SOAR) and validated by the CoALA framework for language agents.",
+        "theoretical_basis": "Cognitive architecture theory: ontology = declarative memory (ACT-R, Anderson 2007), skills = procedural memory, MCP tools = retrieval mechanisms, LLM = pattern-matching engine. CoALA framework (Sumers et al. 2024): ontology = semantic long-term memory, skills = procedural long-term memory, conversation history = working memory, tools = external action space. SOAR (Laird et al. 1987): ontology = semantic LTM, skills = operators, evidence packs = working memory elements.",
+        "significance": "core",
+        "rank": 1,
+        "evaluation_criteria": ["Accuracy improvement over RAG baseline on enterprise NL2SQL tasks", "Knowledge update latency (ontology update vs. model retraining)", "Reasoning transparency (ability to trace decisions to ontology paths)", "Domain adaptation cost (effort to apply architecture to new domains)"],
+        "related_innovations": [5, 12],
+        "code_evidence": {
+          "primary_file": "docs/knowledge/research-exploration.md",
+          "line_range": "61-125",
+          "key_formula": "Ontology Layer (static knowledge) + Skills (cognitive framework) = Cognitive Hub Layer (domain cognition)"
+        }
+      },
+      {
+        "id": 2,
+        "name": "Three-Strategy Serial Execution with Implicit Context Inheritance",
+        "problem": "In LLM-based multi-agent systems for complex reasoning tasks, agents must coordinate to produce coherent results. Existing coordination mechanisms face a fundamental tension: explicit parameter passing (CrewAI, Swarm) requires predefined interfaces that limit flexibility and create tight coupling; shared message pools (MetaGPT) require structured message formats; parallel independent execution loses the opportunity for progressive refinement. No existing LLM-based MAS framework exploits the LLM's native ability to extract information from conversation history as an implicit coordination mechanism that combines the benefits of independent execution (testability, isolation) with shared context (semantic accumulation).",
+        "approach": "We introduce a serial execution architecture where three cognitively specialized agents (Indicator Expert, Scenario Navigator, Semantic Analyst) execute in fixed order via synchronous Skill() calls. Although only the user query is passed as an explicit parameter, each agent accesses the full conversation history, enabling implicit context inheritance. Strategy 2 can infer Strategy 1's Schema/Topic discoveries from conversation context; Strategy 3 can infer all prior discoveries. This mechanism constitutes a form of digital stigmergy — agents communicate indirectly by modifying the shared environment (conversation history) rather than through explicit message passing. The fixed ordering is deliberate: it enables the semantic cumulative effect where each strategy builds on prior discoveries.",
+        "novelty": "This is the first formalization of implicit context inheritance through LLM conversation history as a coordination mechanism for multi-agent systems. Unlike explicit context passing (CrewAI, Swarm), our approach leverages the LLM's native contextual understanding, requiring no predefined message formats or parameter interfaces. Unlike shared message pools (MetaGPT), our mechanism is implicit and semantically flexible. We identify this as a form of digital stigmergy — a concept from swarm intelligence (Grasse 1959) applied to LLM-based agents — where the 'environment' is semantically rich conversation history and the 'perception' mechanism is LLM contextual understanding, far more sophisticated than classical stigmergic markers.",
+        "theoretical_basis": "Stigmergy (Grasse 1959): indirect communication through environment modification. Blackboard systems (Hayes-Roth 1985): shared data structure with independent knowledge sources. Pipeline architecture: serial processing with cumulative state. The hybrid is novel: Pipeline-Blackboard with Stigmergic Context Inheritance — deterministic serial scheduling (pipeline) + shared evidence accumulation (blackboard) + implicit communication (stigmergy).",
+        "significance": "core",
+        "rank": 2,
+        "evaluation_criteria": ["Context inheritance effectiveness (% of prior discoveries correctly utilized by subsequent strategies)", "Comparison with explicit parameter passing on same tasks", "Robustness to context degradation (performance when LLM fails to extract prior context)", "Latency overhead of serial vs. parallel execution"],
+        "related_innovations": [3, 4],
+        "code_evidence": {
+          "primary_file": ".claude/skills/smart-query/SKILL.md",
+          "line_range": "98-147, 360-410",
+          "key_mechanism": "Synchronous Skill() calls + conversation history as implicit context channel"
+        }
+      },
+      {
+        "id": 3,
+        "name": "Semantic Cumulative Effect",
+        "problem": "When multiple specialized agents collaborate on a complex reasoning task, the question of whether serial (sequential) or parallel (independent) execution yields better results lacks formal theoretical grounding. Practitioners choose execution patterns based on intuition or engineering convenience rather than principled analysis. There is no formal framework for predicting when serial execution with shared context will outperform parallel independent execution in LLM-based multi-agent systems.",
+        "approach": "We formalize the semantic cumulative effect using information theory. Let I denote the target information (correct table-field mapping) and S_k denote the evidence from strategy k. We prove that: H(I|S_1,S_2,S_3) ≤ H(I|S_1,S_2) ≤ H(I|S_1) ≤ H(I), where H(·) is Shannon entropy. The proof follows from the chain rule of conditional entropy and the non-negativity of conditional mutual information: I(I; S_k|S_1,...,S_{k-1}) ≥ 0. We further establish conditions for strict inequality: the inequality is strict when strategies explore orthogonal knowledge dimensions, ensuring non-zero conditional mutual information. We prove that serial execution with context inheritance achieves lower entropy than parallel independent execution: H(I|S_1,S_2(S_1),S_3(S_1,S_2)) ≤ H(I|S_1^indep,S_2^indep,S_3^indep), because context inheritance allows later strategies to focus search, reduce redundancy, and validate prior findings.",
+        "novelty": "This is the first information-theoretic formalization of why serial shared-context execution outperforms parallel independent execution in LLM-based multi-agent systems. The key insight is that knowledge dimension orthogonality (indicators vs. data assets vs. terminology) guarantees non-zero conditional mutual information, ensuring each strategy contributes unique evidence. This transforms an engineering observation into a theoretically justified design principle with formal conditions for when the cumulative effect holds (orthogonal dimensions) and when it fails (complete redundancy, noise, context degradation).",
+        "theoretical_basis": "Information theory (Cover & Thomas 2006): Shannon entropy, conditional entropy, chain rule of mutual information, non-negativity of conditional mutual information. Multi-view learning: each strategy as a 'view' of the same query from a different knowledge dimension. Ensemble methods comparison: diversity through knowledge dimension variation rather than model variation.",
+        "significance": "core",
+        "rank": 3,
+        "evaluation_criteria": ["Empirical entropy reduction measurement across strategies", "Comparison of serial vs. parallel execution accuracy", "Measurement of conditional mutual information between strategy pairs", "Identification of query types where cumulative effect is strongest/weakest"],
+        "related_innovations": [2, 4],
+        "code_evidence": {
+          "primary_file": "docs/knowledge/research-exploration.md",
+          "line_range": "654-783",
+          "key_formula": "H(I|S1,S2,S3) ≤ H(I|S1,S2) ≤ H(I|S1) ≤ H(I)"
+        }
+      },
+      {
+        "id": 4,
+        "name": "Evidence Pack Fusion with Cross-Validation Adjudication",
+        "problem": "When multiple agents independently analyze the same query from different perspectives, their outputs may agree, partially overlap, or conflict. Simple aggregation methods (majority voting, score averaging) discard the reasoning chains that produced each recommendation and cannot resolve conflicts based on evidence quality. Existing LLM-based MAS frameworks lack a principled mechanism for fusing structured evidence from multiple specialized agents while preserving provenance and enabling transparent conflict resolution.",
+        "approach": "We introduce a multi-perspective evidence fusion mechanism where three specialized strategies independently produce structured JSON evidence packs containing: matched indicators with field mappings, candidate tables with heat scores, term definitions with data standards, and confidence assessments. Evidence strength is graded by cross-strategy consensus: 3-strategy agreement = high confidence (⭐⭐⭐), 2-strategy = medium-high (⭐⭐), 1-strategy = cautious (⭐). The orchestrator performs comprehensive adjudication: (1) cross-validate table consistency across evidence packs, (2) assess field coverage completeness, (3) resolve conflicts using evidence provenance and confidence levels, (4) execute lineage analysis on the adjudicated primary table, (5) apply isolated table filtering on candidate related tables. The complete reasoning chain from each perspective is preserved, enabling transparent decision justification.",
+        "novelty": "Unlike simple voting (loses reasoning chains), score averaging (ignores evidence structure), or single-agent reasoning (limited perspective), our evidence fusion mechanism preserves the complete multi-perspective reasoning chain while providing graded confidence scoring based on cross-strategy consensus. The adjudication process is more rigorous than ensemble combination because it operates on structured evidence (not just predictions) and can resolve conflicts by examining the provenance and quality of each evidence source. The deferred lineage analysis (performed after adjudication, not during strategy execution) ensures that expensive graph traversal is applied only to the final primary table.",
+        "theoretical_basis": "Dempster-Shafer evidence theory: combining evidence from independent sources with different reliability levels. Ensemble methods: diversity through knowledge dimension variation. Blackboard systems: independent knowledge sources contributing to shared solution space with control-component adjudication. Multi-sensory integration in neuroscience: combining information from orthogonal sensory modalities.",
+        "significance": "core",
+        "rank": 4,
+        "evaluation_criteria": ["Adjudication accuracy vs. single-strategy accuracy", "Conflict resolution quality (correct resolution rate when strategies disagree)", "Confidence calibration (correlation between consensus level and actual accuracy)", "Evidence completeness (field coverage in final evidence pack)"],
+        "related_innovations": [2, 3, 9, 10],
+        "code_evidence": {
+          "primary_file": ".claude/skills/smart-query/SKILL.md",
+          "line_range": "453-605",
+          "evidence_strength_levels": {"three_strategies": "high", "two_strategies": "medium-high", "one_strategy": "cautious"}
+        }
+      },
+      {
+        "id": 5,
+        "name": "Three-Layer Ontology with Cross-Layer Associations",
+        "problem": "Enterprise data environments contain multiple types of semantic knowledge (business indicators, physical data assets, business terminology) that are traditionally managed in separate silos. NL2SQL systems that rely on flat table metadata or single-layer knowledge graphs cannot capture the rich cross-domain relationships between business concepts, physical data structures, and standardized terminology. Building a unified knowledge representation that supports multiple independent navigation paths while maintaining cross-layer semantic coherence at enterprise scale (hundreds of thousands of entities) remains an open challenge.",
+        "approach": "We design a three-layer ontology with cross-layer associations implemented in Neo4j: (1) Business Indicator Layer (163,284 nodes) with a 5-level hierarchy (SECTOR→CATEGORY→THEME→SUBPATH→INDICATOR) encoding business metric semantics; (2) Data Asset Layer (35,379 nodes) with a 3-level hierarchy (SCHEMA→TABLE_TOPIC→TABLE) encoding physical data organization plus 50,509 UPSTREAM lineage relationships; (3) Term/Standard Layer (40,319 nodes) encoding business terminology and data standards. Three types of cross-layer associations connect the layers: HAS_INDICATOR (147,464 edges, TABLE→INDICATOR), HAS_TERM (251,227 edges, TABLE→TERM), and BELONGS_TO_STANDARD (7,167 edges, TERM→DATA_STANDARD). Total: 314,680 nodes, 623,118 relationships. Each layer supports an independent navigation strategy while cross-layer edges enable multi-perspective discovery of the same physical tables.",
+        "novelty": "Unlike single-layer knowledge graphs used in existing NL2SQL systems (which flatten all metadata into one structure), or traditional enterprise ontologies (which focus on a single domain), our three-layer design explicitly separates three orthogonal knowledge dimensions while connecting them through cross-layer associations. This separation enables three independent navigation strategies (indicator-driven, scenario-driven, term-driven) that can be executed by specialized agents, while cross-layer edges ensure that discoveries in one dimension can be validated against other dimensions. The scale (314K nodes, 623K relationships) demonstrates feasibility for production enterprise environments.",
+        "theoretical_basis": "Ontology engineering: modular ontology design with cross-module mappings. Knowledge graph theory: multi-relational graph with typed nodes and edges. OBDA (Ontology-Based Data Access): ontology as mediator between user concepts and physical data. Semantic web: layered knowledge representation with cross-layer inference.",
+        "significance": "core",
+        "rank": 5,
+        "evaluation_criteria": ["Navigation path coverage (% of queries answerable through each layer)", "Cross-layer consistency (agreement rate between layers for same query)", "Scalability metrics (query latency at 300K+ node scale)", "Ontology completeness (coverage of enterprise data assets)"],
+        "related_innovations": [1, 6, 7, 9, 10, 11, 13],
+        "code_evidence": {
+          "primary_file": "docs/knowledge/ontology-graph-building.md",
+          "line_range": "1-16, 337-366",
+          "scale": {"total_nodes": 314680, "total_relationships": 623118}
+        }
+      },
+      {
+        "id": 6,
+        "name": "Fixed-Ratio Hybrid Retrieval with Field-Level Vectorization",
+        "problem": "Table retrieval in enterprise NL2SQL systems faces a dual challenge: keyword-based search misses semantically related tables expressed with different terminology, while vector-based search may return semantically similar but contextually irrelevant tables. Furthermore, standard table-level embeddings (using only table names or descriptions) fail to capture the rich semantic information encoded in column-level metadata. No principled approach exists for combining keyword and vector retrieval for table discovery in ontology-based NL2SQL systems.",
+        "approach": "We propose field-level vectorization where table embeddings are generated by concatenating table description with all column name:description pairs (embedding_text = table_description + ' '.join([col_name:col_desc for col in columns])), enabling semantic matching at the column level. We combine this with a fixed 50/50 ratio hybrid retrieval strategy: 15 keyword results + 15 vector results, where both-recalled tables receive fusion_score=1.0 and single-source tables receive 0.5. The embedding model (paraphrase-multilingual-MiniLM-L12-v2, 384 dimensions) supports bilingual Chinese/English matching.",
+        "novelty": "Field-level vectorization for table retrieval (embedding table + all column descriptions together) is a practical contribution that enables column-level semantic matching without requiring separate column embeddings. The fixed-ratio hybrid strategy treats keyword and vector retrieval as complementary rather than competing approaches, with the fusion score providing a principled confidence signal.",
+        "theoretical_basis": "Information retrieval theory: hybrid retrieval combining exact matching with semantic similarity. Dense retrieval: embedding-based similarity search. Fusion methods: reciprocal rank fusion, score-based fusion.",
+        "significance": "supporting",
+        "rank": 10,
+        "evaluation_criteria": ["Retrieval recall@K for keyword-only vs. vector-only vs. hybrid", "Impact of field-level vs. table-level vectorization on retrieval quality", "Optimal keyword-to-vector ratio analysis", "Bilingual retrieval effectiveness"],
+        "related_innovations": [7],
+        "code_evidence": {
+          "primary_file": "docs/knowledge/smart-query-design.md",
+          "line_range": "204-297",
+          "parameters": {"keyword_ratio": 0.5, "max_results": 30, "embedding_dim": 384}
+        }
+      },
+      {
+        "id": 7,
+        "name": "Dual Retrieval Mechanism",
+        "problem": "In ontology-guided NL2SQL, neither structural navigation (following ontology hierarchies) nor semantic search (vector similarity) alone provides sufficient coverage. Structural navigation ensures coverage of the target business domain but misses synonym expressions and alternative phrasings. Semantic search discovers semantically related tables but may miss tables in the correct business domain that use different terminology. No existing approach mandates and fuses both retrieval paths for table discovery.",
+        "approach": "Strategy 2 mandates simultaneous execution of two complementary retrieval paths: (1) Convergent path navigation (list_schemas → get_schema_topics → get_topic_tables) for structured coverage of the target business domain, progressively narrowing from 9 schemas to 83 topics to target tables; (2) Hybrid search (keyword_limit=50, vector_limit=10) for semantic expansion discovering synonyms and alternative expressions. Results are fused with deduplication: tables recalled by both methods receive highest confidence. Neither path alone is sufficient; the dual mechanism ensures both precision (convergent path covers the correct domain) and recall (semantic expansion discovers alternative expressions).",
+        "novelty": "The mandatory parallel execution of structural ontology navigation and semantic vector search, with principled fusion, demonstrates that these two retrieval paradigms are complementary rather than substitutable in ontology-guided NL2SQL. This challenges the common assumption that vector search alone is sufficient for table discovery.",
+        "theoretical_basis": "Information retrieval: precision-recall tradeoff, complementary retrieval strategies. Ontology-based information retrieval: combining structural and semantic access paths. Data fusion: combining results from heterogeneous retrieval systems.",
+        "significance": "supporting",
+        "rank": 8,
+        "evaluation_criteria": ["Precision/recall of convergent path alone vs. hybrid search alone vs. dual mechanism", "Fusion quality (% of correct tables recalled by both methods)", "Coverage analysis (tables found only by one method)"],
+        "related_innovations": [6],
+        "code_evidence": {
+          "primary_file": "docs/knowledge/smart-query-design.md",
+          "line_range": "454-489",
+          "retrieval_paths": {"convergent": "Schema→Topic→Table", "hybrid": "keyword(50)+vector(10)"}
+        }
+      },
+      {
+        "id": 8,
+        "name": "Progressive Degradation Search",
+        "problem": "In hierarchical knowledge graphs with multiple levels of abstraction, exact matching at the most specific level frequently fails due to terminology mismatches, incomplete metadata, or ambiguous user queries. A rigid search strategy that requires exact matches at each level would fail silently, providing no useful results. Production NL2SQL systems require graceful degradation that trades precision for recall when exact matching fails, while maintaining overall system robustness.",
+        "approach": "We implement a progressive degradation search across the 5-level indicator hierarchy: INDICATOR (highest precision, ⭐⭐⭐⭐⭐) → THEME (⭐⭐⭐⭐) → SUBPATH (⭐⭐⭐) → CATEGORY (⭐⭐) → SECTOR (⭐). When search at the most specific level yields no results, the system falls back to broader levels, trading precision for recall. Each strategy can partially fail without blocking the overall system — the orchestrator continues with remaining strategies. This provides natural redundancy: if one strategy fails entirely, the other two can still produce useful evidence.",
+        "novelty": "The progressive degradation pattern applied to ontology hierarchy navigation, combined with the multi-strategy redundancy that ensures system-level robustness even when individual strategies fail. Maps to SOAR's impasse resolution mechanism: when the current search space is insufficient, the system creates an implicit subgoal to search at a broader level.",
+        "theoretical_basis": "SOAR cognitive architecture: impasse resolution through subgoal creation. Fault tolerance: graceful degradation in distributed systems. Precision-recall tradeoff: systematic trading of precision for recall across hierarchy levels.",
+        "significance": "supporting",
+        "rank": 11,
+        "evaluation_criteria": ["Degradation frequency (% of queries requiring fallback)", "Precision at each degradation level", "System-level robustness (% of queries with at least one successful strategy)"],
+        "related_innovations": [2],
+        "code_evidence": {
+          "primary_file": ".claude/skills/smart-query-indicator/SKILL.md",
+          "line_range": "84-100",
+          "fallback_chain": "layered_keyword_search → find_indicators_by_name → graceful degradation"
+        }
+      },
+      {
+        "id": 9,
+        "name": "Isolated Table Filtering via Lineage Heat Analysis",
+        "problem": "Enterprise data environments accumulate deprecated, abandoned, and orphan tables over time. These tables remain in metadata catalogs and knowledge graphs, polluting search results and degrading recommendation quality. Manual curation of table validity is expensive and error-prone at scale (35,000+ tables). No automated mechanism exists for identifying deprecated tables based on their structural properties in the data lineage graph.",
+        "approach": "We propose a graph-theoretic approach to automated data quality assessment using lineage topology. Tables are classified based on their in-degree (upstream_count) and out-degree (total_downstream_count) in the lineage graph: tables with both upstream_count=0 AND total_downstream_count=0 are classified as 'isolated' (deprecated/orphan) and excluded from recommendations. Source tables (downstream=0, upstream>0) and normal downstream tables (downstream>0, upstream=0) are preserved. Filtering is deferred to the adjudication phase (after all strategies have collected evidence) to maximize evidence collection before applying quality filters.",
+        "novelty": "The use of lineage graph topology (in-degree and out-degree analysis) as a zero-maintenance quality filter for automated identification of deprecated tables. The analogy to ACT-R's base-level activation decay is theoretically interesting: tables that are not reinforced through data flow (no upstream sources, no downstream consumers) are effectively 'forgotten' by the system.",
+        "theoretical_basis": "Graph theory: node degree analysis, connectivity-based classification. ACT-R cognitive architecture: base-level activation decay (unused knowledge becomes inaccessible). Data quality management: automated quality assessment through structural analysis.",
+        "significance": "supporting",
+        "rank": 9,
+        "evaluation_criteria": ["Precision of isolated table classification (false positive rate)", "Impact on recommendation quality (accuracy with vs. without filtering)", "Coverage (% of truly deprecated tables identified)"],
+        "related_innovations": [10],
+        "code_evidence": {
+          "primary_file": ".claude/skills/smart-query/SKILL.md",
+          "line_range": "486-519",
+          "filter_rule": "is_isolated = (total_downstream_count == 0 AND upstream_count == 0)"
+        }
+      },
+      {
+        "id": 10,
+        "name": "Lineage-Driven Related Table Discovery with Automatic JOIN",
+        "problem": "SQL generation for complex queries often requires joining multiple tables. Existing approaches discover related tables through schema-level foreign key analysis (limited to explicit constraints) or vector similarity search (semantic guesses that may not reflect actual data relationships). Neither approach leverages the actual data flow relationships between tables, which encode structural facts about how data is transformed and propagated through ETL pipelines.",
+        "approach": "After primary table determination through cross-validation adjudication, the system executes get_table_dependencies(direction='all') to discover upstream and downstream tables via pre-computed lineage relationships (50,509 UPSTREAM edges reflecting actual ETL data flow). For each candidate related table: (1) check isolation status via lineage heat analysis, (2) retrieve terms and columns, (3) identify matching fields via shared term_en_name, (4) determine JOIN type (INNER/LEFT) based on relationship semantics. The key insight: lineage relationships reflect actual ETL data flow (structural facts), making JOIN conditions more reliable than vector-search-based table discovery (semantic guesses).",
+        "novelty": "The fundamental insight that pre-computed data lineage provides more reliable JOIN condition discovery than semantic similarity search. This challenges the common assumption that vector search is the universal solution for table relationship discovery. Lineage = structural facts about data flow; vector search = semantic guesses about relatedness. For relational operations like JOIN, structural facts are inherently more reliable.",
+        "theoretical_basis": "Data lineage theory: provenance tracking and dependency analysis. Graph theory: directed graph traversal for dependency discovery. Database theory: JOIN condition derivation from data flow relationships.",
+        "significance": "supporting",
+        "rank": 7,
+        "evaluation_criteria": ["JOIN condition accuracy (lineage-based vs. vector-search-based vs. foreign-key-based)", "Related table discovery recall", "SQL execution success rate with lineage-derived JOINs"],
+        "related_innovations": [9, 4],
+        "code_evidence": {
+          "primary_file": ".claude/skills/smart-query/SKILL.md",
+          "line_range": "473-555",
+          "key_insight": "Lineage = structural facts about data flow; Vector search = semantic guesses about relatedness"
+        }
+      },
+      {
+        "id": 11,
+        "name": "Pre-computed Indicator Field Mappings",
+        "problem": "Business indicators in enterprise environments are defined through complex expressions that reference physical database fields. These expressions come in multiple formats (standard references, function-wrapped, arithmetic, CASE WHEN, etc.) and may contain mixed Chinese/English content. Parsing these expressions at query time introduces latency and complexity. At scale (147,464 indicator-field mappings), runtime parsing becomes a performance bottleneck for real-time NL2SQL systems.",
+        "approach": "We implement a pre-computation strategy where indicator-to-physical-field mappings are extracted during the ETL pipeline (steps 11-16) using an expression parser with a 7-step priority chain handling 8 format types: standard (^C_FIELD.schema.table.column^), missing caret, function-wrapped (cast, to_date, substr), arithmetic (+,-,*,/), CASE WHEN, REF, C_BIZATTR (Chinese names, statistics only), and BizView. The 147,464 extracted mappings are stored as HAS_INDICATOR relationships in Neo4j. At query time, get_indicator_field_mapping() reads directly from Neo4j in O(1), eliminating runtime expression parsing entirely.",
+        "novelty": "The systematic handling of 8 real-world expression format types through a prioritized parser chain, combined with the pre-computation strategy that converts O(n) runtime parsing into O(1) graph lookup. The distinction between C_BIZATTR (Chinese business names, statistics only) and C_FIELD (standard schema.table.column, primary mapping source) reflects domain-specific knowledge about banking indicator systems.",
+        "theoretical_basis": "Compiler theory: expression parsing with priority-based disambiguation. Materialized views: pre-computation of expensive derivations for O(1) lookup. ETL design patterns: extract-transform-load with derived relationship generation.",
+        "significance": "supporting",
+        "rank": 12,
+        "evaluation_criteria": ["Expression parser coverage (% of expressions successfully parsed)", "Query latency improvement (pre-computed vs. runtime parsing)", "Mapping accuracy (correctness of extracted field references)"],
+        "related_innovations": [5],
+        "code_evidence": {
+          "primary_file": "docs/knowledge/ontology-graph-building.md",
+          "line_range": "199-312",
+          "expression_types": 8,
+          "precomputed_mappings": 147464
+        }
+      },
+      {
+        "id": 12,
+        "name": "Cognitive Modular Architecture with Instruction-Following Optimization",
+        "problem": "LLM-based multi-agent systems face a fundamental constraint not present in classical architectures: instruction-following quality degrades as instruction complexity increases. A monolithic skill with 2000+ lines of instructions suffers from attention dilution, where the LLM fails to follow all instructions consistently. This constraint is specific to LLM-based systems (classical production rules either match or do not) and requires architectural solutions that account for LLM cognitive limitations.",
+        "approach": "We propose a cognitive modular architecture where each strategy is an independent skill of approximately 400 lines focused on a single cognitive task. This achieves near-100% instruction-following compliance by ensuring the LLM's full attention is directed at a manageable instruction set. We formalize this as: Intelligence ≈ Modularity × Context_Inheritance_Efficiency × Task_Focus, and Instruction-following quality = Context_Focus × Instruction_Clarity × Task_Complexity. By splitting a monolithic 2000+ line skill into 4-5 focused skills (~400 lines each), each skill achieves near-perfect instruction compliance while the overall system maintains coherence through implicit context inheritance.",
+        "novelty": "The identification of instruction-following degradation as a fundamental constraint of LLM-based cognitive architectures, and the principled response through modular decomposition. The ~400 line guideline is an empirical finding with broad implications for LLM-based system design. The formalization (Intelligence = Modularity × Context_Inheritance_Efficiency × Task_Focus) provides a design heuristic for balancing modularity against coordination overhead.",
+        "theoretical_basis": "Cognitive load theory: reducing cognitive load through task decomposition. Software engineering: modular design, separation of concerns. LLM attention mechanisms: attention dilution with increasing context length. ACT-R: production rule specificity (more specific rules fire more reliably).",
+        "significance": "supporting",
+        "rank": 6,
+        "evaluation_criteria": ["Instruction compliance rate vs. skill size (lines)", "Task accuracy comparison: monolithic vs. modular architecture", "Optimal skill size determination", "Context inheritance overhead measurement"],
+        "related_innovations": [1, 2],
+        "code_evidence": {
+          "primary_file": "docs/knowledge/smart-query-design.md",
+          "line_range": "131-187",
+          "key_formulas": ["Intelligence = modularity × context_inheritance_efficiency × task_focus", "Instruction-following quality = context_focus × instruction_clarity × task_complexity"],
+          "avg_skill_lines": 400
+        }
+      },
+      {
+        "id": 13,
+        "name": "Multi-Scenario Unified Ontology",
+        "problem": "Enterprise data platforms serve multiple stakeholder scenarios (data querying, data development, data governance) that traditionally maintain separate knowledge bases. This siloed approach leads to knowledge duplication, inconsistency, and missed opportunities for cross-scenario synergy. No existing framework provides a unified ontology architecture that serves multiple enterprise data scenarios while enabling cross-scenario knowledge flow.",
+        "approach": "We propose a unified multi-scenario ontology architecture with a shared foundation layer (TABLE, FIELD, TERM, STANDARD, SCHEMA) supporting three scenario-specific extensions: Smart Query (user perspective — indicator navigation, table discovery), Data Development (implementation perspective — lineage optimization, pipeline design), and Data Governance (management perspective — quality assessment, standard enforcement). Cross-scenario associations create a flywheel effect: Smart Query identifies frequently queried data → Data Governance prioritizes quality for hot data → Data Development optimizes pipelines → improved data standards feed back into querying accuracy.",
+        "novelty": "The multi-scenario ontology fusion architecture with shared foundation layer and scenario-specific extensions, combined with the flywheel effect between querying, development, and governance. Note: currently only the Smart Query scenario is fully implemented; Data Development and Data Governance are proposed extensions validated through architectural analysis.",
+        "theoretical_basis": "Ontology modularization: shared core with domain-specific extensions. Enterprise architecture: cross-functional knowledge integration. Feedback loop dynamics: positive reinforcement cycles between organizational functions. Knowledge management lifecycle: creation, sharing, application, and refinement.",
+        "significance": "supporting",
+        "rank": 13,
+        "evaluation_criteria": ["Cross-scenario knowledge reuse rate", "Flywheel effect measurement (improvement in one scenario from another's contributions)", "Ontology maintenance cost reduction vs. separate ontologies"],
+        "related_innovations": [5, 1],
+        "code_evidence": {
+          "primary_file": "docs/knowledge/research-exploration.md",
+          "line_range": "979-1411",
+          "scenarios": ["Smart Query (implemented)", "Data Development (proposed)", "Data Governance (proposed)"]
+        }
+      }
+    ],
+    "ranking": [
+      {
+        "id": 1,
+        "rank": 1,
+        "innovation_name": "Cognitive Hub Layer Architecture",
+        "significance": "core",
+        "justification": "Central contribution of the paper — a new architecture paradigm that bridges ontology engineering and LLM-based reasoning. Highly novel (no existing system formalizes ontology + skills as declarative + procedural memory for LLM agents), highly generalizable (applicable to any domain with structured knowledge), and strongly grounded in cognitive architecture theory (ACT-R, SOAR, CoALA). This reframes the NL2SQL problem from 'retrieval augmentation' to 'cognitive architecture design'."
+      },
+      {
+        "id": 2,
+        "rank": 2,
+        "innovation_name": "Three-Strategy Serial Execution with Implicit Context Inheritance",
+        "significance": "core",
+        "justification": "Novel coordination mechanism for LLM-based MAS that exploits conversation history as an implicit communication channel (digital stigmergy). No existing framework formalizes this pattern. Highly generalizable — applicable to any LLM-based multi-agent system. The Pipeline-Blackboard Hybrid with Stigmergic Context Inheritance is a new architectural pattern not previously described in MAS literature."
+      },
+      {
+        "id": 3,
+        "rank": 3,
+        "innovation_name": "Semantic Cumulative Effect",
+        "significance": "core",
+        "justification": "Provides rigorous information-theoretic formalization for why serial shared-context execution outperforms parallel independent execution. The proof via chain rule of conditional entropy is mathematically sound. The conditions for strict inequality (knowledge dimension orthogonality) and failure (redundancy, noise, context degradation) provide actionable design guidance. This transforms an engineering observation into a theoretical principle."
+      },
+      {
+        "id": 4,
+        "rank": 4,
+        "innovation_name": "Evidence Pack Fusion with Cross-Validation Adjudication",
+        "significance": "core",
+        "justification": "Introduces a structured evidence fusion mechanism that is more rigorous than simple voting or averaging. The graded confidence scoring (3-strategy consensus levels) and deferred lineage analysis represent principled design choices. Generalizable to any multi-agent system requiring evidence aggregation from independent sources."
+      },
+      {
+        "id": 5,
+        "rank": 5,
+        "innovation_name": "Three-Layer Ontology with Cross-Layer Associations",
+        "significance": "core",
+        "justification": "Demonstrates a scalable multi-layer ontology design at production scale (314K nodes, 623K relationships). The three-layer separation enables orthogonal navigation strategies that directly support the multi-strategy architecture. While ontology design is not novel per se, the specific three-layer structure optimized for multi-agent NL2SQL is a meaningful contribution."
+      },
+      {
+        "id": 12,
+        "rank": 6,
+        "innovation_name": "Cognitive Modular Architecture with Instruction-Following Optimization",
+        "significance": "supporting",
+        "justification": "Addresses a fundamental constraint of LLM-based systems (instruction-following degradation with complexity) through modular decomposition. The ~400 line per skill guideline is an empirical finding with broad implications for LLM-based system design. However, the theoretical formalization (Intelligence = modularity × context_inheritance_efficiency × task_focus) is more heuristic than rigorous."
+      },
+      {
+        "id": 10,
+        "rank": 7,
+        "innovation_name": "Lineage-Driven Related Table Discovery with Automatic JOIN",
+        "significance": "supporting",
+        "justification": "The insight that structural facts (lineage) outperform semantic guesses (vector similarity) for JOIN discovery is valuable and generalizable. However, the approach relies on pre-computed lineage data that may not be available in all environments. The contribution is more of a design principle than a novel algorithm."
+      },
+      {
+        "id": 7,
+        "rank": 8,
+        "innovation_name": "Dual Retrieval Mechanism",
+        "significance": "supporting",
+        "justification": "Demonstrates complementarity of structural ontology navigation and semantic vector search. The mandatory parallel execution of both retrieval paths with fusion scoring is a sound engineering design. However, hybrid retrieval is well-studied in IR literature; the novelty is in applying it to ontology-guided NL2SQL."
+      },
+      {
+        "id": 9,
+        "rank": 9,
+        "innovation_name": "Isolated Table Filtering via Lineage Heat Analysis",
+        "significance": "supporting",
+        "justification": "Graph-theoretic approach to automated data quality assessment. The zero-maintenance quality filter (no manual curation needed) is practically valuable. The analogy to ACT-R's activation decay is theoretically interesting. However, the mechanism is relatively simple (in-degree + out-degree check) and domain-specific."
+      },
+      {
+        "id": 6,
+        "rank": 10,
+        "innovation_name": "Fixed-Ratio Hybrid Retrieval with Field-Level Vectorization",
+        "significance": "supporting",
+        "justification": "Field-level vectorization (embedding table + all column descriptions) is a practical contribution for table retrieval. The fixed 50/50 ratio is a pragmatic design choice. However, hybrid retrieval and table vectorization are established techniques; the novelty is incremental."
+      },
+      {
+        "id": 8,
+        "rank": 11,
+        "innovation_name": "Progressive Degradation Search",
+        "significance": "supporting",
+        "justification": "Important robustness property for production systems. The graceful degradation pattern (strategy can partially fail without blocking the system) is good engineering. Maps to SOAR's impasse resolution mechanism. However, fallback/degradation patterns are well-known in systems engineering."
+      },
+      {
+        "id": 11,
+        "rank": 12,
+        "innovation_name": "Pre-computed Indicator Field Mappings",
+        "significance": "supporting",
+        "justification": "Converts O(n) runtime parsing to O(1) graph lookup for 147,464 indicator-field mappings. The 8-format expression parser handling real-world complexity is practically valuable. However, pre-computation is a standard optimization technique; the contribution is domain-specific."
+      },
+      {
+        "id": 13,
+        "rank": 13,
+        "innovation_name": "Multi-Scenario Unified Ontology",
+        "significance": "supporting",
+        "justification": "Proposes an interesting multi-scenario ontology fusion architecture with flywheel effects. However, only the Smart Query scenario is implemented; Data Development and Data Governance are proposed extensions. The contribution is more of a vision/architecture proposal than a validated innovation. Should be presented as future work or architectural extensibility demonstration."
+      }
+    ],
+    "contribution_statements": [
+      "We propose a **Cognitive Hub architecture** that combines a multi-layer domain ontology (314,680 nodes across three semantic layers) with specialized cognitive skills to bridge the gap between general-purpose LLMs and domain-specific data querying. Drawing on the declarative-procedural memory distinction from cognitive architecture theory (ACT-R, SOAR), the ontology serves as externalized declarative memory while skills serve as procedural memory, with the LLM acting as the pattern-matching engine. Unlike RAG (unstructured retrieval), fine-tuning (opaque knowledge), or traditional OBDA (rigid mappings), our architecture separates knowledge storage from reasoning patterns, enabling independent evolution of both components. To the best of our knowledge, this is the first work to formalize the ontology-skill duality as a cognitive architecture for LLM-based natural language data querying.",
+      "We introduce a **multi-strategy evidence fusion mechanism** where three cognitively specialized agents execute serially with implicit context inheritance through shared conversation history — a form of digital stigmergy. We formalize the resulting **semantic cumulative effect** using information theory, proving that H(I|S₁,S₂,S₃) ≤ H(I|S₁,S₂) ≤ H(I|S₁) ≤ H(I) via the chain rule of conditional entropy, and establish that knowledge dimension orthogonality guarantees strict inequality. We further prove that serial execution with context inheritance achieves lower entropy than parallel independent execution. Independent evidence packs are cross-validated through structured adjudication with graded confidence scoring (3-strategy consensus = high, 2-strategy = medium-high, 1-strategy = cautious).",
+      "We design an **intelligent search space reduction framework** combining convergent path navigation (Schema→Topic→Table hierarchical narrowing), dual retrieval (structural ontology navigation + semantic vector search with fusion scoring), progressive degradation search (precision-recall tradeoff across hierarchy levels), isolated table filtering (graph-theoretic quality assessment via lineage heat analysis), and lineage-based JOIN discovery (leveraging pre-computed data lineage as structural facts rather than semantic guesses). These mechanisms collectively reduce the candidate space from 35,000+ tables to a precise set of target tables with verified JOIN conditions.",
+      "We demonstrate the **extensibility and practical viability** of the cognitive hub architecture through: (a) a cognitive modular design where each agent skill is optimized for LLM instruction-following constraints (~400 lines per skill for near-100% compliance), (b) a 21-step reproducible ETL pipeline for systematic ontology construction from enterprise metadata, and (c) a unified multi-scenario ontology design supporting cross-scenario knowledge flow between data querying, development, and governance."
+    ],
+    "core_vs_supporting": {
+      "core": [1, 2, 3, 4, 5],
+      "supporting": [6, 7, 8, 9, 10, 11, 12, 13],
+      "rationale": "Core innovations (1-5) represent the paper's main theoretical and methodological contributions: the cognitive hub architecture paradigm (Innovation 1), the novel multi-agent coordination mechanism via implicit context inheritance (Innovation 2), the information-theoretic formalization of the semantic cumulative effect (Innovation 3), the structured evidence fusion mechanism (Innovation 4), and the three-layer ontology design that enables the multi-strategy approach (Innovation 5). These five innovations are novel, generalizable beyond the banking domain, and grounded in established theory. Supporting innovations (6-13) are important engineering contributions that enable the core innovations but are individually less novel or more domain-specific: hybrid retrieval (6, 7) applies established IR techniques to the ontology context; progressive degradation (8) is a well-known robustness pattern; isolated table filtering (9) and lineage-based JOIN (10) are graph-theoretic techniques applied to data quality; pre-computed mappings (11) is a standard optimization; cognitive modularity (12) is an empirical finding about LLM constraints; and multi-scenario ontology (13) is a proposed but unvalidated extension."
+    }
+  }
+}

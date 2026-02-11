@@ -1,0 +1,622 @@
+{
+  "agent_id": "b3-paper-architect",
+  "phase": 2,
+  "status": "complete",
+  "timestamp": "2026-02-11T15:00:00Z",
+  "summary": "Designed complete paper structure: 7 sections, 9 figures, 7 tables, targeting 8,550 words. Recommended AAAI (primary) and CIKM (secondary) as venues. Narrative arc: enterprise data complexity → ontology as cognitive hub → multi-agent serial reasoning with semantic cumulative effect → experimental validation with entropy measurement.",
+  "data": {
+    "title": "Cognitive Hub: A Multi-Agent Architecture for Ontology-Driven Natural Language Data Querying at Enterprise Scale",
+    "alternative_titles": [
+      "From Ontology to Cognition: Multi-Agent Serial Reasoning for Enterprise-Scale Data Querying",
+      "Smart Query: Ontology-Guided Multi-Strategy Evidence Fusion for Natural Language Data Access",
+      "Beyond NL2SQL: A Cognitive Hub Architecture for Navigating Enterprise Data Landscapes"
+    ],
+    "abstract_draft": "Natural language data querying over enterprise-scale databases remains a fundamental challenge: real-world banking environments contain 35,000+ tables across multiple schemas, far exceeding the capacity of existing NL2SQL systems designed for benchmarks with fewer than 200 tables. Traditional ontology-based data access (OBDA) systems provide structured mediation but require rigid formal query languages, while standalone LLMs hallucinate over complex data architectures they cannot systematically navigate. We present Cognitive Hub, a multi-agent architecture that transforms a domain ontology from passive knowledge storage into an active cognitive layer for LLM-based reasoning. Our system employs three cognitively specialized agents — Indicator Expert, Scenario Navigator, and Term Analyst — executing serially over a three-layer ontology (163K indicator nodes, 35K data asset nodes, 40K term nodes connected by 623K relationships). Each agent explores an orthogonal knowledge dimension and produces a structured evidence pack; cross-validation fusion with graded confidence scoring selects the primary table, while lineage-driven analysis discovers JOIN conditions from actual ETL data flow. We formalize the semantic cumulative effect — proving via information theory that serial execution with implicit context inheritance monotonically reduces information entropy about the target data. Experiments on [100 real banking queries / placeholder for results] against five baselines demonstrate [placeholder for key results]. To our knowledge, this is the first system to combine ontology-driven cognitive architecture with multi-agent evidence fusion for enterprise-scale natural language data querying.",
+    "narrative_arc": {
+      "problem": "Enterprise-scale natural language data querying over 35,000+ tables across 9 schemas and 83 topics remains unsolved. Existing NL2SQL systems assume small schemas (<200 tables), OBDA systems require rigid formal query languages (SPARQL) and cannot handle ambiguous natural language, and standalone LLMs hallucinate over complex multi-layer data architectures they cannot systematically navigate.",
+      "insight": "A domain ontology can serve as a Cognitive Hub — not passive knowledge storage, but an active cognitive layer that guides multi-agent reasoning. By separating declarative memory (ontology with 314K nodes) from procedural memory (specialized Skills), and connecting them through an LLM pattern-matching engine with 29+ MCP tools, we create a cognitive architecture that enables systematic domain reasoning at enterprise scale.",
+      "solution": "Smart Query employs three independent expert agents (Indicator, Scenario, Term) executing serially over a three-layer ontology. Each agent explores an orthogonal knowledge dimension via implicit context inheritance through shared conversation history (digital stigmergy). Each agent produces a structured evidence pack; cross-validation fusion selects the primary table with graded confidence; lineage analysis discovers JOIN conditions from actual ETL data flow; isolated table filtering excludes deprecated data assets.",
+      "validation": "Controlled experiments on 100 real banking queries (4 complexity categories) against 5 baselines (Direct LLM, RAG, Single-Strategy variants, Independent Agents, Parallel Execution), 6 ablation studies isolating each architectural component, and information entropy measurement of the semantic cumulative effect across strategy stages."
+    },
+    "sections": [
+      {
+        "id": "sec1",
+        "title": "Introduction",
+        "subsections": [
+          {
+            "id": "sec1.1",
+            "title": "Motivation and Problem Statement",
+            "key_arguments": [
+              "Enterprise databases contain 35,000+ tables across 9 schemas and 83 topics — orders of magnitude beyond benchmark NL2SQL systems",
+              "Existing NL2SQL systems (DIN-SQL, MAC-SQL, CHESS) assume small schemas (<200 tables) and fail at enterprise scale",
+              "LLMs alone cannot navigate complex multi-layer data architectures without structured guidance — hallucination on table/field names",
+              "Traditional OBDA (Ontop, DL-Lite) provides ontology mediation but requires rigid SPARQL, not natural language"
+            ],
+            "evidence_needed": [
+              "Statistics on enterprise schema scale (35,287 tables, 9 schemas, 163K indicators, 40K terms)",
+              "Failure modes of NL2SQL on large schemas (Bird benchmark gap: 87% Spider vs 54% Bird)",
+              "Examples of LLM hallucination on enterprise table/field names",
+              "Comparison of OBDA rigidity vs NL flexibility requirements"
+            ],
+            "word_count": 400
+          },
+          {
+            "id": "sec1.2",
+            "title": "Key Insight: Ontology as Cognitive Hub",
+            "key_arguments": [
+              "Ontology is not just passive storage — it becomes an active cognitive layer when combined with specialized Skills",
+              "Formalized as: Ontology (declarative memory) + Skills (procedural memory) = Cognitive Hub (domain cognition)",
+              "Three orthogonal knowledge dimensions enable multi-perspective reasoning",
+              "Serial execution with implicit context inheritance produces a semantic cumulative effect"
+            ],
+            "evidence_needed": [
+              "Conceptual comparison with passive KG approaches (RAG, GraphRAG, Think-on-Graph)",
+              "Cognitive architecture grounding (ACT-R declarative/procedural, SOAR, CoALA)"
+            ],
+            "word_count": 350
+          },
+          {
+            "id": "sec1.3",
+            "title": "Contributions",
+            "key_arguments": [
+              "C1: Cognitive Hub architecture — ontology + skills as declarative + procedural memory for LLM-based enterprise data querying",
+              "C2: Three-strategy serial execution with implicit context inheritance (digital stigmergy) and evidence pack fusion with cross-validation adjudication",
+              "C3: Semantic cumulative effect — information-theoretic proof that serial execution monotonically reduces entropy",
+              "C4: Intelligent search space reduction — lineage-driven JOIN discovery, isolated table filtering, dual retrieval",
+              "C5: Comprehensive evaluation on 100 real banking queries with 5 baselines, 6 ablations, and entropy measurement"
+            ],
+            "evidence_needed": [],
+            "word_count": 300
+          },
+          {
+            "id": "sec1.4",
+            "title": "Paper Organization",
+            "key_arguments": ["Brief roadmap of remaining sections"],
+            "evidence_needed": [],
+            "word_count": 100
+          }
+        ],
+        "total_word_count": 1150,
+        "figures": ["fig1"],
+        "tables": []
+      },
+      {
+        "id": "sec2",
+        "title": "Related Work",
+        "subsections": [
+          {
+            "id": "sec2.1",
+            "title": "Natural Language to SQL: From Benchmarks to Enterprise Scale",
+            "key_arguments": [
+              "Evolution from fine-tuned models to LLM-based approaches (70% → 87%+ on Spider)",
+              "Multi-agent NL2SQL (MAC-SQL) as current frontier",
+              "Enterprise scale gap: Bird reveals real-world performance lags (54-73%); no system addresses 35K+ tables"
+            ],
+            "papers": ["DIN-SQL", "DAIL-SQL", "C3", "MAC-SQL", "CHESS", "RESDSQL", "Spider", "Bird", "SParC", "LLM-SQL Survey"],
+            "word_count": 300
+          },
+          {
+            "id": "sec2.2",
+            "title": "Ontology-Based Data Access: From Formal Mappings to Flexible Reasoning",
+            "key_arguments": [
+              "OBDA tradition as intellectual ancestor (Ontop, DL-Lite, VKG)",
+              "Formal correctness guarantees but rigid: cannot handle ambiguous NL queries",
+              "Smart Query retains ontology-as-mediator principle but replaces formal rewriting with LLM reasoning"
+            ],
+            "papers": ["Ontop", "Lenzerini", "DL-Lite", "VKG Overview", "Temporal OBDA"],
+            "word_count": 250
+          },
+          {
+            "id": "sec2.3",
+            "title": "LLM-Based Multi-Agent Systems",
+            "key_arguments": [
+              "Coordination mechanisms: explicit messages (AutoGen), shared pools (MetaGPT), chat chains (ChatDev), debate (Du et al.)",
+              "No framework uses implicit context inheritance through conversation history",
+              "No formal justification for serial vs parallel execution in LLM-MAS"
+            ],
+            "papers": ["AutoGen", "MetaGPT", "ChatDev", "CAMEL", "Multi-Agent Debate", "LLM Agent Survey", "Voyager", "Toolformer", "ReAct"],
+            "word_count": 300
+          },
+          {
+            "id": "sec2.4",
+            "title": "Knowledge Graph-Enhanced LLM Reasoning",
+            "key_arguments": [
+              "KG+LLM convergence reduces hallucination by 25-60%",
+              "Graph-guided reasoning (Think-on-Graph) and hierarchical retrieval (GraphRAG)",
+              "Gap: existing work uses general KGs, not purpose-built enterprise ontologies with multiple navigation strategies"
+            ],
+            "papers": ["KG-LLM Roadmap", "Think-on-Graph", "GraphRAG", "RAG", "StructGPT", "KG-Enhanced LLM Survey"],
+            "word_count": 250
+          }
+        ],
+        "total_word_count": 1100,
+        "figures": [],
+        "tables": ["tab7"]
+      },
+      {
+        "id": "sec3",
+        "title": "System Architecture",
+        "subsections": [
+          {
+            "id": "sec3.1",
+            "title": "Overview: Cognitive Hub Architecture",
+            "key_arguments": [
+              "Formalization: Ontology Layer (declarative memory) + Skills (procedural memory) = Cognitive Hub (domain cognition)",
+              "Three-layer ontology as externalized long-term memory; Skills as cognitive procedures; LLM as pattern-matching engine",
+              "29+ MCP tools as retrieval mechanisms bridging LLM working memory with externalized knowledge",
+              "Grounded in ACT-R/SOAR/CoALA cognitive architecture theory"
+            ],
+            "evidence_needed": ["Architecture diagram showing all components and data flow"],
+            "word_count": 350
+          },
+          {
+            "id": "sec3.2",
+            "title": "Ontology Layer Design",
+            "key_arguments": [
+              "Three-layer separation enables three orthogonal navigation strategies",
+              "Indicator Layer: 163,284 nodes, 5-level hierarchy (SECTOR→CATEGORY→THEME→SUBPATH→INDICATOR)",
+              "Data Asset Layer: 35,379 nodes, 3-level hierarchy (SCHEMA→TABLE_TOPIC→TABLE) + 50,509 UPSTREAM lineage edges",
+              "Term/Standard Layer: 40,319 nodes (39,558 terms + 761 data standards)",
+              "Cross-layer associations: HAS_INDICATOR (147,464), HAS_TERM (251,227), BELONGS_TO_STANDARD (7,167)",
+              "Total: 314,680 nodes, 623,118 relationships"
+            ],
+            "evidence_needed": ["Ontology structure diagram", "Layer statistics table"],
+            "word_count": 450
+          },
+          {
+            "id": "sec3.3",
+            "title": "Three-Strategy Serial Execution",
+            "key_arguments": [
+              "Strategy 1 (Indicator Expert): Navigates indicator hierarchy via hybrid retrieval; maps business concepts to physical fields via pre-computed mappings (147,464 edges)",
+              "Strategy 2 (Scenario Navigator): Convergent path (Schema→Topic→Table) + dual retrieval (structural + semantic); fusion scoring for complementary coverage",
+              "Strategy 3 (Term Analyst): Searches 39,558 business terms; provides field-level semantic enhancement via data standards",
+              "Serial execution via synchronous Skill() calls; implicit context inheritance through shared conversation history (digital stigmergy)",
+              "Each skill ~400 lines for near-100% instruction compliance (cognitive modular architecture)"
+            ],
+            "evidence_needed": ["Strategy execution flow diagram", "Strategy capability comparison table"],
+            "word_count": 550
+          },
+          {
+            "id": "sec3.4",
+            "title": "Evidence Pack Fusion and Adjudication",
+            "key_arguments": [
+              "Three independent evidence packs cross-validated through structured adjudication",
+              "Graded confidence: 3-strategy consensus = high, 2 = medium-high, 1 = cautious",
+              "Preserves complete reasoning chains from each perspective for transparent decision justification",
+              "More rigorous than voting or averaging — operates on structured evidence, not just predictions"
+            ],
+            "evidence_needed": ["Evidence pack structure example"],
+            "word_count": 300
+          },
+          {
+            "id": "sec3.5",
+            "title": "Lineage-Driven JOIN Discovery",
+            "key_arguments": [
+              "After primary table adjudication, discover upstream/downstream tables via pre-computed lineage (50,509 UPSTREAM edges)",
+              "Key insight: lineage = structural facts about ETL data flow; vector search = semantic guesses",
+              "For relational operations (JOIN), structural facts are inherently more reliable than semantic similarity",
+              "Automatic JOIN condition inference via shared term_en_name across related tables"
+            ],
+            "evidence_needed": ["Lineage-driven JOIN example diagram"],
+            "word_count": 250
+          },
+          {
+            "id": "sec3.6",
+            "title": "Isolated Table Filtering",
+            "key_arguments": [
+              "Graph-theoretic quality filter: tables with upstream_count=0 AND downstream_count=0 are deprecated/orphan",
+              "Zero-maintenance automated detection leveraging existing lineage graph topology",
+              "Applied during adjudication phase (after evidence collection, before final recommendation)",
+              "Analogous to ACT-R base-level activation decay — unused knowledge becomes inaccessible"
+            ],
+            "evidence_needed": [],
+            "word_count": 150
+          }
+        ],
+        "total_word_count": 2050,
+        "figures": ["fig2", "fig3", "fig4", "fig5"],
+        "tables": ["tab1", "tab2"]
+      },
+      {
+        "id": "sec4",
+        "title": "Theoretical Analysis",
+        "subsections": [
+          {
+            "id": "sec4.1",
+            "title": "Semantic Cumulative Effect",
+            "key_arguments": [
+              "Formal definition: H(I|S1,S2,S3) ≤ H(I|S1,S2) ≤ H(I|S1) ≤ H(I)",
+              "Proof via chain rule of conditional entropy and non-negativity of mutual information",
+              "Strict inequality when strategies explore orthogonal knowledge dimensions (guaranteed by design)",
+              "Conditions for failure: complete redundancy, noise introduction, context degradation",
+              "Serial with context achieves lower entropy than parallel independent: H(I|S1,S2(S1),S3(S1,S2)) ≤ H(I|S1^indep,S2^indep,S3^indep)"
+            ],
+            "evidence_needed": ["Entropy reduction curve visualization", "Formal proof presentation"],
+            "word_count": 400
+          },
+          {
+            "id": "sec4.2",
+            "title": "Multi-Agent Coordination Properties",
+            "key_arguments": [
+              "Smart Query as Pipeline-Blackboard Hybrid with Stigmergic Context Inheritance",
+              "Pipeline: deterministic serial scheduling; Blackboard: shared evidence accumulation; Stigmergy: implicit communication",
+              "Comparison with ensemble methods: diversity from knowledge dimension variation (not model variation)",
+              "Implicit context inheritance as digital stigmergy — novel to LLM-based cognitive architectures"
+            ],
+            "evidence_needed": ["Paradigm comparison with classical MAS frameworks"],
+            "word_count": 300
+          },
+          {
+            "id": "sec4.3",
+            "title": "Cognitive Hub Formalization",
+            "key_arguments": [
+              "Mapping to ACT-R: ontology = declarative memory, skills = procedural memory, LLM = pattern matcher",
+              "Mapping to SOAR: ontology = semantic LTM, skills = operators, evidence packs = working memory",
+              "Mapping to CoALA: ontology = semantic long-term memory, skills = procedural LTM, tools = external action space",
+              "Novel aspects: externalized declarative memory, multi-dimensional evidence fusion, heat-based validity filtering"
+            ],
+            "evidence_needed": [],
+            "word_count": 250
+          }
+        ],
+        "total_word_count": 950,
+        "figures": ["fig6"],
+        "tables": []
+      },
+      {
+        "id": "sec5",
+        "title": "Experiments",
+        "subsections": [
+          {
+            "id": "sec5.1",
+            "title": "Experimental Setup",
+            "key_arguments": [
+              "BankQuery-100 dataset: 100 real banking queries across 4 complexity categories (30 Simple, 40 Medium, 20 Complex, 10 Adversarial)",
+              "7 metrics: TLA@1/3 (table accuracy), FCR (field coverage), ECS (evidence consensus), QRR (resolution rate), SCS (semantic consistency), ONE (navigation efficiency), JA (JOIN accuracy)",
+              "5 baselines: B0 (Direct LLM), B1 (RAG), B2a-c (Single-Strategy), B3 (Independent Agents), B4 (Parallel Execution)",
+              "Statistical rigor: paired bootstrap test (10K resamples, p<0.05), Bonferroni correction, Cohen's d effect sizes"
+            ],
+            "evidence_needed": ["Dataset statistics table", "Baseline descriptions table"],
+            "word_count": 350
+          },
+          {
+            "id": "sec5.2",
+            "title": "Main Results",
+            "key_arguments": [
+              "Smart Query vs all baselines across primary metrics (TLA@1, FCR, ECS)",
+              "Breakdown by query complexity category showing widening gap for Complex/Adversarial queries",
+              "Statistical significance of all pairwise comparisons"
+            ],
+            "evidence_needed": ["Main results comparison table", "Performance comparison bar chart"],
+            "word_count": 400
+          },
+          {
+            "id": "sec5.3",
+            "title": "Ablation Study",
+            "key_arguments": [
+              "A1 (no context inheritance): expected TLA@1 drop 10-20%, largest for Complex/Adversarial",
+              "A2 (no evidence fusion): expected TLA@1 drop 5-15%, largest for Complex queries",
+              "A3 (no isolated filtering): expected precision drop 5-10%",
+              "A4 (no lineage JOIN): expected JA drop 15-25% on multi-table queries",
+              "A5 (no dual retrieval): expected FCR drop 10-15%",
+              "A6 (no ontology hierarchy): expected ONE drop significant, TLA@1 drop for ambiguous queries"
+            ],
+            "evidence_needed": ["Ablation results table", "Ablation impact visualization"],
+            "word_count": 350
+          },
+          {
+            "id": "sec5.4",
+            "title": "Semantic Cumulative Effect Analysis",
+            "key_arguments": [
+              "Empirical validation of H0 > H1 > H2 > H3 monotonic decrease",
+              "Entropy reduction by complexity category: Simple (large H0→H1), Complex (gradual across all stages)",
+              "Cumulative reduction ratio CRR > 0.70 average; correlation between CRR and TLA@1",
+              "Serial vs parallel entropy comparison: Smart Query achieves 5-15% lower final entropy than B4"
+            ],
+            "evidence_needed": ["Entropy reduction line chart by complexity"],
+            "word_count": 300
+          },
+          {
+            "id": "sec5.5",
+            "title": "Case Studies",
+            "key_arguments": [
+              "2-3 representative query traces demonstrating context inheritance and evidence fusion",
+              "Show candidate table set narrowing at each strategy stage",
+              "Include one failure case for honest error analysis",
+              "Compare with B3 (independent agents) on same queries to illustrate context inheritance value"
+            ],
+            "evidence_needed": ["Execution trace diagrams for selected queries"],
+            "word_count": 350
+          }
+        ],
+        "total_word_count": 1750,
+        "figures": ["fig7", "fig8", "fig9"],
+        "tables": ["tab3", "tab4", "tab5", "tab6"]
+      },
+      {
+        "id": "sec6",
+        "title": "Discussion",
+        "subsections": [
+          {
+            "id": "sec6.1",
+            "title": "Key Findings and Implications",
+            "key_arguments": [
+              "Ontology as cognitive hub is more effective than passive KG or flat RAG for enterprise-scale querying",
+              "Serial execution with implicit context inheritance outperforms parallel — validated both theoretically and empirically",
+              "Evidence pack fusion provides calibrated confidence absent in single-strategy or debate approaches",
+              "Lineage-driven JOIN discovery demonstrates that structural facts outperform semantic guesses for relational operations"
+            ],
+            "word_count": 200
+          },
+          {
+            "id": "sec6.2",
+            "title": "Limitations",
+            "key_arguments": [
+              "Domain specificity: ontology is banking-specific; construction requires 21-step ETL pipeline",
+              "No formal correctness guarantees (unlike traditional OBDA); LLM reasoning is probabilistic",
+              "Serial execution introduces latency overhead vs parallel approaches",
+              "Implicit context inheritance depends on LLM contextual understanding quality",
+              "Not evaluated on standard NL2SQL benchmarks (Spider, Bird) — different problem scope"
+            ],
+            "word_count": 200
+          },
+          {
+            "id": "sec6.3",
+            "title": "Generalizability",
+            "key_arguments": [
+              "Cognitive Hub architecture is domain-agnostic: applicable to healthcare, manufacturing, finance with domain-specific ontology",
+              "Multi-strategy serial execution pattern generalizable to any LLM-MAS requiring multi-perspective reasoning",
+              "Multi-scenario ontology extension (Data Development, Data Governance) as future direction"
+            ],
+            "word_count": 200
+          }
+        ],
+        "total_word_count": 600,
+        "figures": [],
+        "tables": []
+      },
+      {
+        "id": "sec7",
+        "title": "Conclusion",
+        "subsections": [
+          {
+            "id": "sec7.1",
+            "title": "Summary and Future Work",
+            "key_arguments": [
+              "Summarize 5 contributions: Cognitive Hub, serial execution with stigmergy, semantic cumulative effect, evidence fusion, intelligent search space reduction",
+              "Future work: multi-scenario ontology extension, cross-domain transfer, formal verification of LLM reasoning, adaptive strategy ordering"
+            ],
+            "word_count": 350
+          }
+        ],
+        "total_word_count": 350,
+        "figures": [],
+        "tables": []
+      }
+    ],
+    "figure_specs": [
+      {
+        "id": "fig1",
+        "title": "Enterprise Data Querying Challenge",
+        "description": "Left: a user's natural language query in Chinese (e.g., '查询各分行中小企业贷款余额'). Right: the vast landscape of 35,287 tables across 9 schemas and 83 topics, visualized as a hierarchical treemap or scatter field. A magnifying glass or spotlight highlights the 1-3 correct target tables among thousands, illustrating the needle-in-haystack problem. Include statistics: 9 schemas, 83 topics, 35,287 tables, 163,284 indicators, 39,558 terms.",
+        "type": "problem_illustration",
+        "placement": "Section 1.1",
+        "size": "full_width",
+        "design_notes": "Use muted colors for the table landscape, bright accent for the target tables. Include a scale comparison: Spider benchmark (200 DBs, avg <10 tables) vs Smart Query (1 enterprise, 35K+ tables)."
+      },
+      {
+        "id": "fig2",
+        "title": "Cognitive Hub Architecture Overview",
+        "description": "Central architecture diagram. Left column: Three-layer ontology (Indicator Layer with 5-level hierarchy, Data Asset Layer with Schema→Topic→Table, Term/Standard Layer). Center: Cognitive Hub label connecting ontology to skills. Right column: Three strategy Skills (Indicator Expert, Scenario Navigator, Term Analyst) with serial execution arrows (1→2→3). Bottom: Evidence Pack Fusion → Adjudication → Primary Table + JOIN Conditions. Show MCP Tools (29) as the interface between Skills and Ontology. Include the formula: Ontology (declarative memory) + Skills (procedural memory) = Cognitive Hub.",
+        "type": "architecture_diagram",
+        "placement": "Section 3.1",
+        "size": "full_width",
+        "design_notes": "Use three distinct colors for the three ontology layers. Show data flow arrows. Include node/edge counts for each layer."
+      },
+      {
+        "id": "fig3",
+        "title": "Three-Layer Ontology Structure",
+        "description": "Detailed ontology diagram showing: (1) Indicator Layer: SECTOR(34)→CATEGORY(301)→THEME(961)→SUBPATH(6,221)→INDICATOR(155,767) with example path; (2) Data Asset Layer: SCHEMA(9)→TABLE_TOPIC(83)→TABLE(35,287) with UPSTREAM lineage edges (50,509); (3) Term/Standard Layer: TABLE→TERM(39,558)→DATA_STANDARD(761). Cross-layer edges shown as dashed lines: HAS_INDICATOR (147,464), HAS_TERM (251,227), BELONGS_TO_STANDARD (7,167). Include a concrete example path from a business concept through all three layers to the same physical table.",
+        "type": "ontology_structure",
+        "placement": "Section 3.2",
+        "size": "full_width",
+        "design_notes": "Vertical layout with three horizontal bands for the three layers. Cross-layer edges as vertical dashed arrows. Include one concrete example path highlighted."
+      },
+      {
+        "id": "fig4",
+        "title": "Three-Strategy Serial Execution Flow",
+        "description": "Horizontal flow diagram: User Query → Strategy 1 (Indicator Expert: hybrid retrieval → indicator path → field mapping → Evidence Pack 1) → Strategy 2 (Scenario Navigator: convergent path + hybrid search → dual retrieval fusion → Evidence Pack 2) → Strategy 3 (Term Analyst: term search → standard lookup → field distribution → Evidence Pack 3) → Comprehensive Adjudication (cross-validation → graded confidence → primary table) → Lineage Analysis (UPSTREAM discovery → JOIN conditions) → Final Evidence Pack. Show implicit context inheritance as a dashed arrow from conversation history flowing into each subsequent strategy. Show the semantic cumulative effect as an entropy reduction bar decreasing at each stage.",
+        "type": "flow_diagram",
+        "placement": "Section 3.3",
+        "size": "full_width",
+        "design_notes": "Horizontal left-to-right flow. Each strategy in a distinct colored box. Conversation history shown as a shared background layer. Entropy bar at bottom showing H0→H1→H2→H3 reduction."
+      },
+      {
+        "id": "fig5",
+        "title": "Lineage-Driven JOIN Discovery Example",
+        "description": "Concrete example: Primary table (e.g., 'loan_balance') identified by adjudication. get_table_dependencies(direction='all') discovers: UPSTREAM table 'customer_info' (direct lineage, 43,880 edges) and 'branch_dim' (indirect lineage, 6,629 edges). For each: check isolation status (not isolated), get shared terms (e.g., 'customer_id'), determine JOIN condition (loan_balance.cust_id = customer_info.cust_id, INNER JOIN). Contrast with vector-search-based JOIN: would find 'loan_application' (semantically similar but wrong relationship) instead of 'customer_info' (structurally correct).",
+        "type": "example_diagram",
+        "placement": "Section 3.5",
+        "size": "column_width",
+        "design_notes": "Show lineage graph with directed edges. Correct JOIN path in green, incorrect vector-search path in red dashed. Include the insight: 'Lineage = structural facts; Vector search = semantic guesses'."
+      },
+      {
+        "id": "fig6",
+        "title": "Semantic Cumulative Effect: Entropy Reduction",
+        "description": "Theoretical visualization showing entropy reduction across 4 stages. X-axis: Strategy Stage (0: Prior, 1: After Indicator, 2: After Scenario, 3: After Term). Y-axis: Shannon Entropy (bits). Starting point H0 = log2(35,287) ≈ 15.11 bits. Four lines for complexity categories: Simple (steep initial drop, flattens), Medium (moderate drops), Complex (gradual across all stages), Adversarial (smaller initial drops, larger H2→H3). Include 95% confidence interval bands. Show the formal inequality: H(I|S1,S2,S3) ≤ H(I|S1,S2) ≤ H(I|S1) ≤ H(I).",
+        "type": "theory_chart",
+        "placement": "Section 4.1",
+        "size": "column_width",
+        "design_notes": "Clean line chart with distinct colors per complexity category. Annotate the formal inequality. Show expected entropy ranges at each stage."
+      },
+      {
+        "id": "fig7",
+        "title": "Main Results: System Comparison",
+        "description": "Grouped bar chart comparing all systems on primary metrics. X-axis groups: TLA@1, TLA@3, FCR, ECS, QRR. Within each group: bars for Smart Query, B0 (Direct LLM), B1 (RAG), Best B2 (Single Strategy), B3 (Independent Agents), B4 (Parallel). Smart Query bar highlighted. Statistical significance stars above pairwise comparisons. Include a secondary panel showing breakdown by query complexity (Simple/Medium/Complex/Adversarial) for TLA@1.",
+        "type": "bar_chart",
+        "placement": "Section 5.2",
+        "size": "full_width",
+        "design_notes": "Smart Query in accent color; baselines in graduated grays. Error bars showing standard error. Significance stars: *p<0.05, **p<0.01, ***p<0.001."
+      },
+      {
+        "id": "fig8",
+        "title": "Ablation Study: Component Impact",
+        "description": "Heatmap or grouped bar chart showing the impact of removing each component. Rows: 6 ablations (A1-A6). Columns: affected metrics (TLA@1, FCR, ECS, JA, ONE). Cell values: Δ (performance drop from full system). Color intensity indicates severity of degradation. Alternative: grouped bar chart with Δ values, color-coded by statistical significance level.",
+        "type": "heatmap_or_bar",
+        "placement": "Section 5.3",
+        "size": "column_width",
+        "design_notes": "Red gradient for degradation severity. Include significance indicators. Rank ablations by overall impact."
+      },
+      {
+        "id": "fig9",
+        "title": "Entropy Reduction by Query Complexity",
+        "description": "Detailed entropy curves from the semantic cumulative effect measurement (Protocol P3). Four panels (one per complexity category) or overlaid lines. X-axis: Strategy Stage (0-3). Y-axis: Shannon Entropy (bits). Show individual query trajectories as thin lines, category mean as thick line, 95% CI as shaded band. Include a scatter subplot: CRR vs TLA@1 showing correlation between entropy reduction and accuracy.",
+        "type": "multi_panel_chart",
+        "placement": "Section 5.4",
+        "size": "full_width",
+        "design_notes": "Four-panel layout (2x2) for complexity categories. Include the CRR vs TLA@1 scatter as a fifth panel or inset. Annotate monotonic decrease percentage."
+      }
+    ],
+    "table_specs": [
+      {
+        "id": "tab1",
+        "title": "Ontology Layer Statistics",
+        "columns": ["Layer", "Node Types", "Node Count", "Hierarchy Levels", "Key Relationships", "Relationship Count"],
+        "rows_description": "Row 1: Indicator Layer (SECTOR→INDICATOR, 163,284 nodes, 5 levels, HAS_CHILD 163,283). Row 2: Data Asset Layer (SCHEMA→TABLE, 35,379 nodes, 3 levels, HAS_TOPIC 83 + HAS_TABLE 3,385 + UPSTREAM 50,509). Row 3: Term/Standard Layer (TERM + DATA_STANDARD, 40,319 nodes, 2 levels, BELONGS_TO_STANDARD 7,167). Row 4: Cross-Layer Associations (HAS_INDICATOR 147,464 + HAS_TERM 251,227). Row 5: Total (314,680 nodes, 623,118 relationships).",
+        "placement": "Section 3.2",
+        "rows_estimate": 5,
+        "purpose": "Quantify the ontology scale and demonstrate enterprise-grade knowledge graph complexity"
+      },
+      {
+        "id": "tab2",
+        "title": "Strategy Capability Comparison",
+        "columns": ["Capability", "Strategy 1 (Indicator)", "Strategy 2 (Scenario)", "Strategy 3 (Term)"],
+        "rows_description": "Rows: Knowledge Dimension, Entry Point, Navigation Method, Retrieval Type, Coverage Scope, Output Type, Unique Strength, Weakness. Shows complementary coverage across three orthogonal dimensions.",
+        "placement": "Section 3.3",
+        "rows_estimate": 8,
+        "purpose": "Demonstrate that three strategies are complementary (not redundant) and cover different knowledge dimensions"
+      },
+      {
+        "id": "tab3",
+        "title": "BankQuery-100 Dataset Statistics",
+        "columns": ["Category", "Count", "Tables Required", "Fields Required", "JOINs", "Key Challenge"],
+        "rows_description": "Row 1: Simple (30, single, 1-3, none, direct mapping). Row 2: Medium (40, single, 3-6, none/self, disambiguation). Row 3: Complex (20, 2-4, 5+, multi-table, cross-schema). Row 4: Adversarial (10, varies, varies, varies, ambiguity/deprecated). Row 5: Total (100).",
+        "placement": "Section 5.1",
+        "rows_estimate": 5,
+        "purpose": "Describe the evaluation dataset with clear complexity categorization"
+      },
+      {
+        "id": "tab4",
+        "title": "Baseline System Descriptions",
+        "columns": ["ID", "Name", "Description", "What It Tests", "Key Difference from Smart Query"],
+        "rows_description": "B0: Direct LLM (no ontology). B1: RAG (vector search only). B2a-c: Single-Strategy variants. B3: Independent Agents (no shared context). B4: Parallel Execution (no serial ordering).",
+        "placement": "Section 5.1",
+        "rows_estimate": 7,
+        "purpose": "Define baselines with clear justification for what each tests"
+      },
+      {
+        "id": "tab5",
+        "title": "Main Experimental Results",
+        "columns": ["System", "TLA@1", "TLA@3", "FCR", "ECS", "QRR", "ONE"],
+        "rows_description": "8 rows: Smart Query (full), B0, B1, B2a, B2b, B2c, B3, B4. Values are mean ± SE. Bold for best. Stars for statistical significance vs Smart Query. Expected: Smart Query leads on all metrics.",
+        "placement": "Section 5.2",
+        "rows_estimate": 8,
+        "purpose": "Present core experimental results — the central evidence table of the paper"
+      },
+      {
+        "id": "tab6",
+        "title": "Ablation Study Results",
+        "columns": ["Ablation", "Component Removed", "TLA@1 Δ", "FCR Δ", "Primary Affected Category", "Significance"],
+        "rows_description": "6 rows: A1 (context inheritance), A2 (evidence fusion), A3 (isolated filtering), A4 (lineage JOIN), A5 (dual retrieval), A6 (ontology hierarchy). Δ values show degradation from full system. Significance stars.",
+        "placement": "Section 5.3",
+        "rows_estimate": 6,
+        "purpose": "Validate that each architectural component contributes measurably to system performance"
+      },
+      {
+        "id": "tab7",
+        "title": "System Comparison with Related Work",
+        "columns": ["System", "Category", "Ontology Integration", "Multi-Agent", "Serial Execution", "Evidence Fusion", "Schema Scale", "NL Input"],
+        "rows_description": "8 rows: Smart Query, MAC-SQL, DIN-SQL, CHESS, Ontop, MetaGPT, Think-on-Graph, GraphRAG. Checkmarks and brief descriptions for each capability. Smart Query unique in combining all capabilities.",
+        "placement": "Section 2 (end)",
+        "rows_estimate": 8,
+        "purpose": "Position Smart Query at the intersection of four research areas, showing unique capability combination"
+      }
+    ],
+    "word_count_budget": {
+      "abstract": 250,
+      "sec1_introduction": 1150,
+      "sec2_related_work": 1100,
+      "sec3_system_architecture": 2050,
+      "sec4_theoretical_analysis": 950,
+      "sec5_experiments": 1750,
+      "sec6_discussion": 600,
+      "sec7_conclusion": 350,
+      "total_body": 7950,
+      "total_with_abstract": 8200,
+      "references_target": "35-45 references",
+      "budget_flexibility": "±500 words; can expand Sec3 (architecture) or Sec5 (experiments) if needed"
+    },
+    "venue_recommendation": {
+      "primary": {
+        "venue": "AAAI",
+        "track": "Main Technical Track or Multi-Agent Systems Track",
+        "justification": "AAAI offers the broadest AI audience and has dedicated tracks for multi-agent systems, knowledge representation, and AI applications. The paper's core contributions span architecture (Cognitive Hub), theory (semantic cumulative effect), and application (enterprise NL2SQL), making AAAI's broad scope ideal. The information-theoretic formalization and cognitive architecture grounding appeal to AAAI's theoretical orientation.",
+        "page_limit": "7 pages + references (AAAI 2025 format)",
+        "fit_score": 0.85
+      },
+      "secondary": {
+        "venue": "CIKM",
+        "track": "Full Research Paper",
+        "justification": "CIKM focuses on information and knowledge management, directly aligning with the ontology-driven querying theme. The enterprise deployment context and knowledge graph integration are strong fits. CIKM's applied focus accommodates the system-building aspects that pure theory venues might undervalue.",
+        "page_limit": "10 pages + references",
+        "fit_score": 0.82
+      },
+      "tertiary": {
+        "venue": "ACL Industry Track",
+        "track": "Industry Track",
+        "justification": "ACL Industry Track values deployed NLP systems with real-world impact. Smart Query's banking deployment, enterprise scale, and practical innovations (lineage-driven JOIN, isolated table filtering) fit the industry track's emphasis on practical systems. The NL2SQL connection provides topical relevance.",
+        "page_limit": "6 pages + references",
+        "fit_score": 0.75
+      },
+      "venue_analysis": [
+        {"venue": "AAAI/IJCAI", "type": "General AI", "fit": "High", "pros": "Multi-agent track; broad audience; theory-friendly", "cons": "Highly competitive; may need stronger baselines"},
+        {"venue": "CIKM", "type": "Information Management", "fit": "High", "pros": "Knowledge management focus; enterprise systems valued", "cons": "Lower tier than ACL/AAAI"},
+        {"venue": "ACL/EMNLP", "type": "NLP", "fit": "Medium-High", "pros": "NL2SQL track; strong NLP community", "cons": "May need NLP-specific contribution; industry track better fit"},
+        {"venue": "VLDB/SIGMOD", "type": "Database", "fit": "Medium", "pros": "Enterprise data focus; system papers valued", "cons": "Less focus on LLM/agent architectures"},
+        {"venue": "KDD", "type": "Data Mining", "fit": "Medium", "pros": "Applied ML track; industry systems", "cons": "Less theoretical focus"},
+        {"venue": "NAACL", "type": "NLP", "fit": "Medium", "pros": "NL2SQL relevant; industry track", "cons": "Regional venue; similar to ACL"}
+      ]
+    },
+    "connecting_narrative": "Enterprise data environments present a fundamental challenge that no existing approach adequately addresses. With 35,287 tables across 9 schemas, 163,284 business indicators, and 39,558 standardized terms, a banking data warehouse exemplifies the complexity that renders current NL2SQL systems ineffective — they are designed for benchmarks with fewer than 200 tables. Traditional OBDA systems like Ontop provide ontology-mediated access but demand rigid SPARQL queries, while standalone LLMs hallucinate when confronted with enterprise-scale schema complexity.\n\nOur key insight is that a domain ontology can be more than passive knowledge storage — it can serve as a Cognitive Hub. By formalizing the ontology as externalized declarative memory and specialized Skills as procedural memory (grounded in ACT-R and SOAR cognitive architecture theory), we create an active cognitive layer that enables systematic domain reasoning. This reframes the NL2SQL problem from retrieval augmentation to cognitive architecture design.\n\nThe Cognitive Hub activates through three independent expert agents, each exploring an orthogonal knowledge dimension: business indicators (163K nodes), data asset topology (35K nodes), and business terminology (40K nodes). These agents execute serially — not in parallel — because serial execution with implicit context inheritance through shared conversation history (a form of digital stigmergy) produces a semantic cumulative effect. We prove via information theory that each successive strategy monotonically reduces information entropy about the target data: H(I|S1,S2,S3) ≤ H(I|S1,S2) ≤ H(I|S1) ≤ H(I).\n\nThe three strategies are complementary by design: the Indicator Expert maps business concepts to physical fields through a 5-level hierarchy; the Scenario Navigator follows convergent paths (Schema→Topic→Table) augmented by dual retrieval combining structural navigation with semantic vector search; the Term Analyst discovers field-level mappings through 39,558 business terms and 761 data standards. Each produces a structured evidence pack; cross-validation fusion with graded confidence scoring (3-strategy consensus = high, 2 = medium-high, 1 = cautious) selects the primary table.\n\nTwo additional innovations complete the system: lineage-driven JOIN discovery uses 50,509 pre-computed UPSTREAM relationships (reflecting actual ETL data flow) to infer JOIN conditions — structural facts rather than semantic guesses. Isolated table filtering automatically detects deprecated tables through graph-theoretic analysis (in-degree + out-degree = 0), providing zero-maintenance data quality assurance.\n\nWe validate this architecture through controlled experiments on 100 real banking queries against 5 baselines spanning the design space (no ontology, no structure, single strategy, no context sharing, no serial ordering), 6 ablation studies isolating each component's contribution, and direct measurement of the semantic cumulative effect through Shannon entropy reduction across strategy stages.",
+    "cross_reference_map": {
+      "sec1_introduction": {
+        "sources": ["A1 (gaps and landscape)", "A4 (contribution statements)", "B1 (positioning statement)"],
+        "key_data": "Enterprise scale statistics from A2; gap analysis from A1/B1; contribution themes from A4"
+      },
+      "sec2_related_work": {
+        "sources": ["A1 (35 papers surveyed)", "B1 (comparison matrix, positioning, related work outline)"],
+        "key_data": "Paper categorization from A1; comparison tables from B1; gap analysis from B1"
+      },
+      "sec3_system_architecture": {
+        "sources": ["A2 (engineering analysis)", "A4 (innovations 1-12)"],
+        "key_data": "Architecture layers from A2; ontology metrics from A2; design patterns from A2; innovation formalizations from A4"
+      },
+      "sec4_theoretical_analysis": {
+        "sources": ["A3 (MAS theory)", "A4 (innovations 2, 3)"],
+        "key_data": "Paradigm mapping from A3; entropy formalization from A3/A4; cognitive architecture mappings from A3"
+      },
+      "sec5_experiments": {
+        "sources": ["B2 (experiment design)"],
+        "key_data": "Metrics M1-M7 from B2; baselines B0-B4 from B2; ablations A1-A6 from B2; dataset spec from B2; protocols P1-P5 from B2; entropy measurement methodology from B2"
+      },
+      "sec6_discussion": {
+        "sources": ["A4 (innovation 13 — future work)", "B1 (limitations from competitor analysis)"],
+        "key_data": "Multi-scenario ontology from A4; limitation analysis from B1 competitor comparisons"
+      },
+      "sec7_conclusion": {
+        "sources": ["A4 (contribution themes)", "A4 (innovation 13 — future directions)"],
+        "key_data": "Contribution summary from A4 themes A-D; future work from A4 innovation 13"
+      }
+    }
+  }
+}

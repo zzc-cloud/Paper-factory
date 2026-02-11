@@ -1,0 +1,178 @@
+{
+  "agent_id": "a3-mas-theorist",
+  "phase": 1,
+  "status": "complete",
+  "summary": "Comprehensive MAS theoretical analysis mapping Smart Query to established paradigms. Smart Query is best characterized as a Pipeline-Blackboard Hybrid with Stigmergic Context Inheritance -- a novel architecture combining serial pipeline execution with blackboard-style shared evidence accumulation, where implicit context inheritance through conversation history constitutes a form of digital stigmergy. The Semantic Cumulative Effect is formally grounded in the chain rule of conditional entropy. The Cognitive Hub (Ontology + Skills) maps closely to ACT-R's declarative + procedural memory distinction and SOAR's long-term memory + operator framework.",
+  "data": {
+    "frameworks": [
+      {
+        "name": "BDI (Belief-Desire-Intention)",
+        "description": "Agent architecture by Rao & Georgeff (1995) where agents maintain beliefs about the world, desires (goals), and intentions (committed plans). Agents reason about which plans to adopt based on current beliefs and desires, using practical reasoning.",
+        "relevance_to_smart_query": "Low-Medium. Smart Query agents do not maintain persistent beliefs or form intentions in the BDI sense. Each strategy Skill is stateless and task-focused rather than goal-directed with plan revision. However, the orchestrator's adjudication phase resembles intention formation -- committing to a primary table after deliberation.",
+        "similarity_score": "0.25"
+      },
+      {
+        "name": "Blackboard Systems",
+        "description": "Architecture by Hayes-Roth (1985) with three components: (1) a shared blackboard data structure, (2) independent knowledge sources that read/write to the blackboard, and (3) a control component that schedules knowledge source activation. Knowledge sources are opportunistic -- they activate when relevant data appears on the blackboard.",
+        "relevance_to_smart_query": "High. Smart Query's evidence pack mechanism closely parallels the blackboard pattern. Three strategy Skills act as knowledge sources, each contributing evidence to a shared 'blackboard' (the conversation context + evidence packs). The orchestrator acts as the control component. Key difference: Smart Query uses serial scheduling rather than opportunistic activation.",
+        "similarity_score": "0.78"
+      },
+      {
+        "name": "Contract Net Protocol",
+        "description": "Task allocation protocol by Smith (1980) where a manager agent broadcasts task announcements, contractor agents submit bids, and the manager awards contracts to the best bidders. Designed for distributed task allocation in MAS.",
+        "relevance_to_smart_query": "Low. Smart Query does not use competitive bidding or dynamic task allocation. Tasks are pre-assigned to specific strategy Skills based on their cognitive specialization. There is no negotiation between agents.",
+        "similarity_score": "0.10"
+      },
+      {
+        "name": "Linda / Tuple Space",
+        "description": "Shared memory coordination model by Gelernter (1985) where agents communicate through a shared tuple space using operations: out (write), in (read and remove), and rd (read without removing). Provides decoupled, asynchronous communication.",
+        "relevance_to_smart_query": "Medium. The conversation history in Smart Query functions similarly to a tuple space -- strategies write their evidence packs into the shared context, and subsequent strategies can read (but not remove) previous findings. However, Smart Query's mechanism is implicit (LLM inference from conversation history) rather than explicit (structured tuple operations).",
+        "similarity_score": "0.45"
+      },
+      {
+        "name": "Pipeline / Assembly Line Architecture",
+        "description": "Sequential processing architecture where data flows through a series of processing stages, each performing a specific transformation. Output of one stage becomes input to the next. Common in data processing and manufacturing.",
+        "relevance_to_smart_query": "High. Smart Query's three-strategy serial execution is fundamentally a pipeline: Strategy 1 -> Strategy 2 -> Strategy 3 -> Adjudication. Each stage processes the same user query but adds incremental evidence. The key distinction is that Smart Query's pipeline carries cumulative semantic context rather than transformed data.",
+        "similarity_score": "0.75"
+      },
+      {
+        "name": "Stigmergy",
+        "description": "Indirect communication mechanism observed in social insects (Grasse, 1959) where agents communicate by modifying the shared environment rather than through direct messaging. Subsequent agents perceive environmental changes and adjust behavior accordingly. Used in ant colony optimization and swarm robotics.",
+        "relevance_to_smart_query": "Medium-High. Smart Query's implicit context inheritance is a form of digital stigmergy. Strategy 1 modifies the shared environment (conversation history) by depositing evidence. Strategy 2 perceives these environmental traces and adjusts its search behavior (e.g., prioritizing identified schemas). This is indirect communication -- no explicit message passing between strategies.",
+        "similarity_score": "0.65"
+      },
+      {
+        "name": "AutoGen (Microsoft)",
+        "description": "LLM-based multi-agent framework featuring conversable agents that can engage in multi-turn conversations. Supports group chat with a manager agent, sequential chat pipelines, and nested chat patterns. Agents communicate through natural language messages.",
+        "relevance_to_smart_query": "Medium-High. AutoGen's sequential chat pattern closely resembles Smart Query's serial execution. Both use conversation history as the communication medium. Key differences: AutoGen agents are general-purpose conversable agents; Smart Query agents are highly specialized cognitive modules with domain-specific tool access.",
+        "similarity_score": "0.60"
+      },
+      {
+        "name": "MetaGPT",
+        "description": "Multi-agent framework simulating a software company with role-based agents (Product Manager, Architect, Engineer, QA). Uses Standardized Operating Procedures (SOPs) to structure agent interactions. Agents produce structured artifacts that flow through a defined workflow.",
+        "relevance_to_smart_query": "High. MetaGPT's SOP-driven workflow with role-based specialization closely parallels Smart Query's architecture. Both use: (1) specialized agents with distinct roles, (2) structured artifact production (evidence packs / design documents), (3) sequential workflow with defined handoff points. MetaGPT's shared message pool is analogous to Smart Query's conversation history.",
+        "similarity_score": "0.72"
+      },
+      {
+        "name": "CrewAI",
+        "description": "Role-based agent orchestration framework supporting sequential and hierarchical process modes. Agents have defined roles, goals, and backstories. Tasks flow through agents in a defined sequence, with each agent contributing its expertise.",
+        "relevance_to_smart_query": "High. CrewAI's sequential process mode with role-based agents is architecturally very similar to Smart Query. Both feature: (1) agents with specialized roles (Indicator Expert, Scenario Navigator, Semantic Analyst), (2) sequential task execution, (3) shared context accumulation. CrewAI's 'delegation' feature parallels Smart Query's orchestrator pattern.",
+        "similarity_score": "0.75"
+      },
+      {
+        "name": "CAMEL",
+        "description": "Communicative Agents for Mind Exploration of Large Language Models. Uses role-playing with inception prompting to guide agent conversations. Two agents (AI Assistant and AI User) engage in task-oriented dialogue with predefined roles.",
+        "relevance_to_smart_query": "Low. CAMEL focuses on dyadic role-playing conversations, while Smart Query uses a one-to-many orchestrator pattern with specialized agents. CAMEL's inception prompting is conceptually related to Smart Query's Skill instructions but serves a different purpose (guiding conversation vs. defining cognitive tasks).",
+        "similarity_score": "0.20"
+      },
+      {
+        "name": "ChatDev",
+        "description": "Multi-agent framework simulating a software company using a waterfall model. Agents (CEO, CTO, Programmer, Tester) collaborate through chat-chain phases: Design, Coding, Testing, Documentation. Each phase involves specific agent pairs in structured dialogue.",
+        "relevance_to_smart_query": "Medium. ChatDev's phase-based execution with specialized agents shares structural similarities with Smart Query. Both use sequential phases with different agent combinations. Key difference: ChatDev uses pairwise agent dialogues within each phase, while Smart Query uses single-agent execution per strategy with shared context.",
+        "similarity_score": "0.50"
+      },
+      {
+        "name": "OpenAI Swarm",
+        "description": "Lightweight multi-agent framework using agent handoff patterns. Agents are defined by instructions and functions (tools). Context variables are passed between agents during handoffs. Designed for simplicity with minimal orchestration overhead.",
+        "relevance_to_smart_query": "Medium. Swarm's handoff pattern with context variables resembles Smart Query's serial execution with implicit context inheritance. Both are lightweight approaches. Key difference: Swarm uses explicit handoff with context variable passing; Smart Query uses implicit context through conversation history. Swarm agents can dynamically choose which agent to hand off to; Smart Query follows a fixed sequence.",
+        "similarity_score": "0.55"
+      },
+      {
+        "name": "ACT-R (Adaptive Control of Thought-Rational)",
+        "description": "Cognitive architecture by Anderson (1993, 2007) with modular structure: declarative memory (facts/knowledge), procedural memory (production rules), and buffers connecting perceptual-motor modules. Knowledge retrieval is activation-based; production rules fire when buffer conditions match.",
+        "relevance_to_smart_query": "High. Smart Query's Cognitive Hub maps directly to ACT-R's memory systems. The ontology layer (Neo4j knowledge graph) corresponds to declarative memory -- structured factual knowledge about business entities, relationships, and standards. Skills correspond to procedural memory -- production rules that define how to navigate and reason over declarative knowledge. The LLM serves as the pattern-matching engine that selects and fires productions.",
+        "similarity_score": "0.80"
+      },
+      {
+        "name": "SOAR (State, Operator And Result)",
+        "description": "Cognitive architecture by Laird, Newell & Rosenbloom (1987) with working memory, long-term memory (procedural, semantic, episodic), and a decision cycle (propose-decide-apply operators). When an impasse occurs (no applicable operator), SOAR creates a subgoal and uses chunking to learn from the resolution.",
+        "relevance_to_smart_query": "High. Smart Query's architecture maps well to SOAR. The ontology layer corresponds to semantic long-term memory. Skills correspond to operators that propose actions. The three-strategy execution resembles SOAR's operator proposal-selection-application cycle. The orchestrator's adjudication phase parallels SOAR's decision procedure. Evidence packs in working memory correspond to SOAR's working memory elements.",
+        "similarity_score": "0.77"
+      },
+      {
+        "name": "CoALA (Cognitive Architectures for Language Agents)",
+        "description": "Framework by Sumers et al. (2024) proposing a unified cognitive architecture for LLM-based agents. Distinguishes between working memory (current context), long-term memory (semantic, episodic, procedural), and action space (internal reasoning, external tools, communication). Provides a taxonomy for analyzing LLM agent designs.",
+        "relevance_to_smart_query": "Very High. CoALA provides the most direct theoretical framework for analyzing Smart Query. Smart Query's ontology layer is long-term semantic memory; conversation history is working memory; Skills are procedural memory; MCP tools are the external action space. CoALA's framework validates Smart Query's design as a well-structured cognitive architecture.",
+        "similarity_score": "0.85"
+      }
+    ],
+    "paradigm_mapping": {
+      "primary_paradigm": "Pipeline-Blackboard Hybrid with Stigmergic Context Inheritance",
+      "secondary_paradigms": [
+        "Cognitive Architecture (ACT-R / SOAR analog)",
+        "SOP-Driven Role-Based MAS (MetaGPT analog)",
+        "Sequential Process Orchestration (CrewAI analog)"
+      ],
+      "justification": "Smart Query combines three established MAS paradigms into a novel hybrid: (1) PIPELINE -- three strategies execute in strict serial order, each processing the same input query but producing incremental evidence; (2) BLACKBOARD -- evidence packs accumulate in a shared space (conversation history) that all subsequent agents can read, with the orchestrator serving as the control component that schedules knowledge source activation and performs final adjudication; (3) STIGMERGY -- the implicit context inheritance mechanism constitutes digital stigmergy, where agents communicate indirectly by modifying the shared environment (depositing evidence into conversation history) rather than through explicit message passing. This hybrid is novel because: (a) classical blackboard systems use opportunistic scheduling while Smart Query uses deterministic serial scheduling; (b) classical pipelines transform data sequentially while Smart Query accumulates evidence cumulatively; (c) stigmergy in MAS typically involves simple environmental markers while Smart Query's stigmergic traces are rich semantic evidence packs interpreted by an LLM. The cognitive architecture dimension (Ontology as declarative memory + Skills as procedural memory) adds a fourth layer that has no direct parallel in classical MAS but maps well to ACT-R and SOAR."
+    },
+    "formalization": {
+      "semantic_cumulative_effect": "H(I|S_1, S_2, S_3) <= H(I|S_1, S_2) <= H(I|S_1) <= H(I), where H(I) is the entropy of the target information I (correct table-field mapping), and S_k is the evidence from strategy k. Equality holds when a strategy provides no new information given previous strategies.",
+      "information_theory_basis": "The inequality follows directly from the chain rule of conditional entropy and the non-negativity of mutual information. By the chain rule: H(I|S_1, S_2) = H(I|S_1) - I(I; S_2|S_1), where I(I; S_2|S_1) >= 0 is the conditional mutual information. Therefore H(I|S_1, S_2) <= H(I|S_1). The inequality is strict (H(I|S_1, S_2) < H(I|S_1)) if and only if I(I; S_2|S_1) > 0, meaning Strategy 2 provides information about I that is not already captured by Strategy 1. This is guaranteed when strategies explore orthogonal knowledge dimensions (indicators vs. topics vs. terms).",
+      "proofs_or_arguments": [
+        {
+          "name": "Chain Rule Derivation",
+          "content": "Starting from the chain rule of entropy: H(I, S_1, S_2, S_3) = H(I) + H(S_1|I) + H(S_2|I, S_1) + H(S_3|I, S_1, S_2). Equivalently: H(I|S_1) = H(I) - I(I; S_1). H(I|S_1, S_2) = H(I|S_1) - I(I; S_2|S_1). H(I|S_1, S_2, S_3) = H(I|S_1, S_2) - I(I; S_3|S_1, S_2). Since mutual information is non-negative: I(I; S_k|S_1,...,S_{k-1}) >= 0, the chain H(I) >= H(I|S_1) >= H(I|S_1, S_2) >= H(I|S_1, S_2, S_3) follows immediately."
+        },
+        {
+          "name": "Conditions for Strict Inequality",
+          "content": "The strict inequality H(I|S_1,...,S_k) < H(I|S_1,...,S_{k-1}) holds iff I(I; S_k|S_1,...,S_{k-1}) > 0, i.e., strategy S_k provides information about I not already contained in previous strategies. In Smart Query, this is ensured by design: (1) Strategy 1 (Indicator) explores the business indicator hierarchy -- a knowledge dimension orthogonal to physical table structure; (2) Strategy 2 (Scenario) navigates Schema->Topic->Table structure -- orthogonal to indicator semantics; (3) Strategy 3 (Term) explores business terminology and data standards -- orthogonal to both indicators and table structure. The orthogonality of knowledge dimensions ensures each strategy has non-zero conditional mutual information."
+        },
+        {
+          "name": "Conditions for Failure (Equality)",
+          "content": "The cumulative effect fails (equality holds) when: (1) Redundancy: S_k provides only information already in S_1,...,S_{k-1}. This could happen if the user query is so specific that Strategy 1 already identifies the exact table and field, leaving nothing for subsequent strategies to add. (2) Noise: S_k introduces noise that does not reduce entropy. This could happen if a strategy returns irrelevant results due to keyword ambiguity. (3) Context Degradation: In the implicit inheritance model, if the LLM fails to extract relevant information from conversation history, the effective S_k may be independent of previous strategies, reducing to the parallel (non-cumulative) case."
+        },
+        {
+          "name": "Comparison with Ensemble Methods",
+          "content": "Smart Query's three-strategy approach shares properties with ensemble methods in ML but differs fundamentally: (1) Ensemble methods (bagging, boosting, stacking) combine multiple models' predictions, typically through voting or weighted averaging. Smart Query combines evidence from different knowledge dimensions, not different models. (2) Boosting's sequential error correction is the closest analog -- each subsequent strategy focuses on aspects not yet resolved. However, boosting adjusts sample weights while Smart Query adjusts search focus through context inheritance. (3) The key distinction is that ensemble diversity comes from model variation (different algorithms, different training data), while Smart Query's diversity comes from knowledge dimension variation (indicators vs. topics vs. terms). This is more analogous to multi-view learning where each view provides a different perspective on the same data."
+        },
+        {
+          "name": "Cumulative vs. Parallel Information Gain",
+          "content": "For the parallel (independent agent) case: H(I|S_1^indep, S_2^indep, S_3^indep) where S_k^indep are independent of each other. For the serial (cumulative) case: H(I|S_1, S_2(S_1), S_3(S_1,S_2)) where S_k depends on previous strategies. The cumulative case achieves lower entropy because: (a) Context inheritance allows later strategies to focus search, increasing the relevance of their evidence; (b) Redundant evidence is reduced because later strategies can avoid re-exploring already-covered ground; (c) The effective information content of S_k(S_1,...,S_{k-1}) is higher than S_k^indep because context-guided search has higher precision."
+        }
+      ]
+    },
+    "cognitive_architecture_analysis": {
+      "act_r_mapping": "ACT-R has four key components that map to Smart Query: (1) DECLARATIVE MEMORY -> Ontology Layer (Neo4j knowledge graph with 238,982 nodes). Just as ACT-R's declarative memory stores factual chunks with activation levels, the ontology stores business entities (indicators, tables, terms) with heat scores (activation analogs). High-heat tables are more 'activated' and more likely to be retrieved. (2) PROCEDURAL MEMORY -> Skills (SKILL.md files ~400 lines each). ACT-R's production rules (IF condition THEN action) correspond to Skill instructions that define when and how to use specific MCP tools. Each strategy Skill is a collection of production rules for a specific cognitive task. (3) BUFFERS -> Evidence Packs + Conversation History. ACT-R's buffers hold the current state of processing; evidence packs hold the current state of query resolution. The conversation history serves as an extended buffer system. (4) PATTERN MATCHING -> LLM Inference. ACT-R's pattern matcher selects which production to fire; the LLM selects which tool to call and how to interpret results based on Skill instructions and current context. A key insight: ACT-R's activation-based retrieval (more active chunks are retrieved faster) parallels Smart Query's heat-based table filtering (higher-heat tables are preferred). The isolated table filtering (heat=0) is analogous to ACT-R's base-level activation decay -- unused knowledge becomes inaccessible.",
+      "soar_mapping": "SOAR's architecture maps to Smart Query as follows: (1) WORKING MEMORY -> Conversation History + Current Evidence Packs. SOAR's working memory holds the current problem state; Smart Query's conversation history holds the evolving understanding of the user's query. (2) LONG-TERM MEMORY (Semantic) -> Ontology Layer. SOAR's semantic memory stores general world knowledge; the ontology stores domain knowledge about business entities and relationships. (3) LONG-TERM MEMORY (Procedural) -> Skills. SOAR's procedural memory contains operators; Skills define the cognitive procedures for each strategy. (4) DECISION CYCLE -> Three-Strategy Serial Execution. SOAR's propose-decide-apply cycle maps to: Propose (each strategy proposes candidate tables/fields), Decide (adjudication selects the best candidates), Apply (SQL generation applies the decision). (5) IMPASSE RESOLUTION -> Progressive Degradation Search. When SOAR cannot select an operator, it creates a subgoal. When Smart Query's indicator search fails at the INDICATOR level, it degrades to THEME, then SUBPATH, etc. -- a form of impasse resolution through search space expansion. (6) CHUNKING -> Evidence Pack Fusion. SOAR learns new productions through chunking; Smart Query's evidence fusion creates new composite knowledge (the final adjudicated result) from individual strategy outputs.",
+      "novel_aspects": [
+        "IMPLICIT CONTEXT INHERITANCE AS DIGITAL STIGMERGY: Neither ACT-R nor SOAR have a mechanism where one cognitive process indirectly influences another through environmental traces. Smart Query's implicit context inheritance -- where Strategy 2 reads Strategy 1's output from conversation history without explicit parameter passing -- is a novel cognitive mechanism that combines aspects of stigmergy (indirect communication through environment modification) with LLM-based semantic understanding. This is unique to LLM-based cognitive architectures where the 'environment' (conversation history) is semantically rich and interpretable.",
+        "ONTOLOGY AS EXTERNALIZED DECLARATIVE MEMORY: In ACT-R and SOAR, declarative/semantic memory is internal to the cognitive system. Smart Query externalizes this memory into a Neo4j knowledge graph accessed through MCP tools. This externalization enables: (a) memory that exceeds LLM context limits (238,982 nodes vs. ~100K token context), (b) structured querying that is more precise than LLM recall, (c) independent memory updates without retraining the cognitive system.",
+        "MULTI-DIMENSIONAL EVIDENCE FUSION: Classical cognitive architectures process information through a single reasoning pathway. Smart Query's three-strategy approach processes the same query through three orthogonal knowledge dimensions simultaneously (indicators, topics, terms), then fuses the results. This is analogous to multi-sensory integration in neuroscience but has no direct parallel in ACT-R or SOAR.",
+        "HEAT-BASED VALIDITY FILTERING: The isolated table filtering mechanism (heat=0 AND upstream=0 -> deprecated) introduces a temporal validity dimension not present in classical cognitive architectures. This is analogous to memory consolidation in neuroscience -- knowledge that is not reinforced (no downstream usage, no upstream sources) is effectively forgotten (filtered out).",
+        "COGNITIVE MODULARITY WITH INSTRUCTION-FOLLOWING OPTIMIZATION: The design principle that each Skill should be ~400 lines for near-100% instruction compliance is a novel engineering insight specific to LLM-based cognitive architectures. Classical architectures do not face instruction-following degradation with complexity. This represents a fundamental constraint of LLM-based systems that Smart Query addresses through modular decomposition."
+      ]
+    },
+    "llm_mas_comparison": [
+      {
+        "system": "AutoGen",
+        "architecture": "Conversable agents with flexible conversation patterns (two-agent, group chat, sequential chat, nested chat). Agents communicate through natural language messages. GroupChatManager orchestrates multi-agent conversations. Supports both synchronous and asynchronous execution.",
+        "vs_smart_query": "SIMILARITIES: Both use conversation history as the primary communication medium; both support sequential execution patterns; both use an orchestrator pattern. DIFFERENCES: (1) AutoGen agents are general-purpose conversable agents while Smart Query agents are highly specialized cognitive modules with domain-specific tool access; (2) AutoGen's group chat allows dynamic turn-taking while Smart Query uses fixed serial ordering; (3) AutoGen does not have an ontology layer -- agents rely on their own knowledge and tools; (4) Smart Query's evidence pack mechanism provides structured output that AutoGen lacks; (5) AutoGen supports agent-to-agent conversation while Smart Query uses orchestrator-to-agent only."
+      },
+      {
+        "system": "MetaGPT",
+        "architecture": "SOP-driven multi-agent framework simulating a software company. Agents have defined roles (Product Manager, Architect, Engineer, QA) and follow standardized operating procedures. Uses a shared message pool for inter-agent communication. Produces structured artifacts (PRDs, design docs, code) that flow through the pipeline.",
+        "vs_smart_query": "SIMILARITIES: Both use role-based specialization with structured artifact production; both follow SOP-like procedures (Skills vs. SOPs); both use a shared message pool / conversation history; both produce structured intermediate artifacts (evidence packs vs. design documents). DIFFERENCES: (1) MetaGPT's SOPs are more rigid workflow definitions while Smart Query's Skills are cognitive frameworks that guide but don't strictly constrain; (2) MetaGPT agents can revise previous agents' outputs while Smart Query agents only add evidence; (3) Smart Query has an external knowledge graph (ontology) that MetaGPT lacks; (4) MetaGPT's artifacts are sequential refinements while Smart Query's evidence packs are parallel perspectives fused at the end."
+      },
+      {
+        "system": "CrewAI",
+        "architecture": "Role-based agent orchestration with sequential and hierarchical process modes. Agents have roles, goals, and backstories. Tasks are assigned to agents and executed in sequence. Supports agent delegation and tool usage. Context from previous tasks is passed to subsequent tasks.",
+        "vs_smart_query": "SIMILARITIES: CrewAI's sequential process mode is the closest architectural match to Smart Query among LLM-based MAS frameworks. Both feature: (1) agents with specialized roles and defined expertise; (2) sequential task execution with context accumulation; (3) tool usage for external knowledge access; (4) an orchestrator that manages the overall workflow. DIFFERENCES: (1) CrewAI's context passing is explicit (task output -> next task input) while Smart Query uses implicit context inheritance through conversation history; (2) CrewAI does not have a structured ontology layer; (3) Smart Query's evidence pack fusion with cross-validation adjudication is more sophisticated than CrewAI's simple context passing; (4) CrewAI supports dynamic delegation while Smart Query uses fixed strategy ordering."
+      },
+      {
+        "system": "CAMEL",
+        "architecture": "Role-playing framework with inception prompting. Two agents (AI Assistant and AI User) engage in task-oriented dialogue. Uses system prompts to define roles and guide conversation. Focuses on autonomous cooperation through structured role-playing.",
+        "vs_smart_query": "SIMILARITIES: Both use role-based prompting to specialize agent behavior. DIFFERENCES: (1) CAMEL uses dyadic (two-agent) conversations while Smart Query uses a one-to-many orchestrator pattern; (2) CAMEL's agents negotiate through dialogue while Smart Query's agents execute independently; (3) CAMEL lacks external knowledge structures; (4) CAMEL focuses on general task completion while Smart Query is domain-specific with ontology grounding."
+      },
+      {
+        "system": "ChatDev",
+        "architecture": "Software development simulation using a waterfall model with chat chains. Agents (CEO, CTO, Programmer, Tester, Art Designer) collaborate through phase-based dialogues: Design -> Coding -> Testing -> Documentation. Each phase involves specific agent pairs in structured chat.",
+        "vs_smart_query": "SIMILARITIES: Both use phase-based sequential execution with specialized agents; both produce artifacts that flow between phases. DIFFERENCES: (1) ChatDev uses pairwise agent dialogues within each phase while Smart Query uses single-agent execution per strategy; (2) ChatDev's phases are functionally different (design vs. coding vs. testing) while Smart Query's strategies explore different knowledge dimensions of the same problem; (3) ChatDev lacks an external knowledge graph; (4) Smart Query's evidence fusion is more sophisticated than ChatDev's phase handoff."
+      },
+      {
+        "system": "OpenAI Swarm",
+        "architecture": "Lightweight agent orchestration using handoff patterns. Agents are defined by instructions (system prompts) and functions (tools). Context variables are explicitly passed between agents during handoffs. Agents can dynamically decide which agent to hand off to. Minimal orchestration overhead.",
+        "vs_smart_query": "SIMILARITIES: Both use tool-equipped agents with defined instructions; both pass context between agents. DIFFERENCES: (1) Swarm uses explicit context variable passing while Smart Query uses implicit context through conversation history; (2) Swarm supports dynamic handoff routing while Smart Query uses fixed serial ordering; (3) Swarm is designed for lightweight, stateless interactions while Smart Query manages complex evidence accumulation; (4) Smart Query's ontology layer provides structured domain knowledge that Swarm lacks; (5) Swarm's simplicity is its strength for simple routing tasks, while Smart Query's complexity is necessary for multi-dimensional evidence fusion."
+      }
+    ]
+  }
+}

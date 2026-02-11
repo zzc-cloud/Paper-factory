@@ -1,0 +1,786 @@
+{
+  "agent_id": "b2-experiment-designer",
+  "phase": 2,
+  "status": "complete",
+  "timestamp": "2026-02-11T14:00:00Z",
+  "summary": "Designed comprehensive evaluation framework with 7 metrics (TLA, FCR, ECS, QRR, SCS, ONE, JA), 5 baseline systems (B0-B4), 6 ablation studies (A1-A6), 100-query dataset specification across 4 complexity categories, 5 experiment protocols, and a formal semantic cumulative effect measurement methodology grounded in Shannon entropy. Every core innovation (1-5) and supporting innovation (6-13) from Phase 1 is mapped to specific experimental validation.",
+  "data": {
+    "innovation_to_experiment_mapping": [
+      {
+        "innovation_id": 1,
+        "innovation_name": "Cognitive Hub Layer Architecture",
+        "theme": "A",
+        "significance": "core",
+        "experimental_validation": {
+          "baselines": ["B0 (Direct LLM — no ontology)", "B1 (RAG — no structured ontology)"],
+          "ablations": ["A6 (Remove Ontology Hierarchy)"],
+          "protocols": ["P1 (Main Comparison)", "P5 (Case Study)"],
+          "primary_metrics": ["TLA@1", "TLA@3", "FCR", "ONE"],
+          "hypothesis": "Smart Query with Cognitive Hub significantly outperforms B0 and B1, demonstrating that structured ontology + skills > raw LLM reasoning and > flat vector retrieval"
+        }
+      },
+      {
+        "innovation_id": 2,
+        "innovation_name": "Three-Strategy Serial Execution with Implicit Context Inheritance",
+        "theme": "B",
+        "significance": "core",
+        "experimental_validation": {
+          "baselines": ["B3 (Independent Agents — no shared context)", "B4 (Parallel Execution — no serial ordering)"],
+          "ablations": ["A1 (Remove Implicit Context Inheritance)"],
+          "protocols": ["P1 (Main Comparison)", "P3 (Semantic Cumulative Effect)", "P5 (Case Study)"],
+          "primary_metrics": ["TLA@1", "SCS", "ECS"],
+          "hypothesis": "Serial execution with implicit context inheritance outperforms both independent agents (B3) and parallel execution (B4), with the gap widening for complex queries"
+        }
+      },
+      {
+        "innovation_id": 3,
+        "innovation_name": "Semantic Cumulative Effect",
+        "theme": "B",
+        "significance": "core",
+        "experimental_validation": {
+          "baselines": ["B4 (Parallel Execution)"],
+          "ablations": ["A1 (Remove Context Inheritance)"],
+          "protocols": ["P3 (Semantic Cumulative Effect Measurement)"],
+          "primary_metrics": ["Entropy reduction (H0→H1→H2→H3)", "Conditional mutual information"],
+          "hypothesis": "Monotonic entropy decrease H0 > H1 > H2 > H3 holds for >80% of queries; cumulative reduction ratio (H0-H3)/H0 > 0.7 on average"
+        }
+      },
+      {
+        "innovation_id": 4,
+        "innovation_name": "Evidence Pack Fusion with Cross-Validation Adjudication",
+        "theme": "B",
+        "significance": "core",
+        "experimental_validation": {
+          "baselines": ["B2a/B2b/B2c (Single-Strategy Variants)"],
+          "ablations": ["A2 (Remove Evidence Pack Fusion)"],
+          "protocols": ["P1 (Main Comparison)", "P2 (Ablation Study)", "P5 (Case Study)"],
+          "primary_metrics": ["TLA@1", "ECS", "FCR"],
+          "hypothesis": "Multi-strategy fusion outperforms best single strategy by 10-20% on TLA@1; confidence calibration shows positive correlation between ECS and accuracy"
+        }
+      },
+      {
+        "innovation_id": 5,
+        "innovation_name": "Three-Layer Ontology with Cross-Layer Associations",
+        "theme": "A",
+        "significance": "core",
+        "experimental_validation": {
+          "baselines": ["B1 (RAG — flat vector, no layers)"],
+          "ablations": ["A6 (Remove Ontology Hierarchy — flat search)"],
+          "protocols": ["P1 (Main Comparison)", "P4 (Efficiency Analysis)"],
+          "primary_metrics": ["TLA@1", "ONE", "FCR"],
+          "hypothesis": "Three-layer ontology enables higher TLA@1 than flat search, especially for ambiguous queries requiring cross-layer validation"
+        }
+      },
+      {
+        "innovation_id": 6,
+        "innovation_name": "Fixed-Ratio Hybrid Retrieval with Field-Level Vectorization",
+        "theme": "C",
+        "significance": "supporting",
+        "experimental_validation": {
+          "baselines": ["B1 (RAG — vector only)"],
+          "ablations": ["A5 (Remove Dual Retrieval)"],
+          "protocols": ["P1", "P4"],
+          "primary_metrics": ["TLA@1", "FCR"],
+          "hypothesis": "Hybrid retrieval (keyword+vector) outperforms either alone; field-level vectorization improves recall for column-specific queries"
+        }
+      },
+      {
+        "innovation_id": 7,
+        "innovation_name": "Dual Retrieval Mechanism",
+        "theme": "C",
+        "significance": "supporting",
+        "experimental_validation": {
+          "baselines": ["B1 (RAG)"],
+          "ablations": ["A5 (Remove Dual Retrieval)"],
+          "protocols": ["P1", "P2"],
+          "primary_metrics": ["TLA@1", "FCR"],
+          "hypothesis": "Convergent path + hybrid search outperforms either alone; tables found by both methods have highest accuracy"
+        }
+      },
+      {
+        "innovation_id": 8,
+        "innovation_name": "Progressive Degradation Search",
+        "theme": "C",
+        "significance": "supporting",
+        "experimental_validation": {
+          "baselines": [],
+          "ablations": [],
+          "protocols": ["P1 (measure degradation frequency)", "P5 (case study of degradation)"],
+          "primary_metrics": ["QRR", "TLA@1 on adversarial queries"],
+          "hypothesis": "Progressive degradation enables >90% system-level robustness (at least one strategy succeeds) even when individual strategies fail"
+        }
+      },
+      {
+        "innovation_id": 9,
+        "innovation_name": "Isolated Table Filtering via Lineage Heat Analysis",
+        "theme": "C",
+        "significance": "supporting",
+        "experimental_validation": {
+          "baselines": [],
+          "ablations": ["A3 (Remove Isolated Table Filtering)"],
+          "protocols": ["P2 (Ablation Study)"],
+          "primary_metrics": ["TLA@1 (precision improvement)", "False positive rate"],
+          "hypothesis": "Removing isolated table filtering increases false positive rate by 5-10% due to deprecated tables appearing in recommendations"
+        }
+      },
+      {
+        "innovation_id": 10,
+        "innovation_name": "Lineage-Driven Related Table Discovery with Automatic JOIN",
+        "theme": "C",
+        "significance": "supporting",
+        "experimental_validation": {
+          "baselines": [],
+          "ablations": ["A4 (Remove Lineage-Driven JOIN)"],
+          "protocols": ["P2 (Ablation Study)"],
+          "primary_metrics": ["JA (JOIN Accuracy)"],
+          "hypothesis": "Lineage-based JOIN discovery outperforms schema-based column name matching by 15-25% on multi-table queries"
+        }
+      },
+      {
+        "innovation_id": 11,
+        "innovation_name": "Pre-computed Indicator Field Mappings",
+        "theme": "C",
+        "significance": "supporting",
+        "experimental_validation": {
+          "baselines": [],
+          "ablations": [],
+          "protocols": ["P4 (Efficiency Analysis)"],
+          "primary_metrics": ["ONE (navigation efficiency)", "Latency"],
+          "hypothesis": "Pre-computed mappings reduce indicator-to-field resolution latency to O(1); parser covers >95% of expression formats"
+        }
+      },
+      {
+        "innovation_id": 12,
+        "innovation_name": "Cognitive Modular Architecture with Instruction-Following Optimization",
+        "theme": "A",
+        "significance": "supporting",
+        "experimental_validation": {
+          "baselines": [],
+          "ablations": [],
+          "protocols": ["P5 (Case Study — instruction compliance analysis)"],
+          "primary_metrics": ["Instruction compliance rate", "TLA@1"],
+          "hypothesis": "Modular ~400-line skills achieve near-100% instruction compliance vs. degraded compliance in monolithic 2000+ line alternatives"
+        }
+      },
+      {
+        "innovation_id": 13,
+        "innovation_name": "Multi-Scenario Unified Ontology",
+        "theme": "D",
+        "significance": "supporting",
+        "experimental_validation": {
+          "baselines": [],
+          "ablations": [],
+          "protocols": ["P5 (architectural analysis only — not experimentally validated)"],
+          "primary_metrics": [],
+          "hypothesis": "Presented as future work / architectural extensibility demonstration; not experimentally validated in current evaluation"
+        }
+      }
+    ],
+    "metrics": [
+      {
+        "id": "M1",
+        "name": "Table Localization Accuracy",
+        "abbreviation": "TLA",
+        "definition": "The percentage of queries where the correct primary table is identified in the system's top-K table recommendations",
+        "formula": "TLA@K = |{q ∈ Q : correct_table(q) ∈ top_K_tables(q)}| / |Q|",
+        "variants": [
+          {"name": "TLA@1", "description": "Strict accuracy — correct table must be the top recommendation", "use_case": "Primary metric for system comparison"},
+          {"name": "TLA@3", "description": "Relaxed accuracy — correct table in top 3", "use_case": "Measures whether correct table is in consideration set"},
+          {"name": "TLA@5", "description": "Generous accuracy — correct table in top 5", "use_case": "Upper bound on system potential with re-ranking"}
+        ],
+        "measurement_method": "Compare system's primary_table output (and ranked alternatives) against ground truth annotation by domain experts",
+        "significance": "Core metric — if the wrong table is selected, all downstream SQL generation is incorrect. This is the single most important metric for Smart Query evaluation.",
+        "applicable_to": ["All baselines", "All ablations", "All query categories"],
+        "expected_range": {"smart_query": "0.75-0.90 (TLA@1)", "best_baseline": "0.55-0.70 (TLA@1)"}
+      },
+      {
+        "id": "M2",
+        "name": "Field Coverage Rate",
+        "abbreviation": "FCR",
+        "definition": "The percentage of ground-truth relevant fields that appear in the system's field recommendations for a given query",
+        "formula": "FCR(q) = |recommended_fields(q) ∩ ground_truth_fields(q)| / |ground_truth_fields(q)|; FCR = (1/|Q|) Σ FCR(q)",
+        "variants": [
+          {"name": "FCR-required", "description": "Coverage of required fields only", "use_case": "Measures essential field discovery"},
+          {"name": "FCR-all", "description": "Coverage of required + optional supplementary fields", "use_case": "Measures comprehensive field discovery"}
+        ],
+        "measurement_method": "Compare system's recommended field set against annotated ground truth fields (both required and optional)",
+        "significance": "Measures completeness of field discovery across all three strategies. High TLA but low FCR indicates correct table but incomplete field identification.",
+        "applicable_to": ["All baselines", "All ablations", "All query categories"],
+        "expected_range": {"smart_query": "0.80-0.95", "best_baseline": "0.60-0.75"}
+      },
+      {
+        "id": "M3",
+        "name": "Evidence Consensus Score",
+        "abbreviation": "ECS",
+        "definition": "The degree of agreement across the three strategies on the final primary table recommendation",
+        "formula": "ECS(q) = |{s ∈ {S1, S2, S3} : primary_table(s, q) = final_primary_table(q)}| / 3",
+        "variants": [
+          {"name": "ECS-table", "description": "Consensus on primary table selection", "use_case": "Primary consensus metric"},
+          {"name": "ECS-schema", "description": "Consensus on target schema (weaker agreement)", "use_case": "Measures directional agreement even when table-level consensus fails"}
+        ],
+        "measurement_method": "Extract each strategy's top table recommendation from its evidence pack; compute agreement with the final adjudicated primary table",
+        "significance": "Higher consensus correlates with higher confidence. ECS=1.0 (all three agree) should predict higher TLA@1 than ECS=0.33 (only one strategy found the correct table). This validates the multi-strategy design.",
+        "applicable_to": ["Smart Query only (baselines B2a-c have only one strategy)", "B3, B4 (have three strategies)"],
+        "expected_range": {"smart_query": "0.70-0.85 average", "adversarial_queries": "0.40-0.60"}
+      },
+      {
+        "id": "M4",
+        "name": "Query Resolution Rate",
+        "abbreviation": "QRR",
+        "definition": "The percentage of queries fully resolved without human intervention (no clarification dialog needed)",
+        "formula": "QRR = |{q ∈ Q : resolved_without_clarification(q)}| / |Q|",
+        "variants": [],
+        "measurement_method": "Track whether the system triggers Phase 0 clarification dialog; queries resolved in a single pass count as resolved",
+        "significance": "Measures system autonomy and practical usability. A system that frequently requires clarification imposes higher cognitive load on users.",
+        "applicable_to": ["All baselines", "All ablations"],
+        "expected_range": {"smart_query": "0.85-0.95", "adversarial_queries": "0.50-0.70"}
+      },
+      {
+        "id": "M5",
+        "name": "Semantic Consistency Score",
+        "abbreviation": "SCS",
+        "definition": "Average pairwise Jaccard similarity of field-level recommendations across the three strategies",
+        "formula": "SCS(q) = (1/3)[J(F_S1,F_S2) + J(F_S1,F_S3) + J(F_S2,F_S3)] where J(A,B) = |A∩B|/|A∪B| and F_Sk is the field set from strategy k",
+        "variants": [],
+        "measurement_method": "Extract field sets from each strategy's evidence pack; compute pairwise Jaccard similarity; average across pairs",
+        "significance": "Measures whether independent strategies converge on the same fields. High SCS indicates robust field identification; low SCS may indicate ambiguity or strategy disagreement requiring careful adjudication.",
+        "applicable_to": ["Smart Query", "B3 (Independent Agents)", "B4 (Parallel Execution)"],
+        "expected_range": {"smart_query": "0.50-0.75", "simple_queries": "0.70-0.90", "adversarial_queries": "0.20-0.40"}
+      },
+      {
+        "id": "M6",
+        "name": "Ontology Navigation Efficiency",
+        "abbreviation": "ONE",
+        "definition": "The ratio of MCP tool calls that contribute to the final answer versus total MCP tool calls made during query resolution",
+        "formula": "ONE(q) = |{tc ∈ tool_calls(q) : contributes_to_final(tc)}| / |tool_calls(q)|",
+        "variants": [
+          {"name": "ONE-strategy", "description": "Efficiency per strategy", "use_case": "Identify which strategy is most/least efficient"},
+          {"name": "ONE-overall", "description": "Efficiency across all strategies combined", "use_case": "Overall system efficiency"}
+        ],
+        "measurement_method": "Log all MCP tool calls with timestamps and return values; post-hoc annotate which calls contributed information present in the final evidence pack",
+        "significance": "Measures how efficiently the system navigates the ontology. Low ONE indicates wasted exploration; high ONE indicates focused, purposeful navigation. Validates the ontology hierarchy design.",
+        "applicable_to": ["Smart Query", "B0 (no ontology — N/A)", "B1 (vector search only)"],
+        "expected_range": {"smart_query": "0.60-0.80", "simple_queries": "0.75-0.90"}
+      },
+      {
+        "id": "M7",
+        "name": "JOIN Accuracy",
+        "abbreviation": "JA",
+        "definition": "The percentage of ground-truth JOIN conditions correctly identified by the system for multi-table queries",
+        "formula": "JA(q) = |correct_joins(q) ∩ system_joins(q)| / |correct_joins(q)| (recall-oriented); JA_precision(q) = |correct_joins(q) ∩ system_joins(q)| / |system_joins(q)|",
+        "variants": [
+          {"name": "JA-recall", "description": "Fraction of required JOINs discovered", "use_case": "Measures completeness of JOIN discovery"},
+          {"name": "JA-precision", "description": "Fraction of proposed JOINs that are correct", "use_case": "Measures accuracy of JOIN proposals"},
+          {"name": "JA-F1", "description": "Harmonic mean of JA-recall and JA-precision", "use_case": "Balanced JOIN quality metric"}
+        ],
+        "measurement_method": "Compare system's proposed JOIN conditions (left_table.field = right_table.field, join_type) against ground truth annotations; only applicable to multi-table queries (Complex category)",
+        "significance": "Validates the lineage-driven JOIN discovery mechanism. Incorrect JOINs produce Cartesian products or missing data — critical for SQL correctness.",
+        "applicable_to": ["Complex queries only (20 queries)", "Ablation A4 (Remove Lineage-Driven JOIN)"],
+        "expected_range": {"smart_query_lineage": "0.75-0.90", "schema_based_join": "0.50-0.65"}
+      }
+    ],
+    "baselines": [
+      {
+        "id": "B0",
+        "name": "Direct LLM Prompting (No Ontology)",
+        "description": "Feed the user query plus a sampled subset of table descriptions directly to the LLM without any ontology structure or MCP tools",
+        "implementation_notes": "Provide top-100 table descriptions (selected by table name keyword similarity to the query) in the LLM prompt. Use the same base LLM as Smart Query. No ontology navigation, no strategy decomposition, no evidence packs.",
+        "what_it_tests": "Whether the ontology layer provides value beyond raw LLM reasoning over flat table metadata. This is the most basic baseline — pure LLM capability without domain structure.",
+        "expected_weakness": "Cannot handle 35,000+ tables (context window limit forces sampling to ~100); no structured navigation; no cross-layer validation; prone to hallucination on ambiguous queries; no lineage information for JOINs",
+        "innovations_tested_against": [1, 5],
+        "fairness_justification": "Uses the same LLM and same table metadata; the only difference is the absence of ontology structure and skills. This isolates the contribution of the Cognitive Hub architecture."
+      },
+      {
+        "id": "B1",
+        "name": "RAG-Based Approach (Vector Search Only)",
+        "description": "Embed all table descriptions and field names using the same embedding model; retrieve top-K tables by vector similarity to the user query; feed retrieved tables to LLM for selection",
+        "implementation_notes": "Use paraphrase-multilingual-MiniLM-L12-v2 (same model as Smart Query). Embed table descriptions + column descriptions (same field-level vectorization). Retrieve top-30 tables by cosine similarity. Feed to LLM for table selection and field identification. No ontology hierarchy, no cross-layer associations, no lineage.",
+        "what_it_tests": "Whether ontology structure adds value beyond vector similarity retrieval. This is the standard RAG approach used in many NL2SQL systems.",
+        "expected_weakness": "No hierarchical navigation (cannot narrow by Schema→Topic); no cross-layer relationships (cannot validate indicator→table→term consistency); no lineage information for JOINs; retrieval quality depends entirely on embedding similarity",
+        "innovations_tested_against": [1, 5, 6, 7],
+        "fairness_justification": "Uses the same embedding model and same field-level vectorization as Smart Query. The only difference is the absence of ontology structure. This is a strong baseline representing the current state-of-the-art in RAG-based NL2SQL."
+      },
+      {
+        "id": "B2",
+        "name": "Single-Strategy Variants (Ablation Baselines)",
+        "description": "Run only one of the three strategies in isolation, without the other two strategies or evidence fusion",
+        "sub_variants": [
+          {
+            "id": "B2a",
+            "name": "Indicator-Only (Strategy 1 alone)",
+            "implementation_notes": "Execute only the indicator strategy skill with full ontology access. No Strategy 2 or 3. Use Strategy 1's evidence pack directly as the final recommendation.",
+            "expected_weakness": "Cannot discover tables not linked to indicators; misses scenario-based navigation; no term-level semantic enhancement"
+          },
+          {
+            "id": "B2b",
+            "name": "Scenario-Only (Strategy 2 alone)",
+            "implementation_notes": "Execute only the scenario strategy skill with full ontology access. No Strategy 1 or 3. Use Strategy 2's evidence pack directly.",
+            "expected_weakness": "Cannot leverage indicator hierarchy for business concept mapping; misses term-level field discovery; no cross-validation"
+          },
+          {
+            "id": "B2c",
+            "name": "Term-Only (Strategy 3 alone)",
+            "implementation_notes": "Execute only the term strategy skill with full ontology access. No Strategy 1 or 2. Use Strategy 3's evidence pack directly.",
+            "expected_weakness": "Cannot navigate indicator hierarchy or Schema→Topic structure; limited to term-based discovery; no business context from indicators"
+          }
+        ],
+        "what_it_tests": "Whether multi-strategy fusion outperforms any single strategy. Identifies the individual contribution and coverage blind spots of each strategy.",
+        "innovations_tested_against": [2, 3, 4],
+        "fairness_justification": "Each variant uses the same ontology, same MCP tools, and same LLM. The only difference is the number of strategies executed. This directly tests the value of multi-strategy evidence fusion."
+      },
+      {
+        "id": "B3",
+        "name": "Independent Agents (No Shared Context)",
+        "description": "Run all three strategies but in completely isolated contexts — each strategy starts with a fresh conversation containing only the user query, with no access to prior strategy outputs",
+        "implementation_notes": "Create three independent conversation sessions. Each receives only the original user query as input. Execute Strategy 1, 2, 3 in separate sessions. Merge the three evidence packs using the same adjudication logic as Smart Query. The key difference: no implicit context inheritance between strategies.",
+        "what_it_tests": "Whether implicit context inheritance (digital stigmergy) provides value beyond independent parallel evidence collection. This isolates the contribution of shared conversation history.",
+        "expected_weakness": "Later strategies cannot benefit from earlier discoveries; Strategy 2 cannot prioritize schemas identified by Strategy 1; Strategy 3 cannot enhance fields found by earlier strategies; redundant exploration across strategies",
+        "innovations_tested_against": [2, 3],
+        "fairness_justification": "Uses the same three strategies, same ontology, same tools, same adjudication. The only difference is the absence of shared conversation context. This is the strongest test of implicit context inheritance."
+      },
+      {
+        "id": "B4",
+        "name": "Parallel Execution (No Serial Ordering)",
+        "description": "Run all three strategies simultaneously in parallel with shared context, then merge results. Strategies can see the user query but execute concurrently without waiting for each other.",
+        "implementation_notes": "Launch all three strategies concurrently. Each strategy has access to the user query but not to other strategies' outputs (since they execute simultaneously). Merge evidence packs using the same adjudication logic. The key difference from Smart Query: no serial ordering guarantee; no progressive refinement.",
+        "what_it_tests": "Whether serial execution order matters for the semantic cumulative effect. If parallel execution matches serial, then the ordering is irrelevant and the benefit comes purely from multi-strategy diversity.",
+        "expected_weakness": "No information entropy reduction across stages; no progressive refinement; each strategy explores independently without benefiting from prior narrowing; expected to perform between B3 (fully independent) and Smart Query (serial with context)",
+        "innovations_tested_against": [2, 3],
+        "fairness_justification": "Uses the same three strategies, same ontology, same tools, same adjudication. The only difference is concurrent vs. serial execution. This directly tests whether serial ordering contributes to accuracy beyond multi-strategy diversity."
+      }
+    ],
+    "ablation_studies": [
+      {
+        "id": "A1",
+        "name": "Remove Implicit Context Inheritance",
+        "component_removed": "Shared conversation context between strategies",
+        "implementation": "Each strategy receives only the original user query in a fresh conversation context, not the accumulated conversation history from prior strategies. Strategies still execute serially (preserving ordering) but without context sharing.",
+        "hypothesis": "TLA@1 drops by 10-20% because later strategies cannot refine search based on earlier findings. The drop is larger for Complex and Adversarial queries where progressive refinement is most valuable.",
+        "expected_result": "Strategy 3 (Term) suffers most because it relies on Strategy 1/2 discoveries for semantic enhancement of already-identified fields. Strategy 1 (Indicator) is unaffected (executes first). SCS drops because strategies explore independently without convergence.",
+        "affected_metrics": ["TLA@1", "TLA@3", "FCR", "SCS", "ECS"],
+        "control": "Full Smart Query system with implicit context inheritance",
+        "innovations_validated": [2, 3],
+        "statistical_test": "Paired bootstrap test, p < 0.05, 10,000 resamples"
+      },
+      {
+        "id": "A2",
+        "name": "Remove Evidence Pack Fusion",
+        "component_removed": "Cross-validation and fusion of three evidence packs in the adjudication phase",
+        "implementation": "Instead of cross-validating three evidence packs, use only the highest-scoring single strategy's recommendation as the final output. Strategy selection based on: (1) number of matched entities, (2) confidence scores, (3) field coverage. No consensus scoring, no conflict resolution.",
+        "hypothesis": "TLA@1 drops by 5-15%. Complex queries (requiring multiple perspectives) suffer most. ECS becomes meaningless (single strategy). Confidence calibration degrades.",
+        "expected_result": "Simple queries may be minimally affected (one strategy often suffices). Complex and Adversarial queries show significant degradation because they require cross-validation to resolve ambiguity. The system becomes more brittle — dependent on a single strategy's success.",
+        "affected_metrics": ["TLA@1", "ECS", "FCR", "QRR"],
+        "control": "Full Smart Query system with evidence pack fusion",
+        "innovations_validated": [4],
+        "statistical_test": "Paired bootstrap test, p < 0.05, 10,000 resamples"
+      },
+      {
+        "id": "A3",
+        "name": "Remove Isolated Table Filtering",
+        "component_removed": "Orphan table detection and exclusion (heat=0 AND upstream=0 filtering)",
+        "implementation": "Include all tables in recommendations regardless of their lineage heat status. Deprecated/orphan tables with no upstream sources and no downstream consumers are no longer filtered out during adjudication.",
+        "hypothesis": "Precision drops by 5-10% due to deprecated tables appearing in recommendations. The effect is most visible in queries where deprecated tables have similar names to active tables.",
+        "expected_result": "False positive rate increases. TLA@1 may drop slightly if deprecated tables outscore active tables on name similarity. The effect is concentrated in schemas with high table turnover (many deprecated tables).",
+        "affected_metrics": ["TLA@1 (precision)", "FCR (noise increase)"],
+        "control": "Full Smart Query system with isolated table filtering",
+        "innovations_validated": [9],
+        "statistical_test": "McNemar's test for paired binary outcomes, p < 0.05"
+      },
+      {
+        "id": "A4",
+        "name": "Remove Lineage-Driven JOIN Discovery",
+        "component_removed": "UPSTREAM relationship-based JOIN discovery via get_table_dependencies()",
+        "implementation": "Replace lineage-based JOIN discovery with schema-based JOIN: match column names across candidate tables (same column name in two tables implies JOIN condition). No lineage graph traversal, no upstream/downstream analysis.",
+        "hypothesis": "JOIN Accuracy (JA) drops by 15-25% because column name matching is ambiguous (many tables share generic column names like 'id', 'date', 'amount'). Multi-table queries suffer; single-table queries are unaffected.",
+        "expected_result": "JA-precision drops significantly due to false JOIN conditions from coincidental column name matches. JA-recall may be less affected if lineage and column-name methods have overlapping coverage. Complex queries (20 queries) show the largest degradation.",
+        "affected_metrics": ["JA-recall", "JA-precision", "JA-F1"],
+        "control": "Full Smart Query system with lineage-driven JOIN",
+        "innovations_validated": [10],
+        "statistical_test": "Paired bootstrap test on Complex query subset, p < 0.05"
+      },
+      {
+        "id": "A5",
+        "name": "Remove Dual Retrieval Mechanism",
+        "component_removed": "Hybrid keyword + vector search in Strategy 2; retain only convergent path navigation",
+        "implementation": "Strategy 2 uses only the convergent path (Schema→Topic→Table) without the parallel hybrid search (keyword_limit=50, vector_limit=10). No fusion scoring between structural and semantic retrieval.",
+        "hypothesis": "FCR drops by 10-15% because synonym/near-synonym tables are missed. Queries with non-standard terminology suffer most because convergent path navigation requires exact Schema/Topic matching.",
+        "expected_result": "Tables discoverable only through semantic similarity (alternative phrasings, synonyms) are missed. The effect is strongest for Adversarial queries with ambiguous terminology. TLA@1 may drop for queries where the correct table is not in the convergent path's coverage.",
+        "affected_metrics": ["TLA@1", "FCR", "ONE"],
+        "control": "Full Smart Query system with dual retrieval",
+        "innovations_validated": [6, 7],
+        "statistical_test": "Paired bootstrap test, p < 0.05, 10,000 resamples"
+      },
+      {
+        "id": "A6",
+        "name": "Remove Ontology Hierarchy (Flat Search)",
+        "component_removed": "Five-level indicator hierarchy (SECTOR→CATEGORY→THEME→SUBPATH→INDICATOR) and three-level data asset hierarchy (SCHEMA→TABLE_TOPIC→TABLE)",
+        "implementation": "Replace hierarchical navigation with flat search: search all 163,284 indicators and 35,287 tables in flat lists without hierarchical narrowing. Use the same hybrid retrieval but without Schema→Topic→Table convergent path.",
+        "hypothesis": "ONE drops significantly (more wasted tool calls exploring irrelevant branches). TLA@1 may drop for ambiguous queries that require hierarchical disambiguation (e.g., 'loan balance' could refer to multiple schemas).",
+        "expected_result": "Queries requiring business context disambiguation suffer most. Simple queries with unique table names may be unaffected. The efficiency cost (more tool calls, higher latency) is significant even when accuracy is maintained.",
+        "affected_metrics": ["TLA@1", "ONE", "FCR", "Latency"],
+        "control": "Full Smart Query system with ontology hierarchy",
+        "innovations_validated": [1, 5],
+        "statistical_test": "Paired bootstrap test for accuracy; Wilcoxon signed-rank test for efficiency metrics"
+      }
+    ],
+    "dataset_spec": {
+      "name": "BankQuery-100: Banking Domain NL2SQL Evaluation Dataset",
+      "total_queries": 100,
+      "categories": [
+        {
+          "name": "Simple",
+          "count": 30,
+          "description": "Single table, single or few fields, direct mapping from query terms to table/field names",
+          "characteristics": ["Single primary table", "1-3 required fields", "No JOINs needed", "Clear terminology matching"],
+          "example_queries": [
+            "查询客户贷款余额 (Query customer loan balance)",
+            "查看某分行的存款总额 (View a branch's total deposits)",
+            "获取客户信用评级 (Get customer credit rating)"
+          ],
+          "expected_difficulty": "All systems should perform reasonably; differentiator is efficiency and field completeness"
+        },
+        {
+          "name": "Medium",
+          "count": 40,
+          "description": "Single table with multiple fields, or requires strategy disambiguation to identify the correct table among similar candidates",
+          "characteristics": ["Single primary table", "3-6 required fields", "No JOINs or simple self-JOINs", "May require disambiguation between similar tables"],
+          "example_queries": [
+            "查询客户AUM和风险等级 (Query customer AUM and risk level)",
+            "查看零售客户的产品持有明细 (View retail customer product holding details)",
+            "获取企业客户的授信额度和用信情况 (Get corporate customer credit limit and utilization)"
+          ],
+          "expected_difficulty": "Single-strategy baselines start to struggle; multi-strategy fusion shows advantage"
+        },
+        {
+          "name": "Complex",
+          "count": 20,
+          "description": "Multi-table JOIN queries requiring aggregation, involving multiple schemas or topics, needing all three strategies for complete resolution",
+          "characteristics": ["2-4 tables with JOINs", "5+ required fields across tables", "Aggregation functions needed", "Cross-schema or cross-topic"],
+          "example_queries": [
+            "查询各分行中小企业贷款余额按金额排名并显示客户名称 (Query each branch's SME loan balance ranked by amount with customer names)",
+            "统计各产品线的客户数量和平均AUM (Count customers and average AUM by product line)",
+            "查询逾期贷款客户的担保物信息和评估价值 (Query overdue loan customers' collateral information and assessed value)"
+          ],
+          "expected_difficulty": "Maximum differentiation between Smart Query and baselines; JOIN accuracy is critical"
+        },
+        {
+          "name": "Adversarial",
+          "count": 10,
+          "description": "Queries with ambiguous terms, deprecated table references, cross-schema ambiguity, or non-standard terminology",
+          "characteristics": ["Ambiguous business terms", "Terms matching deprecated tables", "Cross-schema homonyms", "Non-standard abbreviations or slang"],
+          "example_queries": [
+            "查询ABC指标增长趋势 (Query the ABC metric growth trend — where ABC is ambiguous)",
+            "查看老系统的客户数据 (View old system customer data — references deprecated tables)",
+            "获取FTP数据 (Get FTP data — FTP could mean File Transfer Protocol or Funds Transfer Pricing)"
+          ],
+          "expected_difficulty": "Tests robustness; isolated table filtering and progressive degradation are critical"
+        }
+      ],
+      "source": "Real user queries from the banking Smart Query system logs (anonymized and de-identified)",
+      "annotation_protocol": {
+        "annotators": "Two independent domain experts with 5+ years banking data experience",
+        "process": [
+          "Step 1: Each annotator independently annotates all 100 queries",
+          "Step 2: Compute inter-annotator agreement using Cohen's kappa",
+          "Step 3: Resolve disagreements through discussion and consensus",
+          "Step 4: Third expert adjudicates any remaining disagreements",
+          "Step 5: Final review of all annotations for consistency"
+        ],
+        "agreement_threshold": "Cohen's kappa ≥ 0.80 (substantial agreement) required before proceeding",
+        "ground_truth_fields_per_query": {
+          "primary_table": "The single correct primary table (or documented set of acceptable alternatives with justification)",
+          "required_fields": "List of fields that MUST appear in the query result",
+          "optional_fields": "List of supplementary fields that enhance the result but are not strictly required",
+          "join_conditions": "For multi-table queries: list of {left_table, left_field, right_table, right_field, join_type}",
+          "complexity_category": "Simple | Medium | Complex | Adversarial",
+          "ambiguity_notes": "For Adversarial queries: description of the ambiguity and correct resolution"
+        }
+      },
+      "quality_requirements": [
+        "Each query must have a unique correct primary table (or documented set of acceptable alternatives with justification for each)",
+        "Field annotations must distinguish between required fields and optional supplementary fields",
+        "JOIN annotations must specify exact join conditions: left_table.field = right_table.field with join_type (INNER/LEFT/RIGHT)",
+        "Complexity categorization must be validated by both annotators independently",
+        "Adversarial queries must have documented ambiguity descriptions and correct resolutions",
+        "No query should be answerable without accessing the ontology (trivial queries excluded)",
+        "Dataset must cover all 9 schemas with at least 2 queries per schema"
+      ],
+      "dataset_splits": {
+        "development": "20 queries (5 Simple, 8 Medium, 5 Complex, 2 Adversarial) for system tuning and debugging",
+        "test": "80 queries (25 Simple, 32 Medium, 15 Complex, 8 Adversarial) for final evaluation — no system tuning on test set"
+      }
+    },
+    "experiment_protocols": [
+      {
+        "id": "P1",
+        "name": "Main Comparison: Smart Query vs. Baselines",
+        "objective": "Demonstrate that Smart Query with full Cognitive Hub architecture outperforms all baseline systems across accuracy, coverage, and resolution metrics",
+        "systems_compared": ["Smart Query (full)", "B0 (Direct LLM)", "B1 (RAG)", "B2a (Indicator-only)", "B2b (Scenario-only)", "B2c (Term-only)", "B3 (Independent Agents)", "B4 (Parallel Execution)"],
+        "dataset": "Full 100-query test set",
+        "steps": [
+          "1. Configure each system with identical LLM (same model, same temperature=0 for reproducibility)",
+          "2. Run each system on all 100 queries in randomized order (different random seed per system to avoid ordering effects)",
+          "3. For each query, record: primary_table, ranked_alternatives, recommended_fields, evidence_packs (if applicable), tool_call_logs, wall_clock_time, token_usage",
+          "4. Compute TLA@1, TLA@3, TLA@5, FCR-required, FCR-all, QRR for each system",
+          "5. For systems with three strategies (Smart Query, B3, B4): compute ECS and SCS",
+          "6. For Complex queries: compute JA-recall, JA-precision, JA-F1",
+          "7. Compute statistical significance for each pairwise comparison using paired bootstrap test (10,000 resamples, p < 0.05)",
+          "8. Report results in three views: (a) overall, (b) by complexity category, (c) by schema"
+        ],
+        "expected_output": "Main results table: 8 systems × 7 metrics × 5 views (overall + 4 categories)",
+        "statistical_tests": ["Paired bootstrap test (p < 0.05, 10,000 resamples) for all pairwise comparisons", "Bonferroni correction for multiple comparisons (8 systems × 7 metrics = 56 tests)", "Effect size reporting using Cohen's d"],
+        "reporting_format": "Table with mean ± standard error; bold for best result; * for statistically significant differences from Smart Query"
+      },
+      {
+        "id": "P2",
+        "name": "Ablation Study: Component Contribution Analysis",
+        "objective": "Isolate the contribution of each architectural component by measuring performance degradation when it is removed",
+        "systems_compared": ["Smart Query (full, control)", "A1 (no context inheritance)", "A2 (no evidence fusion)", "A3 (no isolated table filtering)", "A4 (no lineage JOIN)", "A5 (no dual retrieval)", "A6 (no ontology hierarchy)"],
+        "dataset": "Full 100-query test set",
+        "steps": [
+          "1. Run full Smart Query system on all 100 queries (control condition)",
+          "2. Run each ablation variant on all 100 queries",
+          "3. For each ablation, compute Δ_metric = metric(full) - metric(ablated) for all applicable metrics",
+          "4. Identify which query categories are most affected by each ablation",
+          "5. Compute statistical significance for each Δ using paired bootstrap test",
+          "6. Rank ablations by impact: which component removal causes the largest degradation?",
+          "7. Test for interaction effects: does removing two components simultaneously cause greater degradation than the sum of individual removals?"
+        ],
+        "expected_output": "Ablation results table: 6 ablations × applicable metrics × Δ values with significance indicators",
+        "statistical_tests": ["Paired bootstrap test for each Δ (p < 0.05)", "McNemar's test for binary outcomes (correct/incorrect per query)", "Interaction analysis for component pairs"],
+        "reporting_format": "Table with Δ values; ↓ for degradation; significance stars (*p<0.05, **p<0.01, ***p<0.001)"
+      },
+      {
+        "id": "P3",
+        "name": "Semantic Cumulative Effect Measurement",
+        "objective": "Empirically validate the information-theoretic formalization H(I|S1,S2,S3) ≤ H(I|S1,S2) ≤ H(I|S1) ≤ H(I) by measuring entropy reduction across strategy stages",
+        "systems_compared": ["Smart Query (serial with context)", "B3 (independent agents, for comparison)", "B4 (parallel execution, for comparison)"],
+        "dataset": "Full 100-query test set",
+        "steps": [
+          "1. For each query, instrument Smart Query to record the system state after each strategy completes",
+          "2. After each strategy k, extract the candidate table probability distribution P_k(t) from the evidence pack confidence scores",
+          "3. Compute entropy at each stage: H_k = -Σ P_k(t) · log₂(P_k(t)) for all candidate tables t",
+          "4. Define stage 0 (before any strategy): H_0 = log₂(35,287) ≈ 15.11 bits (uniform distribution)",
+          "5. Compute entropy reduction at each stage: ΔH_k = H_{k-1} - H_k",
+          "6. Verify monotonic decrease: check H_0 > H_1 > H_2 > H_3 for each query",
+          "7. Compute cumulative reduction ratio: CRR = (H_0 - H_3) / H_0",
+          "8. For B3 (independent): compute H(I|S1^indep, S2^indep, S3^indep) and compare with Smart Query's H(I|S1, S2, S3)",
+          "9. Compute conditional mutual information: I(I; S_k | S_1,...,S_{k-1}) = H_{k-1} - H_k",
+          "10. Analyze by query complexity: do Complex queries show larger cumulative effects than Simple queries?"
+        ],
+        "expected_output": "Entropy reduction analysis: per-query entropy trajectories, aggregate statistics by complexity category, comparison with independent/parallel baselines",
+        "probability_distribution_method": {
+          "description": "Converting strategy outputs to probability distributions over candidate tables",
+          "approach": "After strategy k completes, extract all tables mentioned in the evidence pack with their confidence/relevance scores. Normalize scores to form a probability distribution. Tables not mentioned receive a small uniform background probability ε = 0.001/N_remaining.",
+          "normalization": "P_k(t) = score_k(t) / Σ score_k(t') for mentioned tables; P_k(t) = ε for unmentioned tables",
+          "edge_cases": [
+            "Strategy finds no results: P_k = P_{k-1} (entropy unchanged, ΔH_k = 0)",
+            "Strategy finds exactly one table with certainty: H_k approaches 0",
+            "Multiple tables with equal scores: entropy reflects the ambiguity"
+          ]
+        },
+        "statistical_tests": ["One-sided paired t-test for H_{k-1} > H_k at each stage", "Wilcoxon signed-rank test (non-parametric alternative)", "Pearson correlation between CRR and TLA@1 (higher reduction → higher accuracy?)"],
+        "visualizations": [
+          "Line chart: Mean entropy vs. strategy stage, with separate lines for each complexity category and 95% CI bands",
+          "Box plot: Distribution of ΔH_k at each stage across all queries",
+          "Heatmap: Per-query entropy matrix (100 queries × 4 stages), sorted by complexity",
+          "Scatter plot: CRR vs. TLA@1 to validate that entropy reduction predicts accuracy"
+        ]
+      },
+      {
+        "id": "P4",
+        "name": "Efficiency Analysis",
+        "objective": "Compare computational efficiency across systems: time, tokens, tool calls, and navigation efficiency",
+        "systems_compared": ["Smart Query (full)", "B0", "B1", "B2a-c", "B3", "B4"],
+        "dataset": "Full 100-query test set",
+        "steps": [
+          "1. For each system and query, record: wall_clock_time (ms), total_tokens (input + output), num_tool_calls, tool_call_breakdown_by_type",
+          "2. Compute ONE (Ontology Navigation Efficiency) for Smart Query and applicable baselines",
+          "3. Compute per-strategy efficiency: time, tokens, tool calls for each of the three strategies",
+          "4. Compare serial (Smart Query) vs. parallel (B4) wall-clock time: serial has higher latency but potentially fewer total tokens",
+          "5. Analyze efficiency vs. accuracy tradeoff: plot TLA@1 vs. wall_clock_time for all systems",
+          "6. Identify efficiency bottlenecks: which strategy or tool call type consumes the most resources?"
+        ],
+        "expected_output": "Efficiency comparison table: systems × {mean_time, median_time, p95_time, mean_tokens, mean_tool_calls, ONE}",
+        "statistical_tests": ["Wilcoxon signed-rank test for pairwise time comparisons", "Spearman correlation between ONE and TLA@1"],
+        "reporting_format": "Table with mean ± std; efficiency-accuracy Pareto frontier plot"
+      },
+      {
+        "id": "P5",
+        "name": "Case Study Analysis",
+        "objective": "Provide qualitative evidence of how the system's architectural components work in practice through detailed execution traces",
+        "systems_compared": ["Smart Query (full)", "Selected baselines for contrast"],
+        "dataset": "5 representative queries (1 Simple, 1 Medium, 1 Complex, 1 Adversarial, 1 failure case)",
+        "steps": [
+          "1. Select 5 representative queries covering different complexity levels and interesting behaviors",
+          "2. For each query, capture the complete execution trace: all tool calls, all intermediate results, all evidence packs",
+          "3. Document how implicit context inheritance manifests: what information does Strategy 2 extract from Strategy 1's output? What does Strategy 3 extract from both?",
+          "4. Document how evidence pack fusion resolves conflicts: when strategies disagree, how does adjudication select the correct answer?",
+          "5. Visualize the semantic cumulative effect: show the candidate table set narrowing at each stage",
+          "6. For the failure case: analyze why the system failed and which component was responsible",
+          "7. Compare with B3 (independent agents) on the same queries to illustrate the value of context inheritance"
+        ],
+        "expected_output": "5 detailed case study narratives with execution trace diagrams, entropy reduction visualizations, and comparative analysis",
+        "selection_criteria": {
+          "simple_case": "A query where all three strategies agree and the system works efficiently",
+          "medium_case": "A query where Strategy 2 benefits from Strategy 1's schema identification",
+          "complex_case": "A multi-table query where lineage-driven JOIN discovery is critical",
+          "adversarial_case": "A query with ambiguous terminology where progressive degradation and isolated table filtering are activated",
+          "failure_case": "A query where the system produces an incorrect result, for honest error analysis"
+        }
+      }
+    ],
+    "semantic_cumulative_measurement": {
+      "theoretical_foundation": {
+        "theorem": "Semantic Cumulative Effect (SCE)",
+        "statement": "For target information I and strategy evidence S_1, S_2, S_3 executing serially with context inheritance: H(I|S_1,S_2,S_3) ≤ H(I|S_1,S_2) ≤ H(I|S_1) ≤ H(I)",
+        "proof_basis": "Chain rule of conditional entropy: H(I|S_1,...,S_k) = H(I|S_1,...,S_{k-1}) - I(I; S_k|S_1,...,S_{k-1}). Since conditional mutual information I(I; S_k|S_1,...,S_{k-1}) ≥ 0, the inequality follows.",
+        "strict_inequality_condition": "I(I; S_k|S_1,...,S_{k-1}) > 0, i.e., strategy S_k provides information about I not already captured by previous strategies. Guaranteed when strategies explore orthogonal knowledge dimensions.",
+        "serial_vs_parallel": "H(I|S_1,S_2(S_1),S_3(S_1,S_2)) ≤ H(I|S_1^indep,S_2^indep,S_3^indep) because context inheritance allows later strategies to focus search, reducing redundancy and increasing relevance."
+      },
+      "measurement_methodology": {
+        "stage_definitions": [
+          {
+            "stage": 0,
+            "name": "Prior (Before Any Strategy)",
+            "distribution": "Uniform over all N=35,287 tables: P_0(t) = 1/N",
+            "expected_entropy": "H_0 = log₂(35,287) ≈ 15.11 bits",
+            "interpretation": "Maximum uncertainty — any table is equally likely"
+          },
+          {
+            "stage": 1,
+            "name": "After Indicator Strategy (S1)",
+            "distribution": "P_1(t) proportional to indicator match scores from Strategy 1's evidence pack. Tables with matched indicators receive high probability; unmatched tables receive background probability ε.",
+            "expected_entropy": "H_1 ≈ 8-12 bits for clear indicator matches; H_1 ≈ 13-14 bits for ambiguous queries",
+            "interpretation": "Indicator strategy narrows the search space by identifying business domain. Large entropy reduction for queries with clear business indicator matches."
+          },
+          {
+            "stage": 2,
+            "name": "After Scenario Strategy (S2)",
+            "distribution": "P_2(t) proportional to combined indicator + scenario evidence. Tables in the identified Schema/Topic receive boosted probability; dual retrieval results further refine the distribution.",
+            "expected_entropy": "H_2 ≈ 4-8 bits typically; further reduction from Schema→Topic narrowing",
+            "interpretation": "Scenario strategy narrows to specific Schema/Topic, significantly reducing candidates. Dual retrieval adds semantic expansion."
+          },
+          {
+            "stage": 3,
+            "name": "After Term Strategy (S3)",
+            "distribution": "P_3(t) proportional to full evidence pack score incorporating all three strategies. Term-level confirmation provides field-level precision.",
+            "expected_entropy": "H_3 ≈ 1-4 bits typically; near-zero for high-confidence queries",
+            "interpretation": "Term strategy provides final confirmation through field-level semantic matching. Entropy approaches zero when all strategies converge."
+          }
+        ],
+        "probability_construction": {
+          "method": "Score-based normalization with background smoothing",
+          "formula": "For tables mentioned by strategy k with scores {s_k(t)}: P_k(t) = (1-ε_total) · s_k(t) / Σ s_k(t') + ε/N for mentioned tables; P_k(t) = ε/N for unmentioned tables. Where ε_total = N_unmentioned · ε/N ensures proper normalization.",
+          "score_sources": {
+            "strategy_1": "Indicator match confidence from layered_keyword_search hybrid scores",
+            "strategy_2": "Fusion score from dual retrieval (convergent path + hybrid search); both-recalled tables get score=1.0",
+            "strategy_3": "Term match count and data standard coverage score"
+          },
+          "cumulative_update": "P_k(t) incorporates evidence from all strategies up to k, not just strategy k alone. This reflects the cumulative nature of the serial execution.",
+          "background_probability": "ε = 0.001 per unmentioned table, ensuring non-zero probability for entropy computation"
+        },
+        "entropy_computation": {
+          "formula": "H_k = -Σ_{t=1}^{N} P_k(t) · log₂(P_k(t))",
+          "reduction": "ΔH_k = H_{k-1} - H_k (information gain from strategy k)",
+          "cumulative_reduction_ratio": "CRR = (H_0 - H_3) / H_0 (fraction of initial uncertainty resolved)",
+          "conditional_mutual_information": "I(I; S_k | S_1,...,S_{k-1}) ≈ ΔH_k (approximation via entropy reduction)"
+        }
+      },
+      "expected_patterns": {
+        "monotonic_decrease": "H_0 > H_1 > H_2 > H_3 should hold for >80% of queries. Violations indicate a strategy introduced noise rather than reducing uncertainty.",
+        "by_complexity": {
+          "simple": "Large H_0→H_1 drop (indicator strategy often sufficient); small H_1→H_2→H_3 drops (diminishing returns)",
+          "medium": "Moderate drops at each stage; H_1→H_2 drop significant as scenario strategy disambiguates",
+          "complex": "Gradual drops across all stages; H_2→H_3 drop significant as term strategy discovers cross-table fields",
+          "adversarial": "Smaller initial drops (ambiguity); larger H_2→H_3 drops as term strategy resolves ambiguity through data standards"
+        },
+        "cumulative_reduction_ratio": "CRR > 0.70 on average (>70% of initial uncertainty resolved); CRR > 0.85 for Simple queries; CRR > 0.50 for Adversarial queries",
+        "serial_vs_parallel_gap": "Smart Query (serial) achieves 5-15% lower final entropy than B4 (parallel) on average, with the gap widening for Complex and Adversarial queries"
+      },
+      "challenges_and_mitigations": [
+        {
+          "challenge": "Defining P_k(t) from strategy outputs: strategies produce structured evidence packs, not explicit probability distributions",
+          "mitigation": "Use normalized confidence scores from evidence packs as proxy probabilities. Validate by checking that higher-probability tables are more likely to be correct (calibration analysis)."
+        },
+        {
+          "challenge": "Handling strategies that find no results: entropy should remain unchanged but the distribution update is undefined",
+          "mitigation": "If strategy k finds no results, set P_k = P_{k-1} (no update). Record these cases separately and report the frequency of 'no-information' strategies."
+        },
+        {
+          "challenge": "Comparing across query complexities: absolute entropy values depend on the effective search space size",
+          "mitigation": "Normalize by H_0 to compute relative reduction ratios. Report both absolute entropy values and normalized ratios."
+        },
+        {
+          "challenge": "The approximation I(I; S_k | S_1,...,S_{k-1}) ≈ ΔH_k assumes the entropy over candidate tables is a good proxy for entropy over the target information I",
+          "mitigation": "Validate by computing correlation between CRR and TLA@1. If high CRR predicts high TLA@1, the proxy is reasonable."
+        }
+      ],
+      "visualizations": [
+        {
+          "type": "Line chart",
+          "title": "Entropy Reduction Across Strategy Stages",
+          "x_axis": "Strategy Stage (0, 1, 2, 3)",
+          "y_axis": "Shannon Entropy (bits)",
+          "series": ["Simple (mean ± 95% CI)", "Medium (mean ± 95% CI)", "Complex (mean ± 95% CI)", "Adversarial (mean ± 95% CI)", "Overall (mean ± 95% CI)"],
+          "purpose": "Visualize the monotonic entropy decrease and compare reduction patterns across complexity categories"
+        },
+        {
+          "type": "Box plot",
+          "title": "Entropy Reduction Distribution by Stage",
+          "x_axis": "Stage Transition (H0→H1, H1→H2, H2→H3)",
+          "y_axis": "ΔH (bits)",
+          "purpose": "Show the distribution of entropy reduction at each stage, highlighting median, quartiles, and outliers"
+        },
+        {
+          "type": "Heatmap",
+          "title": "Per-Query Entropy Trajectory",
+          "x_axis": "Strategy Stage (0, 1, 2, 3)",
+          "y_axis": "Queries (sorted by complexity category, then by CRR)",
+          "color": "Entropy value (high=red, low=blue)",
+          "purpose": "Provide a complete view of all 100 queries' entropy trajectories, enabling identification of patterns and outliers"
+        },
+        {
+          "type": "Scatter plot",
+          "title": "Cumulative Reduction Ratio vs. Table Localization Accuracy",
+          "x_axis": "CRR = (H_0 - H_3) / H_0",
+          "y_axis": "TLA@1 (binary: 0 or 1)",
+          "purpose": "Validate that higher entropy reduction predicts higher accuracy, supporting the theoretical framework"
+        }
+      ]
+    },
+    "expected_results_summary": {
+      "main_comparison_hypotheses": [
+        {"comparison": "Smart Query vs. B0 (Direct LLM)", "metric": "TLA@1", "expected_gap": "+25-35%", "rationale": "Ontology structure enables systematic navigation impossible with flat table descriptions"},
+        {"comparison": "Smart Query vs. B1 (RAG)", "metric": "TLA@1", "expected_gap": "+15-25%", "rationale": "Ontology hierarchy and cross-layer associations provide structured navigation beyond vector similarity"},
+        {"comparison": "Smart Query vs. Best B2 (Single Strategy)", "metric": "TLA@1", "expected_gap": "+10-20%", "rationale": "Multi-strategy fusion covers blind spots of any single strategy"},
+        {"comparison": "Smart Query vs. B3 (Independent Agents)", "metric": "TLA@1", "expected_gap": "+10-15%", "rationale": "Implicit context inheritance enables progressive refinement"},
+        {"comparison": "Smart Query vs. B4 (Parallel)", "metric": "TLA@1", "expected_gap": "+5-10%", "rationale": "Serial ordering enables semantic cumulative effect; gap widens for complex queries"}
+      ],
+      "ablation_hypotheses": [
+        {"ablation": "A1 (no context inheritance)", "primary_metric": "TLA@1", "expected_drop": "-10-20%", "most_affected": "Complex and Adversarial queries"},
+        {"ablation": "A2 (no evidence fusion)", "primary_metric": "TLA@1", "expected_drop": "-5-15%", "most_affected": "Complex queries requiring multi-perspective resolution"},
+        {"ablation": "A3 (no isolated filtering)", "primary_metric": "Precision", "expected_drop": "-5-10%", "most_affected": "Queries in schemas with many deprecated tables"},
+        {"ablation": "A4 (no lineage JOIN)", "primary_metric": "JA-F1", "expected_drop": "-15-25%", "most_affected": "Complex multi-table queries"},
+        {"ablation": "A5 (no dual retrieval)", "primary_metric": "FCR", "expected_drop": "-10-15%", "most_affected": "Queries with non-standard terminology"},
+        {"ablation": "A6 (no ontology hierarchy)", "primary_metric": "ONE", "expected_drop": "Significant", "most_affected": "Ambiguous queries requiring hierarchical disambiguation"}
+      ]
+    },
+    "statistical_analysis_plan": {
+      "primary_significance_test": "Paired bootstrap test with 10,000 resamples, significance level α = 0.05",
+      "multiple_comparison_correction": "Bonferroni correction applied when comparing multiple systems or metrics simultaneously",
+      "effect_size": "Cohen's d reported for all significant differences: small (0.2), medium (0.5), large (0.8)",
+      "non_parametric_alternatives": "Wilcoxon signed-rank test used when normality assumption is violated (Shapiro-Wilk test p < 0.05)",
+      "confidence_intervals": "95% bootstrap confidence intervals reported for all point estimates",
+      "binary_outcome_tests": "McNemar's test for paired binary outcomes (correct/incorrect per query)",
+      "correlation_analysis": "Spearman rank correlation for ordinal relationships (e.g., ECS vs. TLA@1, CRR vs. TLA@1)",
+      "reporting_standards": [
+        "All results reported with mean ± standard error",
+        "Statistical significance indicated with stars: *p<0.05, **p<0.01, ***p<0.001",
+        "Effect sizes reported alongside p-values",
+        "Non-significant results reported honestly (no p-hacking or selective reporting)",
+        "Complete results for all systems and metrics reported, including negative results"
+      ]
+    }
+  }
+}
