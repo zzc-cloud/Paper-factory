@@ -1,0 +1,28 @@
+{
+  "models": {
+    "reasoning": "opus",
+    "writing": "sonnet"
+  },
+  "agents": {
+    "a1": { "model": "writing",   "budget": 3, "tools": ["WebSearch", "WebFetch", "Read", "Write"] },
+    "a2": { "model": "reasoning", "budget": 5, "tools": ["Read", "Glob", "Grep", "Write", "Bash"] },
+    "a3": { "model": "reasoning", "budget": 4, "tools": ["WebSearch", "WebFetch", "Read", "Write"] },
+    "a4": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write"] },
+    "b1": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write", "WebSearch"] },
+    "b2": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write"] },
+    "b3": { "model": "reasoning", "budget": 4, "tools": ["Read", "Write"] },
+    "c1": { "model": "writing",   "budget": 2, "tools": ["Read", "Write"] },
+    "c2": { "model": "writing",   "budget": 3, "tools": ["Read", "Write"] },
+    "c3": { "model": "writing",   "budget": 2, "tools": ["Read", "Write", "Glob"] },
+    "d1": { "model": "reasoning", "budget": 5, "tools": ["Read", "Write"] },
+    "d2": { "model": "reasoning", "budget": 4, "tools": ["Read", "Write"] }
+  },
+  "quality": {
+    "min_papers": 30,
+    "min_review_score": 7,
+    "max_review_iterations": 3
+  },
+  "paper": {
+    "target_word_count": 10000
+  }
+}

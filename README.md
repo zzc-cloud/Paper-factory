@@ -1,346 +1,298 @@
 # 论文工厂：多智能体学术论文生成系统
 
-> 一个自动化生成高质量学术论文的多智能体协作系统
+> 基于 Claude Code Agent Teams 的端到端学术论文自动生成框架
 
 ---
 
 ## 项目概述
 
-"论文工厂"（Paper Factory）是一个创新的多智能体协作系统，旨在自动化学术论文的生成流程。该系统通过 **12 个专业化智能体**的协作，将论文创作过程分解为 **4 个阶段**，实现了从研究素材收集到最终论文生成的端到端自动化。
+论文工厂（Paper Factory）是一个多智能体协作系统，通过 **12 个专业化智能体** 分 **4 个阶段** 完成学术论文的全流程生成——从文献调研到同行评审。
 
-本系统已成功生成一篇完整的学术论文：
+系统基于 Claude Code 的 Agent Teams（实验性功能）构建。Team Lead 读取 `CLAUDE.md` 中的编排指令，动态创建和协调 teammate，通过消息传递和文件系统实现 agent 间协作。无需 bash 脚本，无需手动编排。
 
-- **标题**: Cognitive Hub: A Multi-Agent Architecture for Ontology-Driven Natural Language Data Querying at Enterprise Scale
-- **字数**: ~10,000 字
-- **章节**: 7 个主要章节 + 摘要
-- **图表**: 6 个图表 + 4 个表格
-- **引用**: 35+ 篇学术论文引用
-- **最终评分**: 7.3/10 (Minor Revision, Accept-Leaning)
+---
+
+## 前置条件
+
+- **Claude Code**：已安装并可用
+- **Agent Teams 功能**：需启用实验性 Agent Teams 支持
+  - `.claude/settings.local.json` 中设置 `"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"`
+- **API 额度**：完整 pipeline 预计消耗 ~$41（可通过 `config.json` 调整各 agent 预算）
 
 ---
 
 ## 系统架构
 
 ```
-╔════════════════════════════════════════════════════════════════════════════╗
-║                    论文工厂系统 — 完整执行流程                                 ║
-╠════════════════════════════════════════════════════════════════════════════╣
-║                                                                             ║
-║  ┌───────────────────────────────────────────────────────────────────────┐   ║
-║  │  Phase 1: Research (素材收集)                                      │   ║
-║  │                                                                     │   ║
-║  │  ┌─────────┐  ┌─────────┐  ┌─────────┐                           │   ║
-║  │  │   A1    │  │   A2    │  │   A3    │   并行执行                │   ║
-║  │  │文献调研 │  │工程分析 │  │理论构建 │                           │   ║
-║  │  │35篇论文 │  │7367行代码│  │6种MAS范式│                         │   ║
-║  │  └────┬────┘  └────┬────┘  └────┬────┘                           │   ║
-║  │       └────────────┴────────────┘                                  │   ║
-║  │                      ▼                                              │   ║
-║  │                  ┌─────────┐                                        │   ║
-║  │                  │   A4    │   创新形式化 (依赖 A2)                 │   ║
-║  │                  │创新总结 │   13项创新 → 3-4个贡献主题              │   ║
-║  │                  └────┬────┘                                        │   ║
-║  └───────────────────┼───────────────────────────────────────────────┘   ║
-║                      ▼                                                      ║
-║  ═════════════════════════════════════════════════════════════════════════  ║
-║  Quality Gate 1: 检查 A1-A4 输出文件 (8个文件) ✅                          ║
-║  ═════════════════════════════════════════════════════════════════════════  ║
-║                      ▼                                                      ║
-║  ┌─────────────────────────────────────────────────────────────────────┐   ║
-║  │  Phase 2: Design (论文设计)                                         │   ║
-║  │                                                                     │   ║
-║  │  ┌─────────┐  ┌─────────┐  ┌─────────┐                           │   ║
-║  │  │   B1    │→│   B2    │→│   B3    │   串行执行                │   ║
-║  │  │相关工作 │  │实验设计 │  │结构设计 │                           │   ║
-║  │  │系统定位 │  │5基线6消融│  │8200字大纲│                         │   ║
-║  │  └─────────┘  └─────────┘  └─────────┘                           │   ║
-║  └───────────────────┼───────────────────────────────────────────────┘   ║
-║                      ▼                                                      ║
-║  ═════════════════════════════════════════════════════════════════════════  ║
-║  Quality Gate 2: 检查 B1-B3 输出文件 (6个文件) ✅                          ║
-║  ═════════════════════════════════════════════════════════════════════════  ║
-║                      ▼                                                      ║
-║  ┌─────────────────────────────────────────────────────────────────────┐   ║
-║  │  Phase 3: Writing (论文撰写)                                        │   ║
-║  │                                                                     │   ║
-║  │  ┌─────────┐  ┌─────────┐  ┌─────────┐                           │   ║
-║  │  │   C1    │  │   C2    │  │   C3    │   串行执行                │   ║
-║  │  │章节写作 │  │图表设计 │  │格式整合 │                           │   ║
-║  │  │ 7次调用 │  │ 6图4表  │  │最终组装 │                           │   ║
-║  │  └─────────┘  └─────────┘  └─────────┘                           │   ║
-║  └───────────────────┼───────────────────────────────────────────────┘   ║
-║                      ▼                                                      ║
-║  ═════════════════════════════════════════════════════════════════════════  ║
-║  Quality Gate 3: 检查所有章节和最终论文 (10个文件) ✅                       ║
-║  ═════════════════════════════════════════════════════════════════════════  ║
-║                      ▼                                                      ║
-║  ┌─────────────────────────────────────────────────────────────────────┐   ║
-║  │  Phase 4: Quality (质量评审)                                        │   ║
-║  │                                                                     │   ║
-║  │  ┌─────────┐  ┌─────────┐                                         │   ║
-║  │  │   D1    │→│   D2    │   串行执行 (迭代循环)                    │   ║
-║  │  │同行评审 │  │修订执行 │   3轮迭代达到 7.3/10                    │   ║
-║  │  │3视角评审│  │修订日志 │                                         │   ║
-║  │  └─────────┘  └─────────┘                                         │   ║
-║  └───────────────────┼───────────────────────────────────────────────┘   ║
-║                      ▼                                                      ║
-║  ═════════════════════════════════════════════════════════════════════════  ║
-║  Quality Gate 4: 检查评审报告和修订记录 ✅                                 ║
-║  ═════════════════════════════════════════════════════════════════════════  ║
-║                      ▼                                                      ║
-║                   ┌─────────┐                                             ║
-║                   │ 最终论文 │                                             ║
-║                   │paper.md │                                             ║
-║                   │~10,000字│                                             ║
-║                   └─────────┘                                             ║
-║                                                                             ║
-╚════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════════════╗
+║                   论文工厂系统 — Agent Teams 执行流程                      ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  ┌─────────────────────────────────────────────────────────────────┐    ║
+║  │  Phase 1: Research（素材收集）                                  │    ║
+║  │                                                                 │    ║
+║  │  ┌─────────┐  ┌─────────┐  ┌─────────┐                       │    ║
+║  │  │   A1    │  │   A2    │  │   A3    │   并行执行            │    ║
+║  │  │文献调研 │  │工程分析 │  │理论构建 │                       │    ║
+║  │  └────┬────┘  └────┬────┘  └────┬────┘                       │    ║
+║  │       └────────────┴────────────┘                              │    ║
+║  │                    ▼                                            │    ║
+║  │                ┌─────────┐                                     │    ║
+║  │                │   A4    │   创新形式化（依赖 A2）             │    ║
+║  │                │创新总结 │                                     │    ║
+║  │                └────┬────┘                                     │    ║
+║  └─────────────────┼───────────────────────────────────────────┘    ║
+║                    ▼                                                    ║
+║  ════════════════════════════════════════════════════════════════════   ║
+║  Quality Gate 1: 验证 Phase 1 全部输出文件                              ║
+║  ════════════════════════════════════════════════════════════════════   ║
+║                    ▼                                                    ║
+║  ┌─────────────────────────────────────────────────────────────────┐    ║
+║  │  Phase 2: Design（论文设计）                                    │    ║
+║  │                                                                 │    ║
+║  │  ┌─────────┐  ┌─────────┐  ┌─────────┐                       │    ║
+║  │  │   B1    │→│   B2    │→│   B3    │   严格串行            │    ║
+║  │  │相关工作 │  │实验设计 │  │结构设计 │                       │    ║
+║  │  └─────────┘  └─────────┘  └─────────┘                       │    ║
+║  └─────────────────┼───────────────────────────────────────────┘    ║
+║                    ▼                                                    ║
+║  ════════════════════════════════════════════════════════════════════   ║
+║  Quality Gate 2: 验证 Phase 2 全部输出文件                              ║
+║  ════════════════════════════════════════════════════════════════════   ║
+║                    ▼                                                    ║
+║  ┌─────────────────────────────────────────────────────────────────┐    ║
+║  │  Phase 3: Writing（论文撰写）                                   │    ║
+║  │                                                                 │    ║
+║  │  ┌─────────┐  ┌─────────┐  ┌─────────┐                       │    ║
+║  │  │   C1    │→│   C2    │→│   C3    │   串行执行            │    ║
+║  │  │章节写作 │  │图表设计 │  │格式整合 │                       │    ║
+║  │  └─────────┘  └─────────┘  └─────────┘                       │    ║
+║  └─────────────────┼───────────────────────────────────────────┘    ║
+║                    ▼                                                    ║
+║  ════════════════════════════════════════════════════════════════════   ║
+║  Quality Gate 3: 验证所有章节 + 图表 + 最终论文                         ║
+║  ════════════════════════════════════════════════════════════════════   ║
+║                    ▼                                                    ║
+║  ┌─────────────────────────────────────────────────────────────────┐    ║
+║  │  Phase 4: Quality（质量评审）                                   │    ║
+║  │                                                                 │    ║
+║  │  ┌─────────┐  ┌─────────┐                                     │    ║
+║  │  │   D1    │→│   D2    │   迭代循环                          │    ║
+║  │  │同行评审 │  │修订执行 │   直到评分达标或达到最大轮次        │    ║
+║  │  └─────────┘  └─────────┘                                     │    ║
+║  └─────────────────┼───────────────────────────────────────────┘    ║
+║                    ▼                                                    ║
+║  ════════════════════════════════════════════════════════════════════   ║
+║  Quality Gate 4: 验证评审报告 + 最终论文                                ║
+║  ════════════════════════════════════════════════════════════════════   ║
+║                    ▼                                                    ║
+║                 ┌─────────┐                                            ║
+║                 │ 最终论文 │                                            ║
+║                 │paper.md │                                            ║
+║                 └─────────┘                                            ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
 ---
 
-## 4 个执行阶段
+## 4 个执行阶段 x 12 个智能体
 
 ### Phase 1: Research 素材收集
-- **A1**: Literature Surveyor — 文献调研
-- **A2**: Engineering Analyst — 工程分析
-- **A3**: MAS Theorist — 理论构建
-- **A4**: Innovation Formalizer — 创新形式化
+- **A1** Literature Surveyor — 文献调研：搜索并整理相关学术论文
+- **A2** Engineering Analyst — 工程分析：深度分析目标代码库/系统
+- **A3** MAS Theorist — 理论构建：研究多智能体系统理论框架
+- **A4** Innovation Formalizer — 创新形式化：将工程创新转化为学术贡献
 
 ### Phase 2: Design 论文设计
-- **B1**: Related Work Analyst — 相关工作分析
-- **B2**: Experiment Designer — 实验设计
-- **B3**: Paper Architect — 结构设计
+- **B1** Related Work Analyst — 相关工作分析：系统定位与差异化
+- **B2** Experiment Designer — 实验设计：基线对比与消融实验方案
+- **B3** Paper Architect — 结构设计：完整论文大纲与字数规划
 
 ### Phase 3: Writing 论文撰写
-- **C1**: Section Writer — 章节撰写 (7 次)
-- **C2**: Visualization Designer — 图表设计
-- **C3**: Academic Formatter — 格式整合
+- **C1** Section Writer — 章节撰写：按大纲逐章生成内容
+- **C2** Visualization Designer — 图表设计：生成论文所需图表
+- **C3** Academic Formatter — 格式整合：组装最终论文
 
 ### Phase 4: Quality 质量评审
-- **D1**: Peer Reviewer — 同行评审 (多轮迭代)
-- **D2**: Revision Specialist — 修订执行
+- **D1** Peer Reviewer — 同行评审：多视角学术评审
+- **D2** Revision Specialist — 修订执行：根据评审意见修订论文
 
 ---
-### 已生成论文
-
-详细内容请查看 [papers/](papers/) 目录中的独立文档。
-
----
-
-## 目录结构
 
 ## 目录结构
 
 ```
-research/
-├── README.md                    # 本文档 — 项目总览
-├── orchestrator.sh              # 主编排脚本
-├── config.env                   # 配置文件
-│
-├── papers/                      # 知识库 — 已生成论文的可读文档
-│   └── 001-smart-query-cognitive-hub.md    # 第一篇论文
-│
-├── agents/                      # 智能体定义 (12个)
-│   ├── phase1/                  # Phase 1: Research
-│   │   ├── a1-literature-surveyor.md      # 文献调研员
-│   │   ├── a2-engineering-analyst.md       # 工程分析员
-│   │   ├── a3-mas-theorist.md              # MAS理论家
-│   │   └── a4-innovation-formalizer.md    # 创新形式化专家
-│   ├── phase2/                  # Phase 2: Design
-│   │   ├── b1-related-work-analyst.md     # 相关工作分析员
-│   │   ├── b2-experiment-designer.md       # 实验设计员
-│   │   └── b3-paper-architect.md           # 论文架构师
-│   ├── phase3/                  # Phase 3: Writing
-│   │   ├── c1-section-writer.md            # 章节撰写员
-│   │   ├── c2-visualization-designer.md    # 可视化设计师
-│   │   └── c3-academic-formatter.md        # 学术格式员
-│   └── phase4/                  # Phase 4: Quality
-│       ├── d1-peer-reviewer.md             # 同行评审员
-│       └── d2-revision-specialist.md       # 修订专家
-│
-├── scripts/                     # 执行脚本
-│   ├── run-agent.sh             # 通用智能体执行器
-│   ├── run-phase1.sh            # Phase 1 执行脚本
-│   ├── run-phase2.sh            # Phase 2 执行脚本
-│   ├── run-phase3.sh            # Phase 3 执行脚本
-│   ├── run-phase4.sh            # Phase 4 执行脚本
-│   └── check-quality-gate.sh    # 质量门控检查
-│
-├── workspace/                   # 工作空间（各阶段输出）
-│   ├── phase1/                  # Phase 1 输出 (8个文件)
-│   │   ├── a1-literature-survey.json
-│   │   ├── a1-literature-survey.md
-│   │   ├── a2-engineering-analysis.json
-│   │   ├── a2-engineering-analysis.md
-│   │   ├── a3-mas-theory.json
-│   │   ├── a3-mas-theory.md
-│   │   ├── a4-innovations.json
-│   │   └── a4-innovations.md
-│   ├── phase2/                  # Phase 2 输出 (6个文件)
-│   │   ├── b1-related-work.json
-│   │   ├── b1-related-work.md
-│   │   ├── b2-experiment-design.json
-│   │   ├── b2-experiment-design.md
-│   │   ├── b3-paper-outline.json
-│   │   └── b3-paper-outline.md
-│   ├── phase3/                  # Phase 3 输出 (10个文件)
-│   │   ├── sections/
-│   │   │   ├── 01-introduction.md
-│   │   │   ├── 02-related-work.md
-│   │   │   ├── 03-system-architecture.md
-│   │   │   ├── 04-theoretical-analysis.md
-│   │   │   ├── 05-experiments.md
-│   │   │   ├── 06-discussion.md
-│   │   │   └── 07-conclusion.md
-│   │   └── figures/
-│   │       ├── all-figures.md
-│   │       └── all-tables.md
-│   ├── phase4/                  # Phase 4 输出 (4个文件)
-│   │   ├── d1-review-report.json
-│   │   ├── d1-review-report.md
-│   │   ├── d2-revision-log.json
-│   │   └── d2-revision-log.md
-│   └── quality-gates/           # 质量门控记录
-│       ├── gate-1-complete.json
-│       ├── gate-2-complete.json
-│       ├── gate-3-complete.json
-│       └── gate-4-complete.json
-│
-├── output/                      # 最终输出
-│   └── paper.md                 # 最终论文 (~10,000字)
-│
-├── logs/                        # 执行日志
-│   ├── a1-literature-surveyor.log
-│   ├── a2-engineering-analyst.log
-│   ├── a3-mas-theorist.log
-│   ├── a4-innovation-formalizer.log
-│   ├── b1-related-work-analyst.log
-│   ├── b2-experiment-designer.log
-│   ├── b3-paper-architect.log
-│   ├── c1-section-writer.log
-│   ├── c2-visualization-designer.log
-│   ├── c3-academic-formatter.log
-│   ├── d1-peer-reviewer.log
-│   └── d2-revision-specialist.log
-│
-├── references/                  # 参考文档
-│   └── smart-query-innovations.md
-│
-└── README.md                    # 本文档
+paper-factory/
+├── CLAUDE.md                          # Team Lead 编排指令（核心）
+├── config.json                        # 配置：模型、预算、质量阈值
+├── agents/                            # 12 个 agent 系统提示
+│   ├── phase1/                        # Research: A1-A4
+│   │   ├── a1-literature-surveyor.md
+│   │   ├── a2-engineering-analyst.md
+│   │   ├── a3-mas-theorist.md
+│   │   └── a4-innovation-formalizer.md
+│   ├── phase2/                        # Design: B1-B3
+│   │   ├── b1-related-work-analyst.md
+│   │   ├── b2-experiment-designer.md
+│   │   └── b3-paper-architect.md
+│   ├── phase3/                        # Writing: C1-C3
+│   │   ├── c1-section-writer.md
+│   │   ├── c2-visualization-designer.md
+│   │   └── c3-academic-formatter.md
+│   └── phase4/                        # Quality: D1-D2
+│       ├── d1-peer-reviewer.md
+│       └── d2-revision-specialist.md
+├── .claude/
+│   └── settings.local.json            # Agent Teams 启用 + 工具权限
+├── workspace/                         # 运行时产物（按项目组织）
+│   └── {project-name}/
+│       ├── input-context.md           # 用户提供的项目素材
+│       ├── phase1/                    # A1-A4 输出
+│       ├── phase2/                    # B1-B3 输出
+│       ├── phase3/
+│       │   ├── sections/              # 各章节
+│       │   └── figures/               # 图表
+│       ├── phase4/                    # D1-D2 输出
+│       ├── quality-gates/             # 门控记录
+│       └── output/
+│           └── paper.md               # 最终论文
+├── papers/                            # 历史论文存档
+└── references/                        # 参考资料
 ```
 
 ---
 
 ## 使用方法
 
-### 运行完整流程
+### 1. 准备输入素材
+
+在 `workspace/{project-name}/` 下创建 `input-context.md`，包含：
+
+- 论文主题和工作标题
+- 目标系统/代码库路径（如有）
+- 创新点列表
+- 系统架构概述
+- 关键术语定义
+
+### 2. 启动 Claude Code
 
 ```bash
-bash orchestrator.sh
+cd paper-factory
+claude
 ```
 
-### 运行单个阶段
+### 3. 下达指令
 
-```bash
-bash orchestrator.sh --phase 1    # 只运行 Phase 1
-bash orchestrator.sh --phase 2    # 只运行 Phase 2
+在 Claude Code 中输入：
+
+```
+我要生成一篇关于 [你的主题] 的学术论文。
+素材在 workspace/[project-name]/input-context.md。
+请按 pipeline 开始。
 ```
 
-### 从指定阶段开始运行
-
-```bash
-bash orchestrator.sh --from-phase 2    # 从 Phase 2 运行到结束
-```
+Team Lead 会自动读取 `CLAUDE.md`，按 4 阶段 pipeline 创建 agent team 并推进全流程。
 
 ---
 
 ## 配置说明
 
-`config.env` 文件包含系统的核心配置：
+`config.json` 包含系统的核心配置：
 
-```bash
-# 路径配置
-RESEARCH_DIR="/Users/yyzz/Desktop/MyClaudeCode/research"
-SMART_QUERY_DIR="/Users/yyzz/Desktop/MyClaudeCode/smart-query"
-
-# 默认模型
-MODEL_REASONING="opus"     # 深度推理任务
-MODEL_WRITING="sonnet"     # 写作任务
-
-# 各智能体预算（美元）
-BUDGET_A1=3    # Literature Surveyor
-BUDGET_A2=5    # Engineering Analyst
-BUDGET_A3=4    # MAS Theorist
-BUDGET_A4=3    # Innovation Formalizer
-BUDGET_B1=3    # Related Work Analyst
-BUDGET_B2=3    # Experiment Designer
-BUDGET_B3=4    # Paper Architect
-BUDGET_C1=2    # Section Writer (per section)
-BUDGET_C2=3    # Visualization Designer
-BUDGET_C3=2    # Academic Formatter
-BUDGET_D1=5    # Peer Reviewer
-BUDGET_D2=4    # Revision Specialist
-
-# 质量门控
-MIN_PAPERS=30              # Gate 1: 最少文献数量
-MIN_REVIEW_SCORE=7         # Gate 4: 最低评审分数
-MAX_REVIEW_ITERATIONS=3    # Gate 4: 最大评审迭代次数
+```json
+{
+  "models": {
+    "reasoning": "opus",
+    "writing": "sonnet"
+  },
+  "agents": {
+    "a1": { "model": "writing",   "budget": 3, "tools": ["WebSearch", "WebFetch", "Read", "Write"] },
+    "a2": { "model": "reasoning", "budget": 5, "tools": ["Read", "Glob", "Grep", "Write", "Bash"] },
+    "a3": { "model": "reasoning", "budget": 4, "tools": ["WebSearch", "WebFetch", "Read", "Write"] },
+    "a4": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write"] },
+    "b1": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write", "WebSearch"] },
+    "b2": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write"] },
+    "b3": { "model": "reasoning", "budget": 4, "tools": ["Read", "Write"] },
+    "c1": { "model": "writing",   "budget": 2, "tools": ["Read", "Write"] },
+    "c2": { "model": "writing",   "budget": 3, "tools": ["Read", "Write"] },
+    "c3": { "model": "writing",   "budget": 2, "tools": ["Read", "Write", "Glob"] },
+    "d1": { "model": "reasoning", "budget": 5, "tools": ["Read", "Write"] },
+    "d2": { "model": "reasoning", "budget": 4, "tools": ["Read", "Write"] }
+  },
+  "quality": {
+    "min_papers": 30,
+    "min_review_score": 7,
+    "max_review_iterations": 3
+  },
+  "paper": {
+    "target_word_count": 10000
+  }
+}
 ```
+
+配置项说明：
+- **models** — 模型别名映射，reasoning 用于深度分析，writing 用于内容生成
+- **agents** — 每个 agent 的模型选择、预算上限（美元）、可用工具列表
+- **quality** — 质量门控阈值：最少文献数、最低评审分数、最大评审迭代次数
+- **paper** — 论文参数：目标字数
 
 ---
 
 ## 技术亮点
 
-### 1. 智能体间文件通信
+### 1. CLAUDE.md 驱动的智能编排
 
-后续智能体读取前面智能体的 JSON/Markdown 输出，实现跨智能体的知识传递。
+Team Lead 读取 `CLAUDE.md` 获取完整的 pipeline 定义，自主决定何时创建 teammate、如何分配任务、何时推进到下一阶段。无需外部脚本控制流程。
 
-### 2. 并行 + 串行混合执行
+### 2. Agent 间消息传递
 
-- Phase 1: A1/A2/A3 **并行执行**（后台进程）
-- Phase 2-4: B1-B3、C1-C3、D1-D2 **串行执行**（有依赖关系）
+Agent Teams 支持 teammate 之间的直接消息通信。Team Lead 可以向 teammate 发送指令、接收完成通知，teammate 之间也可以协调工作。
 
-### 3. 依赖管理
+### 3. 并行 + 串行混合执行
 
-通过脚本控制智能体间的依赖关系，例如 A4 必须等待 A2 完成后才执行。
+- Phase 1: A1/A2/A3 **并行执行**（无依赖关系，同时启动）
+- Phase 2-4: 串行执行（有明确的数据依赖链）
+- Phase 4: D1/D2 **迭代循环**（评审-修订直到达标）
 
-### 4. 质量门控
+### 4. 动态调整能力
 
-每个阶段结束后自动检查输出文件完整性，确保流程可靠性。
+Team Lead 可以根据中间结果动态调整策略：
+- 文献不足时要求 A1 补充搜索
+- 评审分数不达标时启动额外修订轮次
+- 某个 agent 失败时决定重试或跳过
 
-### 5. 可扩展设计
+### 5. 质量门控
 
-新增智能体只需：
-- 在 `agents/` 目录下创建 `.md` 文件（定义系统提示词）
-- 在对应的 `run-phaseN.sh` 中添加执行调用
-- 更新 `check-quality-gate.sh` 中的检查逻辑
+每个阶段结束后自动验证输出文件完整性，结果记录到 `quality-gates/gate-{N}.json`，确保 pipeline 可靠推进。
+
+### 6. 通用框架
+
+不绑定特定论文主题。通过 `input-context.md` 提供任意项目的素材，系统自动适配。
 
 ---
 
 ## 项目适用性
 
-本论文工厂是一个通用的学术论文生成系统，可以为任何技术项目生成论文：
+论文工厂适用于为技术项目生成学术论文草稿：
 
-1. 提供 `input-context.md` 描述项目创新点
-2. 系统自动完成文献调研、工程分析、理论构建、实验设计
-3. 生成完整的学术论文草稿
-4. 通过多轮评审迭代提升质量
+1. 准备 `input-context.md` 描述项目背景和创新点
+2. 系统自动完成文献调研、工程分析、理论构建
+3. 设计实验方案和论文结构
+4. 逐章撰写并组装完整论文
+5. 多轮评审迭代提升质量
+
+适合的场景：开源项目论文化、系统设计论文、技术架构论文、多智能体系统研究等。
 
 ---
 
-## 设计决策
+## 已生成论文
 
-### 为什么不需要 CLAUDE.md？
+| # | 标题 | 评分 | 日期 |
+|---|------|------|------|
+| 001 | Cognitive Hub: A Multi-Agent Architecture for Ontology-Driven Natural Language Data Querying at Enterprise Scale | 7.3/10 | 2025 |
 
-CLAUDE.md 通常作为项目的全局系统提示词，在每次 LLM 交互时注入。但对于本项目，**不需要** CLAUDE.md，理由如下：
-
-1. **每个智能体已有专门的系统提示词** — 12 个智能体各自有明确的职责定义，无需额外全局上下文
-2. **orchestrator.sh 是全局编排器** — 脚本已经定义了完整的执行流程和智能体间关系
-3. **保持智能体专注** — 过多的全局上下文可能分散智能体的注意力，降低任务执行质量
-4. **README.md 已提供完整文档** — 项目结构和用法已清晰记录
-
-每个智能体通过自己的 `agents/phase*/**.md` 文件获得充分的指令，输入路径在 task prompt 中明确给出。这种设计确保了智能体的"专注"优于"知情"。
+详细内容请查看 [papers/](papers/) 目录。
 
 ---
 
