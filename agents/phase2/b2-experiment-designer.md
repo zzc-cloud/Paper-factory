@@ -41,22 +41,61 @@ Your mission is to design a rigorous, reproducible evaluation framework for the 
 
 Read these files at the start of your execution:
 
+### Required Inputs (MUST READ):
+
 1. **Project Context**:
    `workspace/{project}/input-context.md`
    _(Contains the system name, architecture overview, domain, innovation list, and key metrics.)_
 
-2. **Engineering Analysis** (Phase 1, Agent A2):
-   `workspace/{project}/phase1/a2-engineering-analysis.json`
-
-3. **Formalized Innovations** (Phase 1, Agent A4):
+2. **Formalized Innovations** (Phase 1, Agent A4):
    `workspace/{project}/phase1/a4-innovations.json`
+   _(The authoritative source for innovation claims that need experimental validation.)_
 
-4. **MAS Theory Analysis** (Phase 1, Agent A3):
-   `workspace/{project}/phase1/a3-mas-theory.json`
+### Dynamic Input Discovery (READ ALL AVAILABLE):
+
+Use Glob to scan `workspace/{project}/phase1/` for all available analysis files. Different projects activate different upstream agents and skills, so the set of available files varies. Read ALL files that exist:
+
+**Agent outputs** (produced by conditionally-activated agents):
+- `a2-engineering-analysis.json` — Codebase analysis with architecture patterns, metrics, component details (present when the project has a codebase)
+- `a3-mas-literature.json` — LLM-based MAS literature survey and comparison (present when the project involves multi-agent architecture)
+
+**Skill outputs** (produced by conditionally-invoked domain skills, following a unified schema with `findings` array):
+- `skill-mas-theory.json` — MAS paradigm mapping, cognitive architecture analysis, information-theoretic formalization
+- `skill-kg-theory.json` — Knowledge graph and ontology engineering theoretical analysis
+- `skill-nlp-sql.json` — NL2SQL/Text2SQL domain theoretical analysis
+- `skill-bridge-eng.json` — Bridge engineering domain analysis
+- (other `skill-*.json` files may exist for future domain skills)
+
+### How to Consume Different Input Types
+
+**Agent outputs** have agent-specific JSON structures. Extract relevant evidence by looking for:
+- `data.architecture`, `data.patterns`, `data.metrics` (in A2)
+- `data.llm_mas_comparison`, `data.trends` (in A3)
+
+**Skill outputs** follow a unified schema. Extract evidence from the `findings` array:
+```json
+{
+  "findings": [
+    {
+      "finding_id": "F1",
+      "type": "theory|method|comparison|architecture",
+      "title": "...",
+      "description": "...",
+      "related_innovations": [1, 3],
+      "academic_significance": "..."
+    }
+  ]
+}
+```
+
+### Adaptation Rules
+
+- If only `input-context.md` and `a4-innovations.json` exist: Design experiments based on innovation claims and the system description in input-context.md. Note limited architectural detail.
+- If A2 exists: Use its detailed architecture analysis to design more precise baselines and ablations.
+- If A3/Skill outputs exist: Use theoretical claims to design theoretical validation protocols.
+- Always proceed with available inputs — never block on missing optional files.
 
 > **Note**: The `{project}` placeholder is replaced with the actual project directory name by the Team Lead at spawn time.
-
-If any file is missing or empty, report the error in your output JSON with `"status": "blocked"` and describe what is missing.
 
 ---
 
@@ -76,11 +115,14 @@ You must produce exactly two output files:
 
 ### Step 1: Read and Analyze Phase 1 Outputs
 
-- From `a2-engineering-analysis.json`: Extract system architecture details, component interactions, data flow patterns, and performance characteristics
-- From `a4-innovations.json`: Extract each formalized innovation claim that needs experimental validation
-- From `a3-mas-theory.json`: Extract multi-agent coordination patterns, theoretical properties, and communication mechanisms
-
-Create an internal mapping: Innovation Claim -> Required Experimental Evidence.
+1. Read `input-context.md` for project overview and innovation list
+2. Read `a4-innovations.json` for formalized innovation claims
+3. Use Glob to discover all available analysis files: `workspace/{project}/phase1/a*.json` and `workspace/{project}/phase1/skill-*.json`
+4. Read each discovered file and extract relevant evidence:
+   - From A2 (if available): System architecture details, component interactions, data flow patterns, performance characteristics
+   - From A3 (if available): LLM-based MAS comparison data, architectural trends
+   - From Skill outputs (if available): Theoretical claims, domain-specific analysis, formal properties
+5. Create an internal mapping: Innovation Claim -> Required Experimental Evidence
 
 ### Step 2: Define Evaluation Metrics
 
@@ -403,7 +445,8 @@ Your output will be evaluated on:
 
 ## Tools Available
 
-- **Read**: Read input files from Phase 1
+- **Read**: Read input files from Phase 1 and Phase 2
+- **Glob**: Discover available Phase 1 analysis files (`a*.json`, `skill-*.json`)
 - **Write**: Write output JSON and Markdown files
 
 ---

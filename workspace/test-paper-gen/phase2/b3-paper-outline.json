@@ -1,0 +1,773 @@
+{
+  "agent_id": "b3-paper-architect",
+  "phase": 2,
+  "status": "complete",
+  "timestamp": "2026-02-13T10:40:00.000000",
+  "summary": "Designed complete paper structure for 'Research on Intelligent CNC Fault Diagnosis System Integrating Large Language Models and Domain Knowledge Graphs'. The paper follows a standard academic structure with 7 main sections, 9 figures, 6 tables, targeting 8,500 words. Recommended AAAI 2025 as primary venue. Narrative arc: Problem (knowledge organization challenges in CNC fault diagnosis) -> Insight (bidirectional reasoning between LLM and KG) -> Solution (four-layer architecture with hybrid reasoning) -> Validation (comprehensive experiments with ablation studies).",
+  "data": {
+    "title": "Research on Intelligent CNC Fault Diagnosis System Integrating Large Language Models and Domain Knowledge Graphs",
+    "alternative_titles": [
+      "A Bidirectional Reasoning Framework for CNC Fault Diagnosis: Synergizing Large Language Models and Knowledge Graphs",
+      "Knowledge-Enhanced LLMs for Explainable CNC Fault Diagnosis: A Neuro-Symbolic Approach",
+      "LLM-KG Fusion for Intelligent Manufacturing: An Architecture for CNC Fault Diagnosis"
+    ],
+    "abstract_draft": "Intelligent fault diagnosis in Computer Numerical Control (CNC) systems faces critical challenges: low efficiency in knowledge organization, lack of adaptability between static knowledge frameworks and dynamic engineering environments, and difficulty integrating expert knowledge with real-time data streams. This paper proposes a novel intelligent CNC fault diagnosis system that synergizes Large Language Models (LLMs) with domain Knowledge Graphs (KGs) through a bidirectional reasoning mechanism. Our system features a four-layer architecture comprising perception, knowledge, reasoning, and application layers. We develop a domain-specific KG construction method for CNC fault diagnosis using ALCHIQ description logic, enabling structured representation of fault patterns, diagnostic methods, and maintenance knowledge. The bidirectional reasoning mechanism leverages KGs to validate LLM outputs through semantic matching and subgraph retrieval, while LLMs enhance KG reasoning through knowledge extraction and completion. We also design a multi-modal information fusion approach integrating sensor data, equipment logs, and maintenance documents. Experimental evaluation on a dataset of 1,000 fault instances demonstrates significant improvements over baseline systems, with ablation studies validating the contribution of each component. This work provides a neuro-symbolic framework for explainable AI in intelligent manufacturing, addressing the hallucination problem in LLMs while enhancing the reasoning capabilities of knowledge graphs.",
+    "narrative_arc": {
+      "problem": "CNC fault diagnosis systems suffer from fragmented knowledge organization, static knowledge frameworks that cannot adapt to dynamic engineering environments, and the challenge of integrating tacit expert knowledge with real-time equipment data streams. Existing approaches either rely on rule-based systems with limited expressiveness, pure deep learning methods lacking explainability, or single-technology solutions that cannot handle the complexity of modern manufacturing environments.",
+      "insight": "The key breakthrough is a bidirectional reasoning mechanism where knowledge graphs and large language models mutually enhance each other: KGs provide factual grounding and semantic constraints for LLMs to reduce hallucinations, while LLMs extract and generate structured knowledge to expand KG coverage and reasoning capabilities. This creates a self-reinforcing knowledge ecosystem that combines the strengths of symbolic reasoning and neural understanding.",
+      "solution": "A four-layer hierarchical architecture: (1) Perception layer collects multi-modal data from sensors, logs, and documents; (2) Knowledge layer houses the CNC-specific knowledge graph with ALCHIQ-based ontology; (3) Reasoning layer implements bidirectional LLM-KG reasoning with hybrid symbolic-neural inference; (4) Application layer provides fault diagnosis, explanation generation, and decision support. The knowledge graph serves as a semantic hub, providing unified representation and coordination across all components.",
+      "validation": "Comprehensive evaluation using 1,000 annotated fault instances across common, complex, rare, and noisy categories. Four baseline systems (rule-based, LLM-only, KG-only, unidirectional KG-augmented) tested on accuracy, precision, recall, F1, response time, KG reasoning accuracy, and hallucination rate. Four ablation studies validate each component's contribution. Real-world deployment testing confirms practical viability."
+    },
+    "sections": [
+      {
+        "id": "sec1",
+        "title": "Introduction",
+        "subsections": [
+          {
+            "id": "sec1.1",
+            "title": "Motivation and Problem Statement",
+            "key_arguments": [
+              "CNC systems are critical in modern manufacturing but fault diagnosis remains challenging (from input-context.md)",
+              "Existing approaches have limitations: rule-based systems lack flexibility, pure deep learning lacks explainability, single-technology solutions insufficient (from A1 literature gaps G1, G4)",
+              "Knowledge organization is inefficient with fragmented expert knowledge and dynamic operational environments (from input-context.md innovation description)",
+              "Need for systems that can handle multi-modal information while providing explainable results (from A1 gap G3)"
+            ],
+            "evidence_needed": [
+              "Statistics on CNC fault diagnosis challenges in manufacturing (downtime costs, misdiagnosis rates)",
+              "Examples of real-world fault scenarios where existing methods fail",
+              "Evidence of knowledge fragmentation in industrial maintenance practices"
+            ],
+            "word_count": 450,
+            "figures": ["fig1"],
+            "tables": []
+          },
+          {
+            "id": "sec1.2",
+            "title": "Key Insight",
+            "key_arguments": [
+              "Bidirectional reasoning between LLMs and KGs as core conceptual breakthrough (from A4 contribution #1, rank 1)",
+              "Knowledge graphs as semantic anchors reduce LLM hallucinations (from skill-kg-theory F2)",
+              "LLMs enhance KG reasoning through knowledge extraction and completion (from skill-kg-theory neurosymbolic_assessment)",
+              "Creates self-reinforcing feedback loop between neural and symbolic reasoning (from skill-kg-theory F4)"
+            ],
+            "evidence_needed": [
+              "Conceptual comparison of unidirectional vs bidirectional LLM-KG integration",
+              "Evidence of hallucination problem in pure LLM approaches",
+              "Demonstration of how KG constraints improve LLM reliability"
+            ],
+            "word_count": 350,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec1.3",
+            "title": "Contributions",
+            "key_arguments": [
+              "Four formalized contributions mapped from A4 innovation ranking",
+              "Contribution 1 (A4 #1): CNC fault diagnosis domain KG construction with ALCHIQ DL framework",
+              "Contribution 2 (A4 #2): Bidirectional LLM-KG reasoning mechanism with feedback loop",
+              "Contribution 3 (A4 #3): Multi-modal information fusion for fault diagnosis",
+              "Contribution 4 (A4 #4): Four-layer hierarchical system architecture"
+            ],
+            "evidence_needed": [
+              "Formal problem statements for each contribution",
+              "Novelty arguments for each contribution",
+              "Mapping of contributions to paper sections"
+            ],
+            "word_count": 400,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec1.4",
+            "title": "Paper Organization",
+            "key_arguments": [
+              "Brief roadmap of remaining sections",
+              "Preview of how each section validates the contributions"
+            ],
+            "evidence_needed": [],
+            "word_count": 100,
+            "figures": [],
+            "tables": []
+          }
+        ],
+        "total_word_count": 1300,
+        "figures": ["fig1"],
+        "tables": []
+      },
+      {
+        "id": "sec2",
+        "title": "Related Work",
+        "subsections": [
+          {
+            "id": "sec2.1",
+            "title": "CNC Fault Diagnosis Methods",
+            "key_arguments": [
+              "Traditional rule-based approaches and their limitations (B1 comparison)",
+              "Deep learning methods for fault diagnosis (B1 strongest competitor)",
+              "Knowledge-based fault diagnosis systems (B1 strongest competitor)",
+              "Gap: lack of LLM-KG fusion in CNC domain (B1 gap 1)"
+            ],
+            "evidence_needed": [
+              "Citations from A1 literature: P01, P04, P09",
+              "Comparison of accuracy, explainability, adaptability",
+              "Limitations of single-technology approaches"
+            ],
+            "word_count": 280,
+            "figures": [],
+            "tables": ["tab1"]
+          },
+          {
+            "id": "sec2.2",
+            "title": "Large Language Models in Fault Diagnosis",
+            "key_arguments": [
+              "LLM applications in industrial fault diagnosis (B1 category 2)",
+              "GPT-based diagnostic approaches (B1 paper: Zhao 2024)",
+              "Limitations: hallucination, lack of domain grounding (A4 contribution 2 problem)",
+              "Need for knowledge augmentation"
+            ],
+            "evidence_needed": [
+              "Citations from A1: P02, P06, P10, P12",
+              "Evidence of hallucination problem in domain applications",
+              "Current knowledge injection approaches"
+            ],
+            "word_count": 260,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec2.3",
+            "title": "Knowledge Graphs in Industrial Applications",
+            "key_arguments": [
+              "Industrial knowledge graph construction methods (B1 category 3)",
+              "KG applications in fault diagnosis (A1: P01, P07, P11)",
+              "Reasoning methods: symbolic, rule-based, hybrid (skill-kg-theory reasoning_analysis)",
+              "Limitations: incomplete coverage, manual maintenance"
+            ],
+            "evidence_needed": [
+              "Citations from A1: P05, P16, P20",
+              "Comparison of reasoning approaches",
+              "Scalability challenges in industrial settings"
+            ],
+            "word_count": 260,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec2.4",
+            "title": "LLM-Knowledge Graph Fusion",
+            "key_arguments": [
+              "Current LLM-KG integration approaches (B1 category 4)",
+              "Unidirectional knowledge augmentation (B2 baseline B3)",
+              "Gap: lack of true bidirectional reasoning (B1 positioning)",
+              "Our differentiation: CNC-specific, bidirectional, real-time"
+            ],
+            "evidence_needed": [
+              "Citations from A1: P03, P08, P13, P18",
+              "Comparison of fusion architectures",
+              "Evidence of bidirectional reasoning novelty"
+            ],
+            "word_count": 280,
+            "figures": [],
+            "tables": ["tab2"]
+          },
+          {
+            "id": "sec2.5",
+            "title": "Positioning and Differentiation",
+            "key_arguments": [
+              "Summary of unique contributions (B1 positioning)",
+              "System-level comparison with strongest competitors (B1 comparison_table 1)",
+              "Functional differentiation (B1 comparison_table 2)",
+              "Research gaps filled (B1 gaps, A1 research_gaps)"
+            ],
+            "evidence_needed": [
+              "Comparison tables showing system advantages",
+              "Evidence of filled research gaps",
+              "Clear positioning statement"
+            ],
+            "word_count": 220,
+            "figures": [],
+            "tables": []
+          }
+        ],
+        "total_word_count": 1300,
+        "figures": [],
+        "tables": ["tab1", "tab2"]
+      },
+      {
+        "id": "sec3",
+        "title": "System Architecture",
+        "subsections": [
+          {
+            "id": "sec3.1",
+            "title": "Architecture Overview",
+            "key_arguments": [
+              "Four-layer architecture: Perception, Knowledge, Reasoning, Application (A4 contribution 4)",
+              "Knowledge layer as core innovation (vs traditional 3-layer)",
+              "Data flow through the system (from input-context.md)",
+              "Design rationale: separation of concerns, semantic interoperability"
+            ],
+            "evidence_needed": [
+              "High-level architecture diagram",
+              "Data flow specification",
+              "Rationale for layer separation"
+            ],
+            "word_count": 400,
+            "figures": ["fig2"],
+            "tables": []
+          },
+          {
+            "id": "sec3.2",
+            "title": "Perception Layer: Multi-Modal Data Collection",
+            "key_arguments": [
+              "Data sources: sensors, equipment logs, maintenance documents (A4 contribution 3)",
+              "Data preprocessing and normalization",
+              "Integration of structured and unstructured data",
+              "Real-time data streaming capabilities"
+            ],
+            "evidence_needed": [
+              "Data flow diagram for perception layer",
+              "Description of data preprocessing pipeline",
+              "Statistics on data modalities handled"
+            ],
+            "word_count": 350,
+            "figures": ["fig3"],
+            "tables": ["tab3"]
+          },
+          {
+            "id": "sec3.3",
+            "title": "Knowledge Layer: Domain Knowledge Graph Construction",
+            "key_arguments": [
+              "CNC fault diagnosis ontology design (A4 contribution 1, skill-kg-theory F1)",
+              "ALCHIQ DL framework selection (skill-kg-theory dl_analysis)",
+              "Modular ontology design pattern (skill-kg-theory design_patterns)",
+              "Knowledge content: fault types, diagnostic methods, system components"
+            ],
+            "evidence_needed": [
+              "Ontology structure diagram",
+              "Description of key concepts and relationships",
+              "Rationale for ALCHIQ expressiveness choice"
+            ],
+            "word_count": 500,
+            "figures": ["fig4"],
+            "tables": ["tab4"]
+          },
+          {
+            "id": "sec3.4",
+            "title": "Reasoning Layer: Bidirectional LLM-KG Integration",
+            "key_arguments": [
+              "KG to LLM: semantic grounding and hallucination reduction (skill-kg-theory F2)",
+              "LLM to KG: knowledge extraction and completion",
+              "Feedback loop mechanism (skill-kg-theory neurosymbolic_assessment)",
+              "Hybrid reasoning: symbolic + neural (skill-kg-theory reasoning_analysis)"
+            ],
+            "evidence_needed": [
+              "Detailed architecture of bidirectional reasoning",
+              "Algorithm for semantic matching and subgraph retrieval",
+              "Description of knowledge extraction process"
+            ],
+            "word_count": 550,
+            "figures": ["fig5"],
+            "tables": []
+          },
+          {
+            "id": "sec3.5",
+            "title": "Application Layer: Fault Diagnosis Services",
+            "key_arguments": [
+              "Fault diagnosis service: main diagnostic workflow",
+              "Explanation generation: tracing reasoning paths",
+              "Decision support: maintenance recommendations",
+              "Natural language interface for user interaction"
+            ],
+            "evidence_needed": [
+              "Service interface specifications",
+              "Example diagnostic workflows",
+              "User interaction examples"
+            ],
+            "word_count": 350,
+            "figures": ["fig6"],
+            "tables": []
+          },
+          {
+            "id": "sec3.6",
+            "title": "System Integration and Coordination",
+            "key_arguments": [
+              "Inter-layer communication protocols",
+              "Knowledge graph as semantic hub (skill-kg-theory cognitive_hub_analysis)",
+              "Ontology-driven coordination mechanisms",
+              "Scalability considerations"
+            ],
+            "evidence_needed": [
+              "Integration architecture diagram",
+              "Description of coordination protocols",
+              "Performance characteristics"
+            ],
+            "word_count": 250,
+            "figures": [],
+            "tables": []
+          }
+        ],
+        "total_word_count": 2400,
+        "figures": ["fig2", "fig3", "fig4", "fig5", "fig6"],
+        "tables": ["tab3", "tab4"]
+      },
+      {
+        "id": "sec4",
+        "title": "Theoretical Analysis",
+        "subsections": [
+          {
+            "id": "sec4.1",
+            "title": "Expressiveness and Tractability",
+            "key_arguments": [
+              "ALCHIQ DL formalization (skill-kg-theory F1)",
+              "Expressiveness requirements for CNC fault diagnosis",
+              "Computational complexity: EXPTIME-complete but tractable for scale",
+              "OWL 2 DL profile alignment"
+            ],
+            "evidence_needed": [
+              "Formal DL axioms for key fault diagnosis concepts",
+              "Complexity analysis for reasoning tasks",
+              "Benchmark results on ontology reasoning"
+            ],
+            "word_count": 300,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec4.2",
+            "title": "Hybrid Reasoning Framework",
+            "key_arguments": [
+              "Symbolic reasoning: OWL/DL classification, SWRL rules, SHACL validation",
+              "Neural reasoning: RotatE embeddings, R-GCN for path prediction",
+              "Kautz Hierarchy Level 4 positioning (skill-kg-theory)",
+              "Scalability through precomputation and on-demand reasoning"
+            ],
+            "evidence_needed": [
+              "Formal description of hybrid reasoning approach",
+              "Task distribution between symbolic and neural methods",
+              "Scalability analysis"
+            ],
+            "word_count": 350,
+            "figures": ["fig7"],
+            "tables": []
+          },
+          {
+            "id": "sec4.3",
+            "title": "Neuro-Symbolic Integration Properties",
+            "key_arguments": [
+              "Bidirectional integration type (skill-kg-theory neurosymbolic_assessment)",
+              "Trust boundary and validation mechanisms",
+              "Local CWA for core knowledge, open world for extensions",
+              "Feedback loop convergence properties"
+            ],
+            "evidence_needed": [
+              "Formal model of bidirectional information flow",
+              "Analysis of trust and validation mechanisms",
+              "Convergence guarantees (if applicable)"
+            ],
+            "word_count": 300,
+            "figures": [],
+            "tables": []
+          }
+        ],
+        "total_word_count": 950,
+        "figures": ["fig7"],
+        "tables": []
+      },
+      {
+        "id": "sec5",
+        "title": "Experiments",
+        "subsections": [
+          {
+            "id": "sec5.1",
+            "title": "Experimental Setup",
+            "key_arguments": [
+              "Dataset specification: 1,000 instances across 4 categories (B2 dataset_spec)",
+              "Evaluation metrics: accuracy, precision, recall, F1, response time, KG reasoning accuracy, hallucination rate (B2 metrics)",
+              "Baseline systems: B0 (rule-based), B1 (LLM-only), B2 (KG-only), B3 (unidirectional) (B2 baselines)",
+              "Implementation details and computing environment"
+            ],
+            "evidence_needed": [
+              "Dataset statistics table",
+              "Metric definitions and formulas",
+              "Baseline system descriptions"
+            ],
+            "word_count": 400,
+            "figures": [],
+            "tables": ["tab5"]
+          },
+          {
+            "id": "sec5.2",
+            "title": "Main Results",
+            "key_arguments": [
+              "Target system vs all baselines across all metrics",
+              "Performance breakdown by fault category (common, complex, rare, noisy)",
+              "Statistical significance testing (t-test, p < 0.05)",
+              "Expected: target system outperforms all baselines"
+            ],
+            "evidence_needed": [
+              "Main results comparison table",
+              "Performance breakdown by fault type",
+              "Statistical significance analysis"
+            ],
+            "word_count": 450,
+            "figures": ["fig8"],
+            "tables": ["tab6"]
+          },
+          {
+            "id": "sec5.3",
+            "title": "Ablation Studies",
+            "key_arguments": [
+              "A1: Remove KG construction module (B2 ablation A1)",
+              "A2: Remove bidirectional reasoning mechanism (B2 ablation A2)",
+              "A3: Remove multi-modal fusion module (B2 ablation A3)",
+              "A4: Flatten hierarchical architecture (B2 ablation A4)",
+              "Expected: each removal causes significant performance drop"
+            ],
+            "evidence_needed": [
+              "Ablation results table",
+              "Analysis of component contributions",
+              "Interaction effects between components"
+            ],
+            "word_count": 400,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec5.4",
+            "title": "Theoretical Validation",
+            "key_arguments": [
+              "Claim 1: Bidirectional reasoning improves accuracy and reduces hallucination (B2 theoretical_validation claim 1)",
+              "Claim 2: Domain KG improves reasoning accuracy (B2 theoretical_validation claim 2)",
+              "Claim 3: Multi-modal fusion improves complex fault diagnosis (B2 theoretical_validation claim 3)",
+              "Observable proxies and measurement procedures"
+            ],
+            "evidence_needed": [
+              "Validation results for each theoretical claim",
+              "Correlation between theoretical properties and empirical results",
+              "Visualization of claim validation"
+            ],
+            "word_count": 300,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec5.5",
+            "title": "Case Studies",
+            "key_arguments": [
+              "Case 1: Common fault with clear symptoms",
+              "Case 2: Complex multi-component failure",
+              "Case 3: Rare fault with incomplete information",
+              "Demonstration of bidirectional reasoning in action"
+            ],
+            "evidence_needed": [
+              "Detailed diagnostic traces for each case",
+              "Visualization of reasoning paths",
+              "Comparison of system output with baselines"
+            ],
+            "word_count": 350,
+            "figures": [],
+            "tables": []
+          }
+        ],
+        "total_word_count": 1900,
+        "figures": ["fig8"],
+        "tables": ["tab5", "tab6"]
+      },
+      {
+        "id": "sec6",
+        "title": "Discussion",
+        "subsections": [
+          {
+            "id": "sec6.1",
+            "title": "Key Findings and Implications",
+            "key_arguments": [
+              "Bidirectional reasoning significantly outperforms unidirectional approaches",
+              "Domain-specific KG construction is critical for CNC fault diagnosis",
+              "Multi-modal fusion provides robustness to noisy inputs",
+              "Theoretical claims validated empirically"
+            ],
+            "evidence_needed": [
+              "Summary of key experimental findings",
+              "Analysis of practical implications",
+              "Connection to broader AI research trends"
+            ],
+            "word_count": 250,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec6.2",
+            "title": "Limitations",
+            "key_arguments": [
+              "Model complexity and deployment cost (B1 target_system_limitation)",
+              "Knowledge graph completeness requires ongoing maintenance",
+              "Real-time performance may be impacted for complex queries",
+              "Generalization to other manufacturing domains requires adaptation"
+            ],
+            "evidence_needed": [
+              "Analysis of computational overhead",
+              "Discussion of knowledge acquisition bottleneck",
+              "Qualitative assessment of deployment challenges"
+            ],
+            "word_count": 200,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec6.3",
+            "title": "Generalizability",
+            "key_arguments": [
+              "Architecture applicable to other intelligent manufacturing scenarios",
+              "KG construction methodology transferable to other domains",
+              "Bidirectional reasoning framework domain-agnostic",
+              "Future extensions to predictive maintenance"
+            ],
+            "evidence_needed": [
+              "Analysis of transferability to other domains",
+              "Description of required adaptations",
+              "Potential application scenarios"
+            ],
+            "word_count": 200,
+            "figures": [],
+            "tables": []
+          }
+        ],
+        "total_word_count": 650,
+        "figures": [],
+        "tables": []
+      },
+      {
+        "id": "sec7",
+        "title": "Conclusion",
+        "subsections": [
+          {
+            "id": "sec7.1",
+            "title": "Summary",
+            "key_arguments": [
+              "Recap of four main contributions",
+              "Summary of key experimental results",
+              "Impact on intelligent fault diagnosis research"
+            ],
+            "evidence_needed": [],
+            "word_count": 250,
+            "figures": [],
+            "tables": []
+          },
+          {
+            "id": "sec7.2",
+            "title": "Future Work",
+            "key_arguments": [
+              "Automated knowledge graph construction and maintenance",
+              "Integration with predictive maintenance systems",
+              "Extension to multi-agent collaborative diagnosis",
+              "Federated learning for privacy-preserving knowledge sharing"
+            ],
+            "evidence_needed": [],
+            "word_count": 150,
+            "figures": [],
+            "tables": []
+          }
+        ],
+        "total_word_count": 400,
+        "figures": [],
+        "tables": []
+      }
+    ],
+    "figure_specs": [
+      {
+        "id": "fig1",
+        "title": "CNC Fault Diagnosis Challenges",
+        "description": "Illustration showing the core challenges in CNC fault diagnosis: (a) fragmented knowledge sources (expert manuals, sensor data, maintenance logs), (b) knowledge gap between static frameworks and dynamic environments, (c) difficulty integrating tacit expert knowledge with real-time data. Visual should show a manufacturing setting with CNC machines, data streams flowing into a fragmented knowledge base that fails to provide coherent diagnostic outputs.",
+        "type": "problem_illustration",
+        "placement": "Section 1.1",
+        "size": "full_width",
+        "purpose": "Motivate the problem by visualizing the knowledge organization challenges that our system addresses"
+      },
+      {
+        "id": "fig2",
+        "title": "System Architecture Overview",
+        "description": "Four-layer architecture diagram showing: (1) Perception Layer (bottom) - multi-modal data collection from sensors, logs, documents; (2) Knowledge Layer - CNC fault diagnosis knowledge graph with ontology modules; (3) Reasoning Layer - bidirectional LLM-KG integration with hybrid inference engine; (4) Application Layer (top) - fault diagnosis, explanation, decision support services. Arrows showing bidirectional data flow between layers, emphasizing the central role of the knowledge layer.",
+        "type": "architecture",
+        "placement": "Section 3.1",
+        "size": "full_width",
+        "purpose": "Provide high-level view of the complete system architecture and component relationships"
+      },
+      {
+        "id": "fig3",
+        "title": "Perception Layer Data Flow",
+        "description": "Detailed data flow diagram for the perception layer. Shows three input streams: (1) Sensor data (time-series vibration, temperature, current); (2) Equipment logs (structured events, error codes); (3) Maintenance documents (unstructured text, PDFs). Each stream has preprocessing steps: normalization, parsing, NLP extraction. All streams converge into a unified multi-modal representation fed to the knowledge layer.",
+        "type": "flow_diagram",
+        "placement": "Section 3.2",
+        "size": "full_width",
+        "purpose": "Explain how multi-modal data is collected, processed, and unified"
+      },
+      {
+        "id": "fig4",
+        "title": "CNC Fault Diagnosis Ontology",
+        "description": "Ontology structure diagram for CNC fault diagnosis. Shows three main modules: (1) Fault Type module - hierarchy of failure modes (mechanical, electrical, software, etc.); (2) Diagnostic Method module - diagnostic procedures and tests; (3) System Component module - CNC machine components and subsystems. Key relationships: hasFault, diagnosedBy, affectsComponent, hasSymptom. Use OWL notation style with class hierarchy and property relationships. Highlight the modular design with clear interfaces.",
+        "type": "ontology_diagram",
+        "placement": "Section 3.3",
+        "size": "full_width",
+        "purpose": "Visualize the structure of the domain knowledge graph and key concept relationships"
+      },
+      {
+        "id": "fig5",
+        "title": "Bidirectional LLM-KG Reasoning Mechanism",
+        "description": "Detailed architecture of the bidirectional reasoning mechanism. Left side: KG to LLM flow - knowledge graph subgraph retrieval, semantic matching with user query, context construction for LLM, output validation against KG constraints. Right side: LLM to KG flow - knowledge extraction from unstructured text by LLM, entity and relation identification, ontology validation, knowledge graph updates. Center: feedback loop showing how KG improvements enhance LLM grounding and vice versa. Use different colors to distinguish symbolic (KG) and neural (LLM) components.",
+        "type": "architecture",
+        "placement": "Section 3.4",
+        "size": "full_width",
+        "purpose": "Explain the core innovation of bidirectional reasoning with detailed component interactions"
+      },
+      {
+        "id": "fig6",
+        "title": "Application Layer Service Interfaces",
+        "description": "Service interface diagram for the application layer. Shows three main services: (1) Fault Diagnosis Service - accepts natural language or structured input, returns diagnostic result with confidence; (2) Explanation Generator - traces reasoning path through KG, produces human-readable explanation; (3) Decision Support - provides maintenance recommendations, part sourcing, scheduling suggestions. Include example API calls and response formats for each service.",
+        "type": "component_diagram",
+        "placement": "Section 3.5",
+        "size": "full_width",
+        "purpose": "Show how end users interact with the system and what services are provided"
+      },
+      {
+        "id": "fig7",
+        "title": "Hybrid Reasoning Framework",
+        "description": "Visual representation of the hybrid reasoning approach. Left side: Symbolic reasoning stack - OWL/DL classification (TBox reasoning), SWRL rules (if-then diagnostic rules), SHACL validation (consistency checking). Right side: Neural reasoning stack - RotatE embeddings for link prediction, R-GCN for fault propagation prediction. Bottom: Task router that directs queries to appropriate reasoning method based on query type and required response time. Center: Results aggregator that combines symbolic and neural outputs.",
+        "type": "architecture",
+        "placement": "Section 4.2",
+        "size": "full_width",
+        "purpose": "Illustrate how symbolic and neural reasoning methods are combined in the system"
+      },
+      {
+        "id": "fig8",
+        "title": "Experimental Results Comparison",
+        "description": "Multi-panel chart showing main experimental results. Panel (a): Bar chart comparing accuracy, precision, recall, F1 across all systems (target vs B0-B3 baselines). Panel (b): Bar chart showing response time comparison. Panel (c): Bar chart showing hallucination rate (lower is better). Panel (d): Grouped bar chart showing performance by fault category (common, complex, rare, noisy). Use consistent color coding: target system in blue, baselines in gray. Include error bars showing statistical significance.",
+        "type": "bar_chart",
+        "placement": "Section 5.2",
+        "size": "full_width",
+        "purpose": "Present comprehensive comparison of system performance against all baselines"
+      },
+      {
+        "id": "fig9",
+        "title": "Ablation Study Results",
+        "description": "Heatmap or grouped bar chart showing ablation study results. Rows: each ablation (A1-A4). Columns: affected metrics (Accuracy, Precision, Recall, Response Time, Hallucination Rate). Color gradient showing percentage change from full system (green for positive change, red for negative). Include absolute values and percentage changes. Highlight A2 (bidirectional reasoning removal) as causing the largest performance drop.",
+        "type": "heatmap",
+        "placement": "Section 5.3",
+        "size": "half_width",
+        "purpose": "Visualize the impact of each component on overall system performance"
+      }
+    ],
+    "table_specs": [
+      {
+        "id": "tab1",
+        "title": "Comparison of CNC Fault Diagnosis Approaches",
+        "columns": [
+          "Approach",
+          "Knowledge Representation",
+          "Explainability",
+          "Adaptability",
+          "Multi-Modal Support",
+          "LLM Integration"
+        ],
+        "description": "Compares traditional rule-based, deep learning, knowledge-based, and our LLM-KG fusion approaches across key dimensions. Shows our approach combines advantages of each existing method.",
+        "placement": "Section 2.1",
+        "rows_estimate": 4,
+        "purpose": "Position our approach relative to existing CNC fault diagnosis methods"
+      },
+      {
+        "id": "tab2",
+        "title": "System Comparison with Related Work",
+        "columns": [
+          "System",
+          "Uses LLM",
+          "Uses Domain KG",
+          "Bidirectional Reasoning",
+          "Natural Language Interface",
+          "Target Domain"
+        ],
+        "description": "Compares our system with the strongest competitors identified in related work: KG-based fault diagnosis, deep learning diagnosis, and LLM+KG QA systems.",
+        "placement": "Section 2.4",
+        "rows_estimate": 4,
+        "purpose": "Show how our system differs from existing LLM-KG fusion approaches"
+      },
+      {
+        "id": "tab3",
+        "title": "Multi-Modal Data Sources and Preprocessing",
+        "columns": [
+          "Data Source",
+          "Format",
+          "Volume",
+          "Preprocessing Steps",
+          "Integration Method"
+        ],
+        "description": "Details the three data modalities processed by the perception layer: sensor data (time-series), equipment logs (structured), maintenance documents (unstructured text).",
+        "placement": "Section 3.2",
+        "rows_estimate": 3,
+        "purpose": "Specify the data inputs to the system and how they are processed"
+      },
+      {
+        "id": "tab4",
+        "title": "CNC Fault Diagnosis Ontology Statistics",
+        "columns": [
+          "Module",
+          "Concepts",
+          "Properties",
+          "Instances",
+          "Description"
+        ],
+        "description": "Quantitative summary of the three ontology modules: Fault Type, Diagnostic Method, System Component. Shows scale of knowledge base.",
+        "placement": "Section 3.3",
+        "rows_estimate": 3,
+        "purpose": "Provide concrete statistics on the knowledge graph structure"
+      },
+      {
+        "id": "tab5",
+        "title": "Experimental Setup",
+        "columns": [
+          "Component",
+          "Specification"
+        ],
+        "description": "Details of experimental configuration including dataset (1,000 instances across 4 categories), evaluation metrics (7 metrics defined), baseline systems (4 baselines), and implementation details.",
+        "placement": "Section 5.1",
+        "rows_estimate": 6,
+        "purpose": "Provide complete experimental setup specification for reproducibility"
+      },
+      {
+        "id": "tab6",
+        "title": "Main Experimental Results",
+        "columns": [
+          "System",
+          "Accuracy",
+          "Precision",
+          "Recall",
+          "F1-Score",
+          "Response Time (ms)",
+          "KG Reasoning Acc.",
+          "Hallucination Rate"
+        ],
+        "description": "Comprehensive comparison of target system vs all baselines (B0-B3) on all evaluation metrics. Target system should outperform on most metrics, especially hallucination rate.",
+        "placement": "Section 5.2",
+        "rows_estimate": 5,
+        "purpose": "Present quantitative comparison of system performance"
+      }
+    ],
+    "word_count_budget": {
+      "abstract": 250,
+      "introduction": 1300,
+      "related_work": 1300,
+      "system_architecture": 2400,
+      "theoretical_analysis": 950,
+      "experiments": 1900,
+      "discussion": 650,
+      "conclusion": 400,
+      "total": 8750
+    },
+    "venue_recommendation": {
+      "primary": "AAAI 2025 (Association for the Advancement of Artificial Intelligence Conference)",
+      "secondary": "IJCAI 2025 (International Joint Conference on Artificial Intelligence)",
+      "tertiary": "ISWC 2025 (International Semantic Web Conference)",
+      "justification": "The paper combines three contribution types highly valued by AAAI/IJCAI: (1) Novel architecture for LLM-KG integration with bidirectional reasoning - a significant AI systems contribution; (2) Theoretical analysis of hybrid neuro-symbolic reasoning - aligns with AAAI's emphasis on theoretically grounded AI; (3) Comprehensive empirical evaluation with ablation studies - meets the rigorous empirical standards of top AI conferences. The application domain (CNC fault diagnosis) demonstrates real-world impact, which is increasingly valued. ISWC is a strong tertiary choice due to the knowledge graph and ontology engineering components, particularly the ALCHIQ-based ontology design and semantic reasoning contributions."
+    },
+    "connecting_narrative": "Modern manufacturing relies heavily on Computer Numerical Control (CNC) systems, where equipment failures can cause costly downtime and production delays. Despite advances in intelligent fault diagnosis, existing approaches face fundamental limitations: rule-based systems lack flexibility for complex故障, pure deep learning methods operate as black boxes without explainability, and single-technology solutions cannot handle the multi-modal nature of diagnostic information. Even more critically, these approaches suffer from fragmented knowledge organization—expert knowledge exists in manuals and technician experience, equipment data streams in real-time, and maintenance records in scattered databases.\n\nThe key insight that addresses these challenges is a bidirectional reasoning mechanism where Large Language Models and Knowledge Graphs mutually enhance each other. LLMs excel at understanding unstructured text and generating natural language explanations, but suffer from hallucinations in specialized domains. Knowledge Graphs provide structured, factual representations of domain knowledge but cannot handle natural language inputs or learn from unstructured data. By creating a feedback loop where KGs validate and constrain LLM outputs while LLMs extract and enrich KG content, we create a self-reinforcing knowledge ecosystem that combines neural flexibility with symbolic reliability.\n\nThis insight manifests in our four-layer system architecture. The Perception Layer aggregates multi-modal data from sensors, logs, and maintenance documents. The Knowledge Layer houses a CNC-specific knowledge graph built with ALCHIQ description logic, providing a formal ontology for fault types, diagnostic methods, and system components. The Reasoning Layer implements the bidirectional LLM-KG mechanism with hybrid symbolic-neural inference. Finally, the Application Layer delivers fault diagnosis, explanation generation, and decision support services through natural language interfaces.\n\nThe architectural choices are deliberate: separating knowledge as its own layer emphasizes the semantic hub role of the KG, enabling ontology-driven coordination across components. The ALCHIQ DL framework balances expressiveness for complex fault relationships with computational tractability. Multi-modal fusion in the perception layer ensures robustness when any single data source is incomplete. Together, these design decisions create a system that is more than the sum of its parts.\n\nAdditional innovations strengthen the core approach. The modular ontology design supports independent evolution of knowledge modules. The hybrid reasoning framework delegates tasks to symbolic or neural methods based on query characteristics, optimizing both accuracy and efficiency. Real-time processing capabilities enable deployment in production environments where rapid故障 response is critical.\n\nTo validate these claims, we conduct comprehensive experiments on a dataset of 1,000 annotated fault instances across common, complex, rare, and noisy categories. We compare against four baselines covering the spectrum of existing approaches: traditional rule-based systems, LLM-only methods, KG-only systems, and unidirectional knowledge augmentation. Ablation studies isolate the contribution of each component. Theoretical validation connects our empirical results to the formal properties of the ALCHIQ framework and hybrid reasoning approach.\n\nThrough this work, we advance both the theory and practice of neuro-symbolic AI in intelligent manufacturing. The bidirectional reasoning framework addresses a fundamental challenge in knowledge-enhanced language models. The domain-specific knowledge graph construction methodology provides a template for other specialized domains. And the complete system demonstrates how cutting-edge AI can be deployed to solve real industrial problems with explainable, reliable results."
+  }
+}

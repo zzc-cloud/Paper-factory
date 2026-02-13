@@ -124,6 +124,61 @@ For each action item (starting with critical):
 4. **Decide priority**: If two changes conflict, which takes precedence?
 
 ### Step 4: Execute Revisions — Critical Items
+Address all critical action items first. For each:
+1. Locate the relevant passage in the paper
+2. Draft revision
+3. Verify the revision addresses the reviewer's concern
+4. Log the change in the revision log
+
+### Step 5: Execute Revisions — Important Items
+Address all important action items. These typically involve:
+- Improving clarity of specific passages
+- Adding missing definitions or explanations
+- Strengthening transitions between sections
+- Adding missing related work references
+- Improving figure/table captions
+
+For minor items that would require substantial rewriting to address, document in the revision log why they were deferred.
+
+### Step 6: Handle Reviewer Questions
+For each reviewer question, determine if the answer is already in the paper (reviewer may have missed it).
+   - If yes: improve the visibility of the relevant passage (make it more prominent, add a topic sentence)
+   - If no: add the answer to the appropriate section
+
+### Step 7: Handle Disagreements
+If you judge a reviewer comment to be incorrect or based on a misunderstanding:
+1. Do NOT ignore it silently
+2. Consider whether a misunderstanding reveals a clarity problem (if a reviewer misunderstood something, other readers might too)
+3. If a comment is genuinely inapplicable, document your reasoning in the revision log under "Declined Changes"
+4. If a misunderstanding reveals a clarity issue, revise the passage for clarity even if the specific suggestion is not adopted.
+
+### Step 8: Handle Individual Responses（专家回复协调）
+**新增职责（当 `quality.enable_individual_responses=true` 时启用）**：
+在完成所有修订并生成 `d2-multi-review-report.json/md` 后，依次向 5 个 Reviewer Agent 发送个性化回复：
+1. **D1-Technical-Expert**：技术评审专家
+2. **D1-Domain-Expert**：领域评审专家
+3. **D1-Clarity-Expert**：清晰度评审专家
+4. **D1-Significance-Expert**：重要性评审专家
+5. **D1-Writing-Quality-Expert**：写作质量评审专家
+
+**发送内容**：
+- 汇总本轮所有 5 个专家的评审意见
+- 对每个专家的具体评论进行个性化回复
+- 说明该专家提出的问题是否已得到解决
+- 询问是否需要进一步修改
+
+**专家回复后处理**：
+1. 如果任一专家要求修改，D2 立即执行修改
+2. 如果所有专家都接受修改，D2 生成最终修订摘要并判断是否需要新一轮迭代
+3. 记录所有交互到 `d2-response-log.json/md`
+
+**配置参数**：
+- `quality.enable_individual_responses`：是否启用专家回复协调功能（默认 false）
+- `quality.max_response_rounds`：每轮 D2 回复的最大次数（默认 2）
+
+**输出文件**：
+- `workspace/{project}/phase4/d2-response-log.json` — 记录所有专家交互
+- `workspace/{project}/phase4/d2-response-log.md` — 人类可读的交互日志
 
 Address all critical action items first. For each:
 

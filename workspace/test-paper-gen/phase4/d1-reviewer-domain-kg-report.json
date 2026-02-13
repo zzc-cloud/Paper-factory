@@ -1,0 +1,204 @@
+{
+  "agent_id": "d1-domain-expert-kg",
+  "phase": 4,
+  "status": "complete",
+  "timestamp": "2025-02-13T13:30:00.000Z",
+  "paper_title": "Research on Intelligent CNC Fault Diagnosis System Integrating Large Language Models and Domain Knowledge Graphs",
+  "reviewer_focus": "knowledge_graph_domain",
+  "reviewers": [
+    {
+      "id": "R1",
+      "role": "Technical Expert",
+      "focus": "correctness",
+      "score": 8,
+      "recommendation": "minor_revision",
+      "strengths": [
+        "The choice of ALCHIQ description logic is well-justified for CNC fault diagnosis domain. The expressiveness (role hierarchies, cardinality constraints, qualified number restrictions) matches domain requirements.",
+        "The modular ontology design pattern is sound and follows ontology engineering best practices. Separating fault types, diagnostic methods, and system components into separate modules enables independent maintenance.",
+        "The ontology statistics (460 concepts, 147 properties, ~23,700 instances) indicate substantial domain coverage.",
+        "The OWL 2 DL profile alignment is correct and enables use of standard reasoning engines.",
+        "The hybrid reasoning approach combining symbolic and neural methods is well-designed for KG completion and link prediction."
+      ],
+      "weaknesses": [
+        "ALCHIQ formalization is described but no actual ontology axioms are shown in OWL/Manchester syntax.",
+        "The SHACL validation mechanism is mentioned but not demonstrated with examples or coverage metrics.",
+        "Ontology completeness is not evaluated against a reference taxonomy or expert-defined fault catalog.",
+        "The relationship between CNC-specific ontology and generic industrial KG is not clearly defined.",
+        "The reasoning complexity discussion claims EXPTIME-complete but does not provide justification or reference to standard DL complexity results.",
+        "The Local Closed World vs Open World Assumption hybrid approach is not formally specified with precise boundary conditions."
+      ],
+      "comments": [
+        {
+          "section": "Section 3.3: Knowledge Layer",
+          "comment": "The ontology module descriptions (Fault Type, Diagnostic Method, System Component) are well-structured but lack concrete examples. The relationship structures between modules are described textually but not shown in formal notation.",
+          "severity": "important",
+          "suggestion": "Add a concrete example showing: (1) class definitions in OWL/Manchester syntax, (2) property definitions with domain/range, (3) an example instance with its assertions."
+        },
+        {
+          "section": "Section 3.3: Ontology Design Framework",
+          "comment": "The ALCHIQ constructor descriptions are accurate. The explanation of qualified number restrictions and cardinality constraints is correct for CNC fault domain requirements.",
+          "severity": "none",
+          "suggestion": "No changes needed. This is well-written."
+        },
+        {
+          "section": "Section 4.1: Expressiveness and Tractability",
+          "comment": "The computational complexity claim (EXPTIME-complete) is stated but not justified. For ALCHIQ specifically, this is correct but should cite standard results or provide brief proof sketch.",
+          "severity": "minor",
+          "suggestion": "Add citation to standard DL complexity results (e.g., 'ALCHIQ reasoning is EXPTIME-complete as established in [reference]') or one-sentence justification."
+        },
+        {
+          "section": "Section 4.2: Hybrid Reasoning Framework",
+          "comment": "The description of RotatE embeddings for link prediction is technically sound. The R-GCN approach for fault propagation is appropriate. However, the integration between symbolic and neural reasoning could be more explicit.",
+          "severity": "minor",
+          "suggestion": "Add more details on how the symbolic and neural reasoning results are combined. Is there a voting mechanism? Confidence aggregation?"
+        },
+        {
+          "section": "Section 4.3: Neuro-Symbolic Integration Properties",
+          "comment": "The bidirectional integration description is strong. The trust boundary concept (explicit KG knowledge trusted, LLM outputs validated) is sound. However, the Local Closed World Assumption discussion is abstract.",
+          "severity": "important",
+          "suggestion": "Formalize the LCWA/OWA hybrid: define which classes/properties use LCWA vs OWA, specify the boundary criteria, and explain how queries handle the mixed assumptions."
+        },
+        {
+          "section": "Table 4: Ontology Statistics",
+          "comment": "The statistics (460 concepts, 147 properties, 23,700 instances) indicate substantial work. However, completeness is not evaluated. What percentage of possible CNC fault types are covered?",
+          "severity": "important",
+          "suggestion": "Add a completeness metric: compare ontology coverage to a reference fault taxonomy or estimate coverage based on equipment manuals and expert-defined fault catalogs."
+        },
+        {
+          "section": "Section 5: Experiments",
+          "comment": "KG reasoning accuracy is reported (94.7%) but the evaluation methodology is not fully described. What constitutes a 'correct' vs 'incorrect' inference?",
+          "severity": "important",
+          "suggestion": "Add description of KG reasoning evaluation: (1) test set composition, (2) correctness criteria, (3) baseline reasoning accuracy for comparison."
+        },
+        {
+          "section": "SHACL Validation",
+          "comment": "SHACL validation is mentioned in Section 4.2 but not elaborated. No examples of SHACL shapes or validation results are provided.",
+          "severity": "important",
+          "suggestion": "Add: (1) 1-2 example SHACL shapes showing constraint definitions, (2) validation results (number of violations detected in test data), (3) discussion of how SHACL integrates with reasoning pipeline."
+        }
+      ],
+      "questions": [
+        "Can you provide 1-2 example ontology axioms in OWL Manchester syntax for the Fault Type Module?",
+        "What is the completeness of the ontology against the full space of CNC fault types?",
+        "How are SHACL constraints defined and validated? Can you provide examples?",
+        "What is the precise boundary between LCWA and OWA components? Which specific classes/properties use each assumption?",
+        "How are symbolic and neural reasoning results combined in the hybrid framework? Is there a voting mechanism?",
+        "Has the ontology been evaluated by domain experts for coverage and correctness?",
+        "What is the relationship between the CNC-specific ontology and generic industrial KG mentioned in ablation A1?"
+      ]
+    },
+    {
+      "role": "Novelty Expert",
+      "focus": "contribution",
+      "score": 8,
+      "recommendation": "minor_revision",
+      "strengths": [
+        "The domain-specific KG for CNC fault diagnosis is a novel contribution. Most prior work uses generic industrial KGs.",
+        "The modular ontology design pattern, while not entirely new, is well-applied to this specific domain.",
+        "The bidirectional LLM-KG integration for KG completion is novel over prior unidirectional approaches.",
+        "The use of ALCHIQ for this domain is appropriate and well-motivated."
+      ],
+      "weaknesses": [
+        "The modular ontology design pattern is a known best practice in ontology engineering, not a novel contribution.",
+        "The hybrid reasoning approach (symbolic + neural) follows established patterns in KG research.",
+        "The ontology construction methodology is not significantly different from general ontology engineering practices."
+      ],
+      "comments": [
+        {
+          "section": "Section 3.3: Knowledge Layer",
+          "comment": "The domain-specific nature of the ontology is a strength. However, the paper should more explicitly state what aspects are novel versus standard ontology engineering.",
+          "severity": "minor",
+          "suggestion": "Add a sentence explicitly stating: 'Our novel contribution is the application of modular ontology design to CNC fault diagnosis domain with domain-specific fault taxonomies.'"
+        }
+      ],
+      "questions": [
+        "What specific aspects of the ontology construction methodology are novel versus standard practices?",
+        "How does the modular ontology design here differ from prior modular ontology design patterns in literature?"
+      ]
+    },
+    {
+      "role": "Clarity Expert",
+      "focus": "presentation",
+      "score": 8,
+      "recommendation": "accept",
+      "strengths": [
+        "The KG architecture description is clear with good use of terminology.",
+        "Table 4 effectively summarizes ontology statistics.",
+        "The description of ALCHIQ constructors is accessible.",
+        "The neuro-symbolic integration explanation is well-structured."
+      ],
+      "weaknesses": [
+        "Some KG-specific concepts (semantic interoperability, ontology-driven interfaces) are used without detailed definition.",
+        "The ontology module descriptions would benefit from diagrams or examples."
+      ],
+      "comments": [
+        {
+          "section": "Section 3.3",
+          "comment": "The knowledge layer description is clear but would benefit from a visual diagram showing module relationships.",
+          "severity": "minor",
+          "suggestion": "Consider adding a diagram (or more detailed description of Figure 4) showing how the three modules interact."
+        }
+      ],
+      "questions": [
+        "Would adding an ontology diagram improve clarity of module relationships?",
+        "Could technical terms be defined more explicitly for KG non-specialists?"
+      ]
+    }
+  ],
+  "consolidated": {
+    "average_score": 8.0,
+    "overall_recommendation": "minor_revision",
+    "priority_actions": [
+      {
+        "action": "Add concrete ontology axioms in OWL/Manchester syntax",
+        "severity": "important",
+        "section": "Section 3.3",
+        "raised_by": ["R1"],
+        "rationale": "The ALCHIQ framework is described but no actual ontology code is shown. Concrete examples would enable verification of formal correctness and provide implementation guidance."
+      },
+      {
+        "action": "Formalize the LCWA/OWA hybrid boundary conditions",
+        "severity": "important",
+        "section": "Section 4.3",
+        "raised_by": ["R1"],
+        "rationale": "The hybrid closed/open world assumption is mentioned but not formally specified. Precise boundary conditions are needed for theoretical rigor and implementation."
+      },
+      {
+        "action": "Provide SHACL constraint examples and validation results",
+        "severity": "important",
+        "section": "Section 4.2",
+        "raised_by": ["R1"],
+        "rationale": "SHACL validation is mentioned but not demonstrated. Examples and validation metrics would substantiate this aspect of the ontology engineering."
+      },
+      {
+        "action": "Add ontology completeness evaluation",
+        "severity": "important",
+        "section": "Table 4 / Section 5",
+        "raised_by": ["R1"],
+        "rationale": "Ontology statistics are given but completeness is not evaluated. Coverage metrics against reference taxonomies are needed to assess quality."
+      },
+      {
+        "action": "Describe KG reasoning evaluation methodology",
+        "severity": "important",
+        "section": "Section 5",
+        "raised_by": ["R1"],
+        "rationale": "KG reasoning accuracy of 94.7% is reported but evaluation methodology is unclear. Test set composition and correctness criteria must be specified."
+      },
+      {
+        "action": "Clarify symbolic-neural result combination mechanism",
+        "severity": "minor",
+        "section": "Section 4.2",
+        "raised_by": ["R1"],
+        "rationale": "The hybrid reasoning framework combines symbolic and neural results but the combination mechanism is not explicit. Voting or aggregation details are needed."
+      },
+      {
+        "action": "Add DL complexity citation or justification",
+        "severity": "minor",
+        "section": "Section 4.1",
+        "raised_by": ["R1"],
+        "rationale": "EXPTIME-complete claim is stated but not justified. Citation to standard DL complexity results would strengthen this claim."
+      }
+    ],
+    "overall_assessment": "This paper presents a solid knowledge graph contribution for the CNC fault diagnosis domain. The choice of ALCHIQ description logic is well-justified and the modular ontology design follows best practices. The domain-specific nature of the ontology provides clear value over generic industrial KGs. The main areas for improvement are: (1) providing concrete ontology code examples for verification, (2) formalizing the LCWA/OWA hybrid approach, (3) demonstrating SHACL validation, and (4) evaluating ontology completeness. With these additions, the KG/ontology contribution would be substantially stronger. The neuro-symbolic integration approach is sound and the hybrid reasoning framework is well-designed. The paper is ready for acceptance with minor revisions addressing ontology engineering specifics."
+  }
+}

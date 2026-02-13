@@ -1,0 +1,38 @@
+{
+  "project": "bridge-test",
+  "search_config": {
+    "domain": "bridge structural health monitoring",
+    "databases": ["IEEE Xplore"],
+    "search_queries": [
+      "bridge structural health monitoring"
+    ],
+    "date_range": "2020-2025"
+  },
+  "papers": [
+    {
+      "id": "P01",
+      "title": "Internet of Things based Construction and Health Monitoring of High-pier Long-span Continuous Rigid Frame Bridge",
+      "authors": ["Yuhang Liu", "Chan Wu", "Hengshan Wu", "Yuan Zhang"],
+      "year": 2020,
+      "source": "IEEE Xplore",
+      "conference": "2020 International Conferences on Internet of Things (iThings) and IEEE Green Computing and Communications (GreenCom) and IEEE Cyber, Physical and Social Computing (CPSCom) and IEEE Smart Data (SmartData) and IEEE Congress on Cybermatics",
+      "doi": "10.1109/iThings-GreenCom-CPSCom-SmartData-Cybermatics50389.2020.00060",
+      "pdf_file": "papers/P01-IoT-Bridge-SHM.pdf",
+      "extracted_text": "extracted/P01-IoT-Bridge-SHM.txt",
+      "extracted_meta": "extracted/P01-IoT-Bridge-SHM.json",
+      "pages": 6,
+      "tables_count": 2,
+      "char_count": 24057,
+      "keywords": ["IoT", "bridge monitoring", "structural health monitoring", "construction monitoring", "continuous rigid frame bridge"],
+      "abstract_summary": "Proposes an IoT-based integrated system for construction monitoring and health monitoring of high-pier long-span continuous rigid frame bridges, combining sensitivity analysis, sensor optimization, and cloud-based data management."
+    }
+  ],
+  "statistics": {
+    "total_papers": 1,
+    "total_downloaded": 1,
+    "total_extracted": 1,
+    "databases_searched": 1
+  },
+  "created_at": "2026-02-12",
+  "last_updated": "2026-02-12"
+}

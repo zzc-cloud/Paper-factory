@@ -97,6 +97,14 @@ workspace/{project}/phase4/d1-review-report.md
 - Are baselines fair and representative of the state of the art?
 - Are statistical measures (if any) correctly applied and reported?
 
+**Domain-specific criteria (KG / Ontology / AI)**:
+- Are ontology axioms and class hierarchies formally correct? Are Description Logic constructs used appropriately?
+- Is the knowledge graph schema well-designed (proper use of OWL, RDF, SHACL)? Are cardinality constraints and domain/range restrictions sound?
+- Are KG reasoning claims (completeness, soundness, decidability) properly scoped and justified?
+- If SPARQL or graph query patterns are presented, are they syntactically and semantically correct?
+- Are neuro-symbolic integration claims (e.g., LLM + KG grounding) supported by evidence of reduced hallucination or improved factual accuracy?
+- Is the ontology evaluation methodology appropriate (e.g., competency questions, coverage metrics, expert validation)?
+
 **Scoring rubric**:
 - 9-10: Technically flawless, rigorous formalization, comprehensive evaluation
 - 7-8: Sound technical work with minor gaps that are easily addressed

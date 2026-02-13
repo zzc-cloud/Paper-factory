@@ -48,11 +48,22 @@ Read ALL of these files at the start of your execution:
 0. `workspace/{project}/input-context.md`
    _(Contains the system name, architecture overview, domain, innovation list, and key metrics.)_
 
-**Phase 1 Outputs:**
-1. `workspace/{project}/phase1/a1-literature-survey.json`
-2. `workspace/{project}/phase1/a2-engineering-analysis.json`
-3. `workspace/{project}/phase1/a3-mas-theory.json`
-4. `workspace/{project}/phase1/a4-innovations.json`
+**Phase 1 Outputs (use Glob to discover available files):**
+
+Use Glob to scan `workspace/{project}/phase1/` for all available analysis files (`a*.json` and `skill-*.json`). Not all files exist for every project — read whatever is available.
+
+**Agent outputs** (produced by conditionally-activated agents):
+1. `workspace/{project}/phase1/a1-literature-survey.json` — Always present
+2. `workspace/{project}/phase1/a2-engineering-analysis.json` — Present when the project has a codebase
+3. `workspace/{project}/phase1/a3-mas-literature.json` — Present when the project involves multi-agent architecture
+4. `workspace/{project}/phase1/a4-innovations.json` — Always present (Phase 1 aggregation)
+
+**Skill outputs** (produced by conditionally-invoked domain skills, following a unified schema with `findings` array):
+- `workspace/{project}/phase1/skill-mas-theory.json` — MAS paradigm mapping and cognitive architecture analysis
+- `workspace/{project}/phase1/skill-kg-theory.json` — Knowledge graph and ontology engineering theoretical analysis
+- `workspace/{project}/phase1/skill-nlp-sql.json` — NL2SQL/Text2SQL domain theoretical analysis
+- `workspace/{project}/phase1/skill-bridge-eng.json` — Bridge engineering domain analysis
+- (other `skill-*.json` files may exist for future domain skills)
 
 **Phase 2 Outputs:**
 5. `workspace/{project}/phase2/b1-related-work.json`
@@ -80,13 +91,14 @@ You must produce exactly two output files:
 
 ### Step 1: Read and Synthesize All Inputs
 
-Read all input files (input-context.md + six Phase 1/2 outputs) and create an internal synthesis:
+Read all input files (input-context.md + all available Phase 1/2 outputs discovered via Glob) and create an internal synthesis:
 
 - From input-context.md: What is the system? What domain? What are the claimed innovations?
 - From A1 (Literature Survey): What is the research landscape? What gaps exist?
-- From A2 (Engineering Analysis): What are the system's architectural details and design decisions?
-- From A3 (MAS Theory): What theoretical frameworks apply? What formal properties does the system have?
+- From A2 (Engineering Analysis, if available): What are the system's architectural details and design decisions?
+- From A3 (MAS Literature, if available): What are the latest LLM-based MAS systems and how does the target system compare?
 - From A4 (Innovations): What are the formalized innovation claims?
+- From Skill outputs (if available): What theoretical frameworks, domain-specific analyses, and formal properties apply?
 - From B1 (Related Work): How does the target system position against existing work? What are the strongest competitors?
 - From B2 (Experiment Design): What metrics, baselines, and ablation studies are planned?
 
@@ -461,6 +473,7 @@ Your output will be evaluated on:
 ## Tools Available
 
 - **Read**: Read all input files from Phase 1 and Phase 2
+- **Glob**: Discover available Phase 1 analysis files (`a*.json`, `skill-*.json`)
 - **Write**: Write output JSON and Markdown files
 
 ---

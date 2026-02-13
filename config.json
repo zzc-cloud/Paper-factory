@@ -5,12 +5,12 @@
   },
   "agents": {
     "a1": { "model": "writing",   "budget": 3, "tools": ["WebSearch", "WebFetch", "Read", "Write"] },
-    "a2": { "model": "reasoning", "budget": 5, "tools": ["Read", "Glob", "Grep", "Write", "Bash"] },
-    "a3": { "model": "reasoning", "budget": 4, "tools": ["WebSearch", "WebFetch", "Read", "Write"] },
-    "a4": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write"] },
+    "a2": { "model": "reasoning", "budget": 5, "tools": ["Read", "Glob", "Grep", "Write", "Bash"], "conditional": true, "condition": "Project has a codebase_path to analyze" },
+    "a3": { "model": "reasoning", "budget": 4, "tools": ["WebSearch", "WebFetch", "Read", "Write"], "conditional": true, "condition": "Project involves multi-agent architecture and needs latest MAS literature" },
+    "a4": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write", "Glob"] },
     "b1": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write", "WebSearch"] },
-    "b2": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write"] },
-    "b3": { "model": "reasoning", "budget": 4, "tools": ["Read", "Write"] },
+    "b2": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write", "Glob"] },
+    "b3": { "model": "reasoning", "budget": 4, "tools": ["Read", "Write", "Glob"] },
     "c1": { "model": "writing",   "budget": 2, "tools": ["Read", "Write"] },
     "c2": { "model": "writing",   "budget": 3, "tools": ["Read", "Write"] },
     "c3": { "model": "writing",   "budget": 2, "tools": ["Read", "Write", "Glob"] },
@@ -19,10 +19,61 @@
   },
   "quality": {
     "min_papers": 30,
-    "min_review_score": 7,
-    "max_review_iterations": 3
+    "min_review_score": 8,
+    "max_review_iterations": 10,
+    "max_response_rounds": 2,
+    "dynamic_scoring": true
   },
   "paper": {
     "target_word_count": 10000
+  },
+  "skills": {
+    "paper-generation": { "description": "论文生成主编排器" },
+    "paper-phase1-research": { "description": "Phase 1 文献调研与工程分析" },
+    "paper-phase2-design": { "description": "Phase 2 论文设计阶段" },
+    "paper-phase3-writing": { "description": "Phase 3 论文撰写阶段" },
+    "paper-phase4-quality": { "description": "Phase 4 质量保障阶段" },
+    "research-mas-theory": { "domain": "multi_agent_systems", "output": "skill-mas-theory.json" },
+    "research-kg-theory": { "domain": "knowledge_graph", "output": "skill-kg-theory.json" },
+    "research-nlp-sql": { "domain": "nlp_to_sql", "output": "skill-nlp-sql.json" },
+    "research-bridge-eng": { "domain": "bridge_engineering", "output": "skill-bridge-eng.json" },
+    "domain-knowledge-prep": { "description": "领域知识准备 — 为评审专家生成特定领域的评审指南和知识点" }
+  },
+  "domains": {
+    "knowledge_graph": {
+      "full_name": "Knowledge Graphs and Ontology Engineering",
+      "keywords": ["KG", "ontology", "RDF", "OWL", "SPARQL", "knowledge graph", "RDFS"],
+      "core_concepts": ["RDF", "OWL", "SPARQL", "DL"],
+      "review_criteria": ["theory_accuracy", "ontology_design", "reasoning_evaluation"],
+      "classic_papers": ["RDF2004", "OWL2008", "Horrocks2008"]
+    },
+    "multi_agent_systems": {
+      "full_name": "Multi-Agent Systems (MAS)",
+      "keywords": ["multi-agent", "MAS", "BDI", "Contract Net", "Blackboard"],
+      "core_concepts": ["BDI", "coordination", "negotiation"],
+      "review_criteria": ["architecture_correctness", "protocol_design"],
+      "classic_papers": ["Wooldridge2000", "Smith1990"]
+    },
+    "nl2sql": {
+      "full_name": "Natural Language to SQL (NL2SQL / Text2SQL)",
+      "keywords": ["NL2SQL", "Text2SQL", "schema linking", "SQL generation"],
+      "core_concepts": ["schema linking", "SQL synthesis", "execution feedback"],
+      "review_criteria": ["coverage", "accuracy", "generalization"],
+      "classic_papers": ["Androud1990s", "Popescu1990s", "Yu2017"]
+    },
+    "bridge_engineering": {
+      "full_name": "Bridge Engineering",
+      "keywords": ["bridge", "structural health", "inspection", "BIM", "SHM"],
+      "core_concepts": ["NDE", "sensors", "damage detection"],
+      "review_criteria": ["methodology", "sensor_fusion", "standard_compliance"],
+      "classic_papers": ["Sohn1990s", "Brown1990s", "GL ISO16739"]
+    },
+    "data_analysis": {
+      "full_name": "Data Analysis and Machine Learning",
+      "keywords": ["data mining", "machine learning", "classification", "regression"],
+      "core_concepts": ["feature engineering", "model evaluation", "cross-validation"],
+      "review_criteria": ["novelty", "experiment_design", "reproducibility"],
+      "classic_papers": ["Breiman2001", "Hastie2009", "Kohavi1995"]
+    }
   }
 }

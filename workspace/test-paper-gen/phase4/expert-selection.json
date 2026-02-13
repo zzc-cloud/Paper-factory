@@ -1,0 +1,22 @@
+{
+  "paper_title": "Research on Intelligent CNC Fault Diagnosis System Integrating Large Language Models and Domain Knowledge Graphs",
+  "selected_reviewers": [
+    "D1-Technical-Expert",
+    "D1-Clarity-Expert",
+    "D1-Writing-Quality-Expert",
+    "D1-Domain-Expert-knowledge_graph"
+  ],
+  "skipped_reviewers": [
+    {
+      "expert": "D1-Significance-Expert",
+      "reason": "论文创新性声明清晰但未声称重大理论突破"
+    }
+  ],
+  "domain_relevance_scores": {
+    "knowledge_graph": 0.92,
+    "multi_agent_systems": 0.15,
+    "nl2sql": 0,
+    "bridge_engineering": 0,
+    "data_analysis": 0.05
+  }
+}

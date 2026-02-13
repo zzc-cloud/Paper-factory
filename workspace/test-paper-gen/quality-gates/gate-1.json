@@ -1,0 +1,23 @@
+{
+  "gate": 1,
+  "phase": "phase1-research",
+  "status": "passed",
+  "timestamp": "2024-02-13T10:22:00Z",
+  "activated_agents": ["A1"],
+  "activated_skills": ["research-kg-theory"],
+  "files_expected": [
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a1-literature-survey.json",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a1-literature-survey.md",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a4-innovations.json",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a4-innovations.md",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/skill-kg-theory.json"
+  ],
+  "files_found": [
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a1-literature-survey.json",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a1-literature-survey.md",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a4-innovations.json",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a4-innovations.md",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/skill-kg-theory.json"
+  ],
+  "files_missing": []
+}

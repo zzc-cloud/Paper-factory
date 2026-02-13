@@ -1,0 +1,21 @@
+{
+  "gate": 2,
+  "phase": "Design",
+  "status": "passed",
+  "timestamp": "2026-02-13T11:10:00.000000",
+  "activated_agents": ["B1", "B2"],
+  "activated_skills": [],
+  "files_expected": [
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase2/b1-related-work.json",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase2/b1-related-work.md",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase2/b2-experiment-design.json",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase2/b2-experiment-design.md"
+  ],
+  "files_found": [
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase2/b1-related-work.json",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase2/b1-related-work.md",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase2/b2-experiment-design.json",
+    "/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase2/b2-experiment-design.md"
+  ],
+  "files_missing": []
+}

@@ -203,7 +203,7 @@ Produce both the JSON and Markdown outputs following the formats specified below
         {
           "feature": "",
           "shared_with": "",
-          "smart_query_variant": ""
+          "target_system_variant": ""
         }
       ],
       "positioning_statement": "A concise 1-2 sentence statement positioning the target system's unique contribution relative to the state of the art. Derive this from the gap analysis and innovation claims."
@@ -211,7 +211,7 @@ Produce both the JSON and Markdown outputs following the formats specified below
     "gaps": [
       {
         "gap": "",
-        "how_smart_query_fills": "",
+        "how_target_system_fills": "",
         "evidence": "",
         "closest_approach": "",
         "remaining_distance": ""
@@ -222,8 +222,8 @@ Produce both the JSON and Markdown outputs following the formats specified below
         "system": "",
         "category": "",
         "strengths": [""],
-        "smart_query_advantages": [""],
-        "smart_query_limitations": [""],
+        "target_system_advantages": [""],
+        "target_system_limitations": [""],
         "fair_comparison": true,
         "comparison_notes": ""
       }
