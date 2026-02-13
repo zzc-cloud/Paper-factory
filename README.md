@@ -39,25 +39,6 @@ Phase 4: Quality   →  D1 同行评审 ⇄ D2 修订执行（迭代循环）
 
 ---
 
-## 12 个智能体
-
-| Phase | Agent | 角色 | 模型 | 预算 |
-|-------|-------|------|------|------|
-| Research | A1 | 文献调研 | Sonnet | $3 |
-| Research | A2 | 工程分析 | Opus | $5 |
-| Research | A3 | 理论构建 | Opus | $4 |
-| Research | A4 | 创新形式化 | Opus | $3 |
-| Design | B1 | 相关工作分析 | Opus | $3 |
-| Design | B2 | 实验设计 | Opus | $3 |
-| Design | B3 | 结构设计 | Opus | $4 |
-| Writing | C1 | 章节撰写 | Sonnet | $2 |
-| Writing | C2 | 图表设计 | Sonnet | $3 |
-| Writing | C3 | 格式整合 | Sonnet | $2 |
-| Quality | D1 | 同行评审 | Opus | $5 |
-| Quality | D2 | 修订执行 | Opus | $4 |
-
----
-
 ## 目录结构
 
 ```
@@ -65,21 +46,23 @@ paper-factory/
 ├── CLAUDE.md              # Team Lead 编排指令（系统核心）
 ├── config.json            # 配置：模型、预算、质量阈值
 ├── agents/                # 12 个 Agent 系统提示
+│   ├── phase1/            # A1-A4
+│   ├── phase2/            # B1-B3
+│   ├── phase3/            # C1-C3
+│   └── phase4/            # D1-D2
 ├── docs/                  # 完整文档
 ├── workspace/             # 运行时产物（按项目组织）
-├── papers/                # 历史论文存档
+│   └── {project}/
+│       ├── input-context.md
+│       ├── phase1/
+│       ├── phase2/
+│       ├── phase3/
+│       ├── phase4/
+│       ├── quality-gates/
+│       └── output/
+│           └── paper.md
 └── references/            # 参考资料
 ```
-
----
-
-## 已生成论文
-
-| # | 标题 | 评分 | 日期 |
-|---|------|------|------|
-| 001 | Cognitive Hub: Multi-Agent Architecture for Ontology-Driven NL Querying | 7.3/10 | 2026-02-11 |
-
-查看 [论文索引](docs/papers-index.md) 了解详情。
 
 ---
 
@@ -104,6 +87,16 @@ paper-factory/
 | [技能目录](docs/skills-catalog.md) | 17 个已安装技能的分类索引 |
 | [MCP 工具](docs/mcp-tools.md) | Chrome MCP Server 工具集 |
 | [论文索引](docs/papers-index.md) | 历史论文列表与详细信息 |
+
+---
+
+## 核心技能调用
+
+当用户请求"生成论文，project X"时：
+
+1. **验证** `workspace/{project}/input-context.md` 存在且包含必填字段
+2. **调用** `Skill(skill="paper-generation", args="{project}")`
+3. **编排器** 自动按顺序执行 4 个 Phase，每个 Phase 完成后执行 Quality Gate
 
 ---
 

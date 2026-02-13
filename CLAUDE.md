@@ -89,7 +89,6 @@ paper-factory/
 │       ├── quality-gates/
 │       └── output/
 │           └── paper.md
-├── papers/                # 历史论文存档
 └── references/            # 参考资料
 ```
 
