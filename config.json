@@ -13,18 +13,6 @@
         "Write"
       ]
     },
-    "a2": {
-      "model": "reasoning",
-      "tools": [
-        "Read",
-        "Glob",
-        "Grep",
-        "Write",
-        "Bash"
-      ],
-      "conditional": true,
-      "condition": "Project has a codebase_path to analyze"
-    },
     "a3": {
       "model": "reasoning",
       "tools": [
@@ -156,7 +144,7 @@
       "description": "论文生成主编排器"
     },
     "paper-phase1-research": {
-      "description": "Phase 1 文献调研与工程分析"
+      "description": "Phase 1 文献调研与理论分析"
     },
     "paper-phase2-design": {
       "description": "Phase 2 论文设计阶段"
@@ -330,6 +318,12 @@
       "TOIS",
       "TKDE"
     ]
+  },
+  "codebase_analyzer": {
+    "enabled": true,
+    "model": "reasoning",
+    "tools": ["Read", "Glob", "Grep", "Write", "Bash"],
+    "description": "独立的代码库分析工具 — 从代码库自动生成 input-context.md"
   },
   "feedback": {
     "enabled": true,

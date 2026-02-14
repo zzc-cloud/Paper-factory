@@ -25,7 +25,7 @@ Where `{project}` is the project directory name under `workspace/`.
 - **Tools available**: Read, Write, Glob, Grep only.
 - **Single output file**: Write exactly one JSON file to `workspace/{project}/phase1/skill-mas-theory.json`.
 - **Input dependency**: Requires `workspace/{project}/phase1/input-context.md` to exist.
-- **Scope boundary**: Do NOT analyze source code (that is A2's job), do NOT search for papers (that is A1's job), do NOT formalize engineering innovations into paper contributions (that is A4's job). Focus exclusively on MAS theory mapping and formalization.
+- **Scope boundary**: Do NOT analyze source code (that is the codebase-analyzer's job), do NOT search for papers (that is A1's job), do NOT formalize engineering innovations into paper contributions (that is A4's job). Focus exclusively on MAS theory mapping and formalization.
 
 ---
 

@@ -8,7 +8,7 @@ Paper Factory 通过 MCP（Model Context Protocol）协议集成了外部工具�
 
 ### 配置
 
-配置文件位置：`.mcp.json`
+配置文件位置多`.mcp.json`
 
 ```json
 {
@@ -82,12 +82,11 @@ Paper Factory 通过 MCP（Model Context Protocol）协议集成了外部工具�
 | chrome_handle_dialog | 处理 JavaScript 对话框（alert/confirm/prompt） |
 | chrome_request_element_selection | 请求用户手动选择页面元素 |
 
-## 在论文工厂中的应用场景
+## 在论文工工中的应用场景
 
 ### Phase 1: Research（素材收集）
 
 - **A1 (Literature Surveyor)**: 使用 `chrome_navigate` + `chrome_get_web_content` 访问学术数据库（Google Scholar、arXiv、DBLP），自动检索和下载论文元数据
-- **A2 (Engineering Analyst)**: 使用 `chrome_screenshot` 截取目标系统界面，作为论文中的系统演示素材
 
 ### Phase 3: Writing（论文撰写）
 
@@ -101,7 +100,7 @@ Paper Factory 通过 MCP（Model Context Protocol）协议集成了外部工具�
 
 ## 前置条件
 
-1. 安装 mcp-chrome-bridge：
+1. 安装 mcp-chrome-bridge多
    ```bash
    npm install -g mcp-chrome-bridge
    ```

@@ -1,6 +1,6 @@
 ---
 name: paper-phase1-research
-description: "Phase 1 文献调研与工程分析 — 素材收集阶段，支持缓存优化和并行执行。"
+description: "Phase 1 文献调研与理论分析 — 素材收集阶段，支持缓存优化和并行执行。"
 ---
 
 # Phase 1: Research Orchestrator
@@ -9,20 +9,20 @@ description: "Phase 1 文献调研与工程分析 — 素材收集阶段，支�
 
 You are the **Phase 1 Research Orchestrator** — responsible for literature survey, engineering analysis (if applicable), domain theoretical analysis, and innovation formalization.
 
-**调用方式：** `Skill(skill="paper-phase1-research", args="{project}")`
+**调用方式多** `Skill(skill="paper-phase1-research", args="{project}")`
 
-**执行模式：** 根据配置选择串行或并行模式
-- **串行模式** (默认)：顺序启动 Agent，简单可靠
-- **并行模式** (config.parallel.phase1_enabled=true)：使用 `paper-phase1-parallel` Skill 实现真正的并发执行
+**执行模式多** 根据配置选择串行或并行模式
+- **串行模式** (默认)多顺序启动 Agent，简单可靠
+- **并行模式** (config.parallel.phase1_enabled=true)多使用 `paper-phase1-parallel` Skill 实现真正的并发执行
 
-- **Fan-out：** Spawn multiple agents in parallel for independent analysis
-- **Fan-in：** Aggregate all outputs via A4 (Innovation Formalizer)
-- **Domain Skills：** Call domain analysis Skills serially in 系统's session
+- **Fan-out多** Spawn multiple agents in parallel for independent analysis
+- **Fan-in多** Aggregate all outputs via A4 (Innovation Formalizer)
+- **Domain Skills多** Call domain analysis Skills serially in 系统's session
 
-**缓存支持** (config.cache.enabled=true)：
-- **首次执行**：建立缓存基础，检索并存储论文
-- **后续执行**：从缓存读取已处理论文，只检索新增内容
-- **手动添加**：支持用户直接在缓存目录添加论文
+**缓存支持** (config.cache.enabled=true)多
+- **首次执行**多建立缓存基础，检索并存储论文
+- **后续执行**多从缓存读取已处理论文，只检索新增内容
+- **手动添加**多支持用户直接在缓存目录添加论文
 
 **DO NOT** write paper content — your role is coordination and aggregation.
 
@@ -32,34 +32,34 @@ You are the **Phase 1 Research Orchestrator** — responsible for literature sur
 
 ### Step 0: 确定项目领域
 
-从 `input-context.md` 分析项目涉及的研究领域：
+从 `input-context.md` 分析项目涉及的研究领域多
 
 | 领域标识 | 判断条件 |
 |----------|----------|
-| `multi_agent_systems` | 关键词：multi-agent, MAS, BDI, agent coordination |
-| `knowledge_graph` | 关键词：knowledge graph, ontology, RDF, OWL, SPARQL |
-| `nlp_to_sql` | 关键词：NL2SQL, Text2SQL, schema linking, SQL generation |
-| `bridge_engineering` | 关键词：bridge, SHM, BIM, structural health |
+| `multi_agent_systems` | 关键词多multi-agent, MAS, BDI, agent coordination |
+| `knowledge_graph` | 关键词多knowledge graph, ontology, RDF, OWL, SPARQL |
+| `nlp_to_sql` | 关键词多NL2SQL, Text2SQL, schema linking, SQL generation |
+| `bridge_engineering` | 关键词多bridge, SHM, BIM, structural health |
 
 记录主要领域到 `primary_domain` 变量，用于后续缓存路径解析。
 
 ### Step 0.5: 初始化或加载缓存
 
-**调用：** `Skill(skill="cache-utils", action="init", args="{project}", domain="{primary_domain}")`
+**调用多** `Skill(skill="cache-utils", action="init", args="{project}", domain="{primary_domain}")`
 
-**逻辑：**
+**逻辑多**
 1. 检查 `workspace/{project}/.cache/` 目录结构
-2. 如不存在则创建：`papers/{domain}/`, `search-history/{domain}/`
+2. 如不存在则创建多`papers/{domain}/`, `search-history/{domain}/`
 3. 初始化 `search-history/{domain}/processed-ids.txt`
 4. 创建或更新 `papers/{domain}/.last-update.json`
 
-**输出：** 无返回值，确保目录结构完整
+**输出多** 无返回值，确保目录结构完整
 
 ### Step 0.6: 读取已缓存论文
 
-**调用：** `Skill(skill="cache-utils", action="read", args="{project}", domain="{primary_domain}")`
+**调用多** `Skill(skill="cache-utils", action="read", args="{project}", domain="{primary_domain}")`
 
-**返回格式：**
+**返回格式多**
 ```json
 [
   {
@@ -77,7 +77,7 @@ You are the **Phase 1 Research Orchestrator** — responsible for literature sur
 ]
 ```
 
-**使用：**
+**使用多**
 - 将缓存的论文传递给 A1 Agent 作为"已有论文"参考
 - 在 WebSearch 前告知 Agent 哪些论文已处理过
 
@@ -96,7 +96,6 @@ Based on project context, decide:
 
 **For Agents:**
 - **A1 (Literature Surveyor)** → Always activate (mandatory)
-- **A2 (Engineering Analyst)** → Activate if `codebase_path` exists and points to valid directory
 - **A3-agent (MAS Literature Researcher)** → Activate if project involves multi-agent architecture AND needs latest MAS literature support
 
 **For Domain Skills:**
@@ -106,6 +105,9 @@ Based on project context, decide:
 - **research-bridge-eng** → If project involves bridge engineering domain
 
 Record activation decisions in memory for Quality Gate 1.
+
+> **注意**：A2（工程分析）已从 Phase 1 移除。如果用户没有 `input-context.md` 但有代码库，
+> 应使用独立的 `codebase-analyzer` Skill 先生成 `input-context.md`，再启动论文生成流水线。
 
 ---
 
@@ -123,21 +125,6 @@ Record activation decisions in memory for Quality Gate 1.
 - Output: `workspace/{project}/phase1/a1-literature-survey.json` + `.md`
 
 **Spawn in background**, wait for completion.
-
-### A2: Engineering Analyst (Conditional)
-
-**Agent File:** `agents/phase1/a2-engineering-analyst.md`
-
-**Model:** `config.models.reasoning` (typically opus)
-
-**Condition:** Activate only if `codebase_path` exists in input-context.md and points to valid directory
-
-**Task:**
-- Analyze codebase architecture, design patterns, and technical stack
-- Identify engineering innovations and technical trade-offs
-- Output: `workspace/{project}/phase1/a2-engineering-analysis.json` + `.md`
-
-**Spawn in background** if condition met, wait for completion.
 
 ### A3-agent: MAS Literature Researcher (Conditional)
 
@@ -214,7 +201,7 @@ Execute activated domain Skills one by one in 系统's session. Each Skill retur
 
 **Task:**
 - Use `Glob` to discover all available analysis files in `workspace/{project}/phase1/`
-  - Agent outputs: `a*.json` (a1, a2, a3, etc.)
+  - Agent outputs: `a*.json` (a1, a3, etc.)
   - Skill outputs: `skill-*.json` (skill-mas-theory, skill-kg-theory, etc.)
 - Read all discovered files
 - Read `input-context.md` as authoritative source for innovations
@@ -238,7 +225,6 @@ Execute activated domain Skills one by one in 系统's session. Each Skill retur
   - `phase1/a4-innovations.md`
 
 - **Conditional** (based on activation record):
-  - If A2 activated: `phase1/a2-engineering-analysis.json` + `.md`
   - If A3-agent activated: `phase1/a3-mas-literature.json` + `.md`
   - If research-mas-theory called: `phase1/skill-mas-theory.json`
   - If research-kg-theory called: `phase1/skill-kg-theory.json`
@@ -334,7 +320,6 @@ Based on project context, decide:
 
 **For Agents:**
 - **A1 (Literature Surveyor)** → Always activate (mandatory)
-- **A2 (Engineering Analyst)** → Activate if `codebase_path` exists and points to valid directory
 - **A3-agent (MAS Literature Researcher)** → Activate if project involves multi-agent architecture AND needs latest MAS literature support
 
 **For Domain Skills:**
@@ -362,22 +347,6 @@ Record activation decisions in memory for Quality Gate 1.
 - Output: `workspace/{project}/phase1/a1-literature-survey.json` + `.md`
 
 **Spawn in background**, wait for completion.
-
-### A2: Engineering Analyst (Conditional)
-
-**Agent File:** `agents/phase1/a2-engineering-analyst.md`
-
-**Model:** `config.models.reasoning` (typically opus)
-
-**Condition:** Activate only if `codebase_path` exists in input-context.md and points to valid directory
-
-**Task:**
-- Analyze codebase architecture
-- Extract engineering patterns and design decisions
-- Identify novel technical contributions
-- Output: `workspace/{project}/phase1/a2-engineering-analysis.json` + `.md`
-
-**Spawn in background** if condition met, wait for completion.
 
 ### A3-agent: MAS Literature Researcher (Conditional)
 
@@ -454,7 +423,7 @@ Execute activated domain Skills one by one in 系统's session. Each Skill retur
 
 **Task:**
 - Use `Glob` to discover all available analysis files in `workspace/{project}/phase1/`
-  - Agent outputs: `a*.json` (a1, a2, a3, etc.)
+  - Agent outputs: `a*.json` (a1, a3, etc.)
   - Skill outputs: `skill-*.json` (skill-mas-theory, skill-kg-theory, etc.)
 - Read all discovered files
 - Read `input-context.md` as authoritative source for innovations
@@ -478,7 +447,6 @@ Execute activated domain Skills one by one in 系统's session. Each Skill retur
   - `phase1/a4-innovations.md`
 
 - **Conditional** (based on activation record):
-  - If A2 activated: `phase1/a2-engineering-analysis.json` + `.md`
   - If A3-agent activated: `phase1/a3-mas-literature.json` + `.md`
   - If research-mas-theory called: `phase1/skill-mas-theory.json`
   - If research-kg-theory called: `phase1/skill-kg-theory.json`
@@ -497,7 +465,7 @@ Execute activated domain Skills one by one in 系统's session. Each Skill retur
   "phase": "phase1-research",
   "status": "passed|failed",
   "timestamp": "ISO-8601",
-  "activated_agents": ["A1", "A2", "A3-agent"],
+  "activated_agents": ["A1", "A3-agent"],
   "activated_skills": ["research-mas-theory", "research-kg-theory", ...],
   "files_expected": [...],
   "files_found": [...],

@@ -2,18 +2,18 @@
 
 > **反馈收集器** — 收集用户在各交互节点的反馈，结构化存储，并提供自动应用逻辑。
 >
-> **V2 新增**：交互式论文生成流程 — 自动解析用户反馈并智能调整后续策略，无需手动干预。
+> **V2 新增**多交互式论文生成流程 — 自动解析用户反馈并智能调整后续策略，无需手动干预。
 
 ---
 
 ## Skill 概述
 
-本 Skill 是用户反馈的中央存储和分析组件，负责：
+本 Skill 是用户反馈的中央存储和分析组件，负责多
 
-1. **收集中存储**：从 interaction-manager 接收用户反馈
-2. **结构化处理**：将反馈分类为确认、修改、补充等类型
-3. **智能应用**：根据反��内容自动调整后续 Agent 策略
-4. **历史追踪**：记录完整的反馈历史供版本管理使用
+1. **收集中存储**多从 interaction-manager 接收用户反馈
+2. **结构化处理**多将反馈分类为确认、修改、补充等类型
+3. **智能应用**多根据反馈内容自动调整后续 Agent 策略
+4. **历史追踪**多记录完整的反馈历史供版本管理使用
 
 ---
 
@@ -29,7 +29,7 @@
 
 ## 输出
 
-### 1. 主输出：`workspace/{project}/user-feedback.json`
+### 1. 主输出多`workspace/{project}/user-feedback.json`
 
 ```json
 {
@@ -86,7 +86,7 @@
 }
 ```
 
-### 2. 辅助输出：`workspace/{project}/feedback-analysis.json`
+### 2. 辅助输出多`workspace/{project}/feedback-analysis.json`
 
 ```json
 {
@@ -120,7 +120,7 @@
 
 ## 执行流程
 
-### Step 1：初始化与验证
+### Step 1多初始化与验证
 
 ```bash
 project_dir="/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/${project}"
@@ -132,13 +132,13 @@ if [ ! -f "${feedback_file}" ]; then
 fi
 ```
 
-### Step 2：读取现有反馈
+### Step 2多读取现有反馈
 
 使用 Read 工具读取 `user-feedback.json`，获取已完成的交互节点和历史反馈。
 
-### Step 3：分类新反馈
+### Step 3多分类新反馈
 
-根据用户反馈类型进行分类：
+根据用户反馈类型进行分类多
 
 ```python
 # 伪代码
@@ -184,9 +184,9 @@ def classify_feedback(checkpoint, user_feedback):
   }
 ```
 
-### Step 4：自动应用反馈
+### Step 4多自动应用反馈
 
-根据反馈类型执行自动应用：
+根据反馈类型执行自动应用多
 
 #### 4.1 期刊选择反馈
 
@@ -293,7 +293,7 @@ def apply_outline_feedback(project, user_choice):
     }
 ```
 
-### Step 5：更新反馈文件
+### Step 5多更新反馈文件
 
 ```python
 def update_feedback_file(project, checkpoint, feedback_data, apply_result):
@@ -329,9 +329,9 @@ def update_feedback_file(project, checkpoint, feedback_data, apply_result):
   write_json(feedback_file, data)
 ```
 
-### Step 6：生成反馈分析报告
+### Step 6多生成反馈分析报告
 
-可选：生成 `feedback-analysis.json` 提供反馈统计。
+可选多生成 `feedback-analysis.json` 提供反馈统计。
 
 ---
 
@@ -367,10 +367,10 @@ def update_feedback_file(project, checkpoint, feedback_data, apply_result):
 
 ## 与其他 Skill 的集成
 
-1. **interaction-manager**：在获取用户反馈后调用本 Skill
-2. **venue-analyzer**：在应用期刊选择反馈时调用
-3. **Phase Skills**：读取 user-feedback.json 获取用户决策
-4. **version-manager**：使用 feedback-history 生成版本变更日志
+1. **interaction-manager**多在获取用户反馈后调用本 Skill
+2. **venue-analyzer**多在应用期刊选择反馈时调用
+3. **Phase Skills**多读取 user-feedback.json 获取用户决策
+4. **version-manager**多使用 feedback-history 生成版本变更日志
 
 ---
 

@@ -3,13 +3,13 @@
 > 此文件是论文生成系统**唯一的会议/期刊配置源**。所有预定义和用户自定义的会议/期刊配置都在这里。
 > 系统在启动论文生成时会读取此文件，根据用户指定的 `target_venue` 查找对应配置并应用格式化规则。
 >
-> **V2 新增**：交互式论文生成流程 — 预定义期刊现在包含写作风格配置，用于生成 `venue-style-guide.md`，指导后续 Phase 的写作风格适配。
+> **V2 新增**多交互式论文生成流程 — 预定义期刊现在包含写作风格配置，用于生成 `venue-style-guide.md`，指导后续 Phase 的写作风格适配。
 
 ---
 
 ## 预定义会议列表
 
-以下系统预定义的会议/期刊配置，可以直接使用或作为参考模板：
+以下系统预定义的会议/期刊配置，可以直接使用或作为参考模板多
 
 ### AAAI
 
@@ -547,7 +547,7 @@ TKDE:
 
 ### 示例
 
-#### 示例 1：ICSE 2025（会议）
+#### 示例 1多ICSE 2025（会议）
 
 ```yaml
 ICSE-2025:
@@ -591,7 +591,7 @@ ICSE-2025:
     trending_topics: ["AI_assisted_SE", "DevOps", "microservices", "green_computing"]
 ```
 
-#### 示例 2：CHI 2025（会议）
+#### 示例 2多CHI 2025（会议）
 
 ```yaml
 CHI-2025:
@@ -635,7 +635,7 @@ CHI-2025:
     trending_topics: ["accessibility", "AI_in_HCI", "XR_VR_interfaces", "sustainable_HCI"]
 ```
 
-#### 示例 3：VLDB Journal（期刊）
+#### 示例 3多VLDB Journal（期刊）
 
 ```yaml
 VLDB-Journal:

@@ -6,14 +6,14 @@
 
 ## 一、配置概览
 
-`config.json` 是论文工厂系统的核心配置文件，通过单文件控制整个论文生成流程的方方面面。
+`config.json` 是论文工工系统的核心配置文件，通过单文件控制整个论文生成流程的方方面面。
 
 ```mermaid
 graph TB
     A[config.json] --> B[models - 模型分配]
     A --> C[agents - Agent配置]
     A --> D[quality - 质量阈值]
-    A --> E[parallel - 并���执行]
+    A --> E[parallel - 并行执行]
     A --> F[cache - 缓存策略]
     A --> G[skills - 技能注册]
     A --> H[domain_skills - 领域映射]
@@ -24,14 +24,14 @@ graph TB
 | 配置节 | 作用 | 关键参数 |
 |--------|------|----------|
 | **models** | 定义推理/写作使用的模型类型 | `reasoning: opus`, `writing: sonnet` |
-| **agents** | 12 个 Agent 的模型引用、工具权限、条件执行 | 每个 Agent 可定制模型、工具、激活条件 |
+| **agents** | 11 个 Agent 的模型引用、工具权限、条件执行 | 每个 Agent 可定制模型、工具、激活条件 |
 | **quality** | 质量门控阈值 | 最小论文字数、评审分数阈值、章节字数要求 |
 | **parallel** | Phase 1 并行执行开关 | `phase1_enabled: true`, 超时重试机制 |
 | **cache** | 论文缓存策略 | 自动生成索引、过期清理、领域映射 |
 | **skills** | Skill 注册表 | 描述与 Skill 文件的映射关系 |
 | **domain_skills** | 领域 → 评审专家的动态映射 | 基于 keywords 自动匹配 |
 
-> **会议/期刊配置**：所有目标会议/期刊的配置信息（格式、页数限制、模板等）已从 `config.json` 迁移至项目根目录的 [venues.md](../venues.md) 文件。这是系统唯一的会议/期刊配置源，支持用户自定义添加新会议/期刊。详见 [快速开始指南](getting-started.md#第三步自定义会议期刊配置可选)。
+> **会议/期刊配置**多所有目标会议/期刊的配置信息（格式、页数限制、模板等）已从 `config.json` 迁移至项目根目录的 [venues.md](../venues.md) 文件。这是系统唯一的会议/期刊配置源，支持用户自定义添加新会议/期刊。详见 [快速开始指南](getting-started.md#第三步自定义会议期刊配置可选)。
 
 ---
 
@@ -51,18 +51,18 @@ graph TB
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `reasoning` | string | `"opus"` | 推理类任务使用的模型（文献检索、评审、理论构建） |
-| `writing` | string | `"sonnet"` | 写作类任务使用的模型（章节��写、格式整合） |
+| `writing` | string | `"sonnet"` | 写作类任务使用的模型（章节撰写、格式整合） |
 
 ### 可用模型
 
 | 模型 | 成本 | 适用场景 |
 |------|------|----------|
-| `opus` | 高 | 文献检索、同行评审、理论分析、工程分析 |
+| `opus` | 高 | 文献检索、同行评审、理论分析 |
 | `sonnet` | 中 | 章节撰写、格式整合、图表设计 |
 
 ### 修改指南
 
-降低成本时，可将部分推理任务改用 Sonnet：
+降低成本时，可将部分推理任务改用 Sonnet多
 
 ```json
 "models": {
@@ -75,7 +75,7 @@ graph TB
 
 ## 三、agents - Agent 配置
 
-定义 12 个 Agent 的模型引用、工具权限和条件执行逻辑。
+定义 11 个 Agent 的模型引用、工具权限和条件执行逻辑。
 
 ### 配置结构
 
@@ -84,14 +84,8 @@ graph TB
   "a1": {
     "model": "reasoning",
     "tools": ["WebSearch", "WebFetch", "Read", "Write"]
-  },
-  "a2": {
-    "model": "reasoning",
-    "tools": ["Read", "Glob", "Grep", "Write", "Bash"],
-    "conditional": true,
-    "condition": "Project has a codebase_path to analyze"
   }
-  }
+}
 ```
 
 ### 参数说明
@@ -103,12 +97,11 @@ graph TB
 | `conditional` | boolean | 是否为条件执行 Agent（可选） |
 | `condition` | string | 激活条件的描述（可选） |
 
-### 12 个 Agent 配置一览
+### 11 个 Agent 配置一览
 
 | Agent | 模型引用 | 核心工具 | 条件执行 |
 |-------|----------|----------|----------|
 | **A1** 文献调研 | `reasoning` | WebSearch, WebFetch, Read, Write | - |
-| **A2** 工程分析 | `reasoning` | Read, Glob, Grep, Write, Bash | 有 codebase_path |
 | **A3** 理论构建 | `reasoning` | WebSearch, WebFetch, Read, Write | MAS 架构相关 |
 | **A4** 创新形式化 | `reasoning` | Read, Write, Glob | - |
 | **B1** 相关工作 | `reasoning` | Read, Write, WebSearch | - |
@@ -122,7 +115,7 @@ graph TB
 
 ### 修改示例
 
-为 A1 文献调研降本：
+为 A1 文献调研降本多
 
 ```json
 "a1": {
@@ -181,7 +174,7 @@ graph TB
 
 ### 修改指南
 
-**收紧质量标准**（可能增加生成时间和成本）：
+**收紧质量标准**（可能增加生成时间和成本）多
 
 ```json
 "quality": {
@@ -191,7 +184,7 @@ graph TB
 }
 ```
 
-**放质量标准**（加快生成）：
+**放质量标准**（加快生成）多
 
 ```json
 "quality": {
@@ -299,7 +292,7 @@ graph TB
 ```json
 "skills": {
   "paper-generation": { "description": "论文生成主编排器" },
-  "paper-phase1-research": { "description": "Phase 1 文献调研与工程分析" },
+  "paper-phase1-research": { "description": "Phase 1 文献调研与理论分析" },
   "paper-phase2-design": { "description": "Phase 2 论文设计阶段" },
   "paper-phase3-writing": { "description": "Phase 3 论文撰写阶段" },
   "paper-phase4-quality": { "description": "Phase 4 质量保障阶段" },
@@ -375,7 +368,7 @@ graph TB
 
 ### 工作原理
 
-Phase 4 执行时，系统会：
+Phase 4 执行时，系统会多
 1. 读取 `input-context.md` 中的论文内容
 2. 匹配 `keywords` 判断论文所属领域
 3. 动态加载对应的 `review-*-domain` Skill 作为评审专家
@@ -396,9 +389,9 @@ Phase 4 执行时，系统会：
 
 ## 九、常见配置场景
 
-### 场景 1：降低成本
+### 场景 1多降低成本
 
-将所有推理任务改用 Sonnet：
+将所有推理任务改用 Sonnet多
 
 ```json
 "models": {
@@ -407,9 +400,9 @@ Phase 4 执行时，系统会：
 }
 ```
 
-### 场景 2：提高质量
+### 场景 2多提高质量
 
-增加文献检索量和评审标准：
+增加文献检索量和评审标准多
 
 ```json
 "quality": {
@@ -419,7 +412,7 @@ Phase 4 执行时，系统会：
 }
 ```
 
-### 场景 3：禁用缓存
+### 场景 3多禁用缓存
 
 ```json
 "cache": {
@@ -427,7 +420,7 @@ Phase 4 执行时，系统会：
 }
 ```
 
-### 场景 4：禁用并行模式
+### 场景 4多禁用并行模式
 
 ```json
 "parallel": {
@@ -435,7 +428,7 @@ Phase 4 执行时，系统会：
 }
 ```
 
-### 场景 5：新增评审领域
+### 场景 5多新增评审领域
 
 1. 创建 `review-your-domain/SKILL.md`
 2. 在 `domain_skills` 中添加映射
@@ -445,11 +438,11 @@ Phase 4 执行时，系统会：
 
 ## 十、注意事项
 
-1. **修改后重启**：修改配置后需要重新启动 Claude Code 才能生效
-2. **JSON 格式**：确保 JSON 格式正确，否则系统无法启动
-3. **Git 追踪**：建议将配置修改纳入 Git 追踪
-4. **成本平衡**：降低模型级别可能影响输出质量
-5. **超时设置**：`timeout_per_agent` 过短可能导致 Agent 被强制终止
+1. **修改后重启**多修改配置后需要重新启动 Claude Code 才能生效
+2. **JSON 格式**多确保 JSON 格式正确，否则系统无法启动
+3. **Git 追踪**多建议将配置修改纳入 Git 追踪
+4. **成本平衡**多降低模型级别可能影响输出质量
+5. **超时设置**多`timeout_per_agent` 过短可能导致 Agent 被强制终止
 
 ---
 

@@ -9,13 +9,13 @@ description: "Phase 4 质量保障阶段 — 多视角同行评审与修订循�
 
 You are **Phase 4 Quality Orchestrator** — responsible for managing iterative peer review, revision cycles, expert debate, and final quality assurance.
 
-**调用方式**：`Skill(skill="paper-phase4-quality", args="{project}")`
+**调用方式**多`Skill(skill="paper-phase4-quality", args="{project}")`
 
-**执行模式**：迭代循环（D1 评审 ⇄ D2 修订 ⇄ 专家辩论）— 评审分数达标或达到最大迭代次数
+**执行模式**多迭代循环（D1 评审 ⇄ D2 修订 ⇄ 专家辩论）— 评审分数达标或达到最大迭代次数
 
-**核心职责**：
+**核心职责**多
 - 管理评审-修订迭代流程
-- 智能选择需要的评审专家（���态决策）
+- 智能选择需要的评审专家（动态决策）
 - 为领域专家准备领域知识（通过 domain-knowledge-prep Skill）
 - 协调 D1（评审）、D2（修订）和 5 个评审专家的多轮交互与辩论
 - 判断评审结果是否满足质量标准（8.0 分）
@@ -29,13 +29,13 @@ You are **Phase 4 Quality Orchestrator** — responsible for managing iterative 
 
 ### Step 1: 读取项目上下文
 
-读取 `workspace/{project}/phase2/b3-paper-outline.json` 获取：
+读取 `workspace/{project}/phase2/b3-paper-outline.json` 获取多
 - 论文总章节数和标题
 - 每章节的内容要求和依赖关系
 
 ### Step 2: 加载质量配置
 
-读取 `config.json` 并提取：
+读取 `config.json` 并提取多
 - `quality.min_review_score` — 最低通过评分（现在 8.0）
 - `quality.max_review_iterations` — 最大评审轮次（现在 10）
 - `quality.max_response_rounds` — 专家回复最大轮数（默认 2）
@@ -47,20 +47,20 @@ You are **Phase 4 Quality Orchestrator** — responsible for managing iterative 
 
 ### Step 3: 读取论文用于领域分析
 
-读取 `workspace/{project}/output/paper.md` 的标题、摘要、关键词和全文内容，用于：
+读取 `workspace/{project}/output/paper.md` 的标题、摘要、关键词和全文内容，用于多
 - 分析论文涉及的领域
 - 判断需要哪些评审专家
 
 ### Step 4: 分析论文领域
 
-**目标**：基于论文内容，智能决定需要哪些评审专家。
+**目标**多基于论文内容，智能决定需要哪些评审专家。
 
 **4.1 领域相关度计算**
 
-对每个候选领域，计算关键词匹配度：
+对每个候选领域，计算关键词匹配度多
 
 ```python
-# 伪代码：系统 的领域分析逻辑
+# 伪代码多系统 的领域分析逻辑
 
 def get_domain_keywords_from_config():
     """从 config.json 的 domain_skills 获取关键词"""
@@ -104,7 +104,7 @@ def analyze_paper_domains(paper_content):
     return domains
 ```
 
-**决策规则**：
+**决策规则**多
 
 | 专家类型 | 选择条件 |
 |---------|----------|
@@ -118,7 +118,7 @@ def analyze_paper_domains(paper_content):
 
 ### Step 5: 记录专家选择
 
-写入 `workspace/{project}/phase4/expert-selection.json`：
+写入 `workspace/{project}/phase4/expert-selection.json`多
 
 ```json
 {
@@ -164,7 +164,7 @@ def analyze_paper_domains(paper_content):
 ## 领域知识更新前置操作
 
 ### Step 0.1: 执行领域知识更新（新增）
-**在启动评审专家前**，调用 `domain-knowledge-update` 技能动态更新领域知识：
+**在启动评审专家前**，调用 `domain-knowledge-update` 技能动态更新领域知识多
 
 ```bash
 # 对所有支持的领域执行知识更新
@@ -179,12 +179,12 @@ for domain in sorted_domains:
     Skill(skill="domain-knowledge-update", args=f"{project}:{domain}")
 ```
 
-**输出文件**：
+**输出文件**多
 - `workspace/{project}/phase4/domain-knowledge-{domain}.json` — 更新后的领域知识
 - `workspace/{project}/phase4/knowledge-update-report.json` — 更新报告摘要
 
 ### Step 0.2: 验证知识更新完成
-检查所有高相关领域的知识更新是否完成：
+检查所有高相关领域的知识更新是否完成多
 ```bash
 # 检查更新文件是否存在
 if all([check_file(f"workspace/{project}/phase4/domain-knowledge-{d}.json")
@@ -200,26 +200,26 @@ else:
 
 ### Step 6: 启动评审专家
 
-**对于每个选中的评审专家，使用不同的配置：**
+**对于每个选中的评审专家，使用不同的配置多**
 
 #### 6.1 通用评审专家（D1-Technical-Expert, D1-Clarity-Expert）
 
 - 读取 `agents/phase4/d1-peer-reviewer.md`
 - 使用 Task 工具 spawn Agent
-- 传入：project 参数
+- 传入多project 参数
 
 #### 6.2 领域评审专家（D1-Domain-Expert-{domain}）
 
-领域评审专家使用新的架构：**Agent + 领域 Skill**
+领域评审专家使用新的架构多**Agent + 领域 Skill**
 
 - 读取 `agents/phase4/d1-reviewer-domain-expert.md`（领域评审专家模板）
 - 确定对应的领域 Skill 名称（根据 domain_skills 映射）
-- 使用 Task 工具 spawn Agent，传入：
+- 使用 Task 工具 spawn Agent，传入多
   - `project`: 项目名称
   - `domain_skill`: 领域 Skill 名称（如 `review-kg-domain`）
   - `domain_name`: 领域全称（如 `Knowledge Graphs and Ontology Engineering`）
 
-**领域 Skill 映射表**：
+**领域 Skill 映射表**多
 
 | domain_id | domain_skill | domain_full_name |
 |-----------|-------------|------------------|
@@ -243,34 +243,34 @@ else:
 
 ### Step 7: 收集评审报告
 
-等待所有评审专家完成，读取对应的报告文件：
+等待所有评审专家完成，读取对应的报告文件多
 
-- 通用专家：`d1-review-report.json`
-- 领域专家：`d1-reviewer-domain-{domain_id}-report.json`
+- 通用专家多`d1-review-report.json`
+- 领域专家多`d1-reviewer-domain-{domain_id}-report.json`
 
 ---
 
-## ��本管理与用户确认
+## 版本管理与用户确认
 
 ### Step 7.5: 版本快照创建
 
-**在每次迭代完成后，根据 versioning 配置决定是否创建版本**：
+**在每次迭代完成后，根据 versioning 配置决定是否创建版本**多
 
 #### 1. 读取 versioning 配置
 
-从 `config.json` 读取：
+从 `config.json` 读取多
 - `versioning.enabled` — 是否启用版本管理（默认 true）
 - `versioning.mode` — 创建模式
-  - `all`：每次迭代都创建版本
-  - `milestones`：达到阈值分数时创建版本
-  - `smart`：分数提升 >0.5 时创建版本
-  - `off`：不创建版本
+  - `all`多每次迭代都创建版本
+  - `milestones`多达到阈值分数时创建版本
+  - `smart`多分数提升 >0.5 时创建版本
+  - `off`多不创建版本
 - `versioning.max_versions_to_keep` — 最多保留版本数（默认 10）
 
 #### 2. 判断是否需要创建版本
 
 ```python
-# 伪代码：版本创建判断
+# 伪代码多版本创建判断
 should_create_version = False
 version_type = "revision"
 
@@ -287,13 +287,13 @@ elif versioning_config["mode"] == "smart":
 
 #### 3. 创建版本快照
 
-如果需要创建版本：
+如果需要创建版本多
 
 ```python
 # 调用 version-manager Skill
 Skill(skill="version-manager", args=f"{project}:create:{version_type}")
 
-# version-manager 将创建：
+# version-manager 将创建多
 # - workspace/{project}/versions/V{NN}/ 目录
 # - paper.md — 论文快照
 # - metadata.json — 版本元数据（评分、时间戳、迭代次数等）
@@ -316,15 +316,15 @@ if version_count > versioning_config["max_versions_to_keep"]:
 
 ### Step 7.6: 用户确认检查
 
-**根据 confirmation 配置判断是否需要用户确认**：
+**根据 confirmation 配置判断是否需要用户确认**多
 
 #### 1. 读取 confirmation 配置
 
-从 `config.json` 读取：
+从 `config.json` 读取多
 - `confirmation.mode` — 确认模式
-  - `full`：每次迭代都确认
-  - `threshold`：达到阈值分数时确认
-  - `skip`：跳过所有确认
+  - `full`多每次迭代都确认
+  - `threshold`多达到阈值分数时确认
+  - `skip`多跳过所有确认
 - `confirmation.threshold_score` — 阈值分数（默认 9.0）
 - `confirmation.confirm_at_milestones` — 是否在里程碑版本确认（默认 true）
 - `confirmation.confirm_every_n_iterations` — 每 N 轮确认一次（默认 null）
@@ -332,7 +332,7 @@ if version_count > versioning_config["max_versions_to_keep"]:
 #### 2. 判断是否需要确认
 
 ```python
-# 伪代码：确认判断
+# 伪代码多确认判断
 requires_confirmation = False
 
 if confirmation_config["mode"] == "full":
@@ -356,22 +356,22 @@ if confirmation_config.get("confirm_every_n_iterations"):
 
 #### 3. 生成版本摘要
 
-如果需要确认，从版本元数据生成摘要：
+如果需要确认，从版本元数据生成摘要多
 
 ```
 版本 V03 已就绪
 ─────────────────────────────
-评分：9.2/10（目标：9.0）
-迭代：第 2 轮
-创建时间：2026-02-14 13:20:00
+评分多9.2/10（目标多9.0）
+迭代多第 2 轮
+创建时间多2026-02-14 13:20:00
 
-主要改进：
+主要改进多
 - 添加了统计显著性分析
 - 扩展了实验评估，新增 3 个基线对比
 - 修复了 4 个关键问题
 - 改进了领域特定术语的准确性
 
-剩余问题：
+剩余问题多
 - Related Work 可补充最新文献
 - Discussion 缺少更广泛影响的讨论
 ```
@@ -384,10 +384,10 @@ AskUserQuestion(
         {
             "question": f"""版本 {new_version_id} 已就绪，评分 {current_score}/10
 
-主要改进：
+主要改进多
 {generate_improvements_summary()}
 
-请选择下一步操作：""",
+请选择下一步操作多""",
             "header": "版本确认",
             "options": [
                 {
@@ -411,19 +411,19 @@ AskUserQuestion(
 
 #### 5. 处理用户选择
 
-**选择 1：接受**
+**选择 1多接受**
 - 标记版本为 `version_type="final"`
 - 退出迭代循环
 - 完成 Phase 4
 
-**选择 2：继续并反馈**
+**选择 2多继续并反馈**
 - 使用 AskUserQuestion 收集用户反馈内容
 - 将用户反馈写入 `workspace/{project}/phase4/user-feedback.json`
 - 设置 `feedback.status="pending"`
 - 继续下一轮迭代（D2 将优先处理用户反馈）
 
-**选择 3：手动编辑**
-- 向用户展示当前论文位置：`workspace/{project}/output/paper.md`
+**选择 3多手动编辑**
+- 向用户展示当前论文位置多`workspace/{project}/output/paper.md`
 - 暂示用户编辑完成后输入"RESUME"
 - 等待用户完成
 - 检测文件变更
@@ -436,7 +436,7 @@ AskUserQuestion(
 
 ### Step 8: 执行评审-修订-专家协调迭代（已更新）
 
-**迭代循环已更新，集成版本创建和用户确认**：
+**迭代循环已更新，集成版本创建和用户确认**多
 
 ```
 iteration = 1
@@ -455,18 +455,18 @@ while iteration <= max_review_iterations:
     │
     │ 3. 【新增】版本快照创建（Step 7.5）
     │     检查 versioning 配置，判断是否创建版本
-    │     如果需要：调用 version-manager 创建版本 V{NN}
+    │     如果需要多调用 version-manager 创建版本 V{NN}
     │     记录 version_type 到元数据
     │
     │ 4. 【新增】用户确认检查（Step 7.6）
     │     检查 confirmation 配置和当前分数
-    │     如果需要确认：
+    │     如果需要确认多
     │       - 使用 AskUserQuestion 展示版本摘要
-    │       - 根据用户选择：
+    │       - 根据用户选择多
     │         - 接受 → 退出循环，标记 final
     │         - 继续反馈 → 记录到 user-feedback.json，继续
     │         - 手动编辑 → 暂停等待，恢复后继续
-    │     如果用户接受：退出循环
+    │     如果用户接受多退出循环
     │
     │ 5. 未达标且未达最大轮次
     │     if iteration < max_review_iterations:
@@ -545,7 +545,7 @@ while iteration <= max_review_iterations:
     │     记录最终状态到 gate-4.json
 ```
 
-**专家回复协调的核心价值**：
+**专家回复协调的核心价值**多
 - D2 可以向评审专家澄清模糊的评审意见
 - 评审专家可以看到 D2 对其他专家意见的回应
 - 通过多轮辩论，确保修改真正解决了问题
@@ -557,9 +557,9 @@ while iteration <= max_review_iterations:
 
 ### Step 9: 执行 Quality Gate 4
 
-验证以下文件存在：
+验证以下文件存在多
 
-**必选文件**：
+**必选文件**多
 - `workspace/{project}/phase4/expert-selection.json`
 - `workspace/{project}/phase4/d1-review-report.json`
 - `workspace/{project}/phase4/d1-review-report.md`
@@ -567,7 +567,7 @@ while iteration <= max_review_iterations:
 - `workspace/{project}/phase4/d2-response-log.json`
 - `workspace/{project}/phase4/d2-response-log.md`
 
-**领域专家相关文件**（如果选中）：
+**领域专家相关文件**（如果选中）多
 - `workspace/{project}/phase4/domain-knowledge-{domain}.json`
 - `workspace/{project}/phase4/d1-reviewer-domain-expert-report.json`
 - `workspace/{project}/phase4/d1-reviewer-domain-expert-report.md`

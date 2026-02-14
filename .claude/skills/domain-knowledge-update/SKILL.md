@@ -9,9 +9,9 @@ description: "领域知识动态更新 — 通过 Web Search 获取前沿论文�
 
 You are the **Domain Knowledge Update Skill** — responsible for dynamically updating domain knowledge through Web Search and directly updating the corresponding `review-{domain}-domain` Skill file.
 
-**调用方式：** `Skill(skill="domain-knowledge-update", args="{domain}")`
+**调用方式多** `Skill(skill="domain-knowledge-update", args="{domain}")`
 
-**核心职责：**
+**核心职责多**
 - Search for cutting-edge research papers in the target domain (past 2 years)
 - Analyze paper content to extract core concepts and research trends
 - **Directly update** the corresponding `review-{domain}-domain/SKILL.md` file
@@ -184,13 +184,13 @@ def insert_new_concept(content, concept):
     new_concept_text = f"""
 #### {concept['name']}
 
-**期望用法**：
+**期望用法**多
 - {concept['expect']}
 
-**常见问题**：
+**常见问题**多
 {chr(10).join(f"- {issue}" for issue in concept['common_issues'])}
 
-**评审要点**：
+**评审要点**多
 - {concept['review_points']}
 """
 
@@ -267,12 +267,12 @@ Source: Web Search {date}"
 └── domain-knowledge-update/SKILL.md ← 更新工具（本 Skill）
 ```
 
-**架构优势**：
-- **单一数据源**：每个领域的知识只存储在一个 Skill 文件中
-- **可自动更新**：通过此 Skill 使用 Web Search 自动更新
-- **可手动编辑**：也可以直接手动编辑 Skill 文件
-- **Git 可追溯**：所有更新通过 git commit 追踪
-- **直接读取**：评审专家直接读取对应的 Skill
+**架构优势**多
+- **单一数据源**多每个领域的知识只存储在一个 Skill 文件中
+- **可自动更新**多通过此 Skill 使用 Web Search 自动更新
+- **可手动编辑**多也可以直接手动编辑 Skill 文件
+- **Git 可追溯**多所有更新通过 git commit 追踪
+- **直接读取**多评审专家直接读取对应的 Skill
 
 ---
 
@@ -311,10 +311,10 @@ Source: Web Search {date}"
 
 ## 使用建议
 
-1. **定期更新**：每 1-2 个月执行一次，保持领域知识前沿性
-2. **审查更新**：更新后检查 Skill 文件，确保新增内容准确
-3. **Git 提交**：每次更新后通过 git commit 追踪变更历史
-4. **手动补充**：对于特别重要的新概念，可以手动编辑 Skill 文件
+1. **定期更新**多每 1-2 个月执行一次，保持领域知识前沿性
+2. **审查更新**多更新后检查 Skill 文件，确保新增内容准确
+3. **Git 提交**多每次更新后通过 git commit 追踪变更历史
+4. **手动补充**多对于特别重要的新概念，可以手动编辑 Skill 文件
 
 ---
 

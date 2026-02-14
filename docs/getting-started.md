@@ -1,6 +1,6 @@
 # 快速开始
 
-本指南���助你在 5 分钟内完成从准备素材到启动论文生成的全过程。
+本指南帮助你在 5 分钟内完成从准备素材到启动论文生成的全过程。
 
 ---
 
@@ -12,7 +12,7 @@
 | Agent 执行 | 通过 Skill 调用管理 |
 | API 预算度 | 完整 pipeline 约 $41（可通过 `config.json` 调整） |
 
-Agent 执行配置：
+Agent 执行配置多
 
 ```json
 {
@@ -24,29 +24,29 @@ Agent 执行配置：
 
 ---
 
-## 第一步：准备项目素材
+## 第一步多准备项目素材
 
-在 `workspace/{project-name}/` 下创建 `input-context.md`，包含以下内容：
+在 `workspace/{project-name}/` 下创建 `input-context.md`，包含以下内容多
 
 ```markdown
 # 论文输入素材
 
 ## 论文主题
-[你的研究主题，例如：基于知识图谱的智能数据查询��统]
+[你的研究主题，例如多基于知识图谱的智能数据查询系统]
 
 ## 工作标题
 [论文的工作标题]
 
 ## 目标会议/期刊 (target_venue)
-[目标投稿会议或期刊，例如：AAAI、IJCAI、ISWC、WWW、ACL、EMNLP 等]
+[目标投稿会议或期刊，例如多AAAI、IJCAI、ISWC、WWW、ACL、EMNLP 等]
 
 ## 目标系统/代码库路径
 [如有目标代码库，提供绝对路径]
 
 ## 创新点列表
-1. [创新点 1：简要描述]
-2. [创新点 2：简要描述]
-3. [创新点 3：简要描述]
+1. [创新点 1多简要描述]
+2. [创新点 2多简要描述]
+3. [创新点 3多简要描述]
 
 ## 系统架构概述
 [用 2-3 段描述系统的整体架构和关键组件]
@@ -56,11 +56,11 @@ Agent 执行配置：
 - **术语 2**: 定义
 ```
 
-> 素材越详细，生成��论文质量越高。特别是创新点列表和系统架构，直接影响 A4（创新形式化）和 B3（结构设计）的输出质量。
+> 素材越详细，生成的论文质量越高。特别是创新点列表和系统架构，直接影响 A4（创新形式化）和 B3（结构设计）的输出质量。
 
 ---
 
-## 第二步：用户职责（推荐）
+## 第二步多用户职责（推荐）
 
 ### 必需项（启动前必须完成）
 
@@ -82,20 +82,20 @@ Agent 执行配置：
 
 ---
 
-## 第三步：自定义会议/期刊配置（可选）
+## 第三步多自定义会议/期刊配置（可选）
 
-如果你的目标会议/期刊不在预定义列表中（AAAI、IJCAI、ACL 等），可以通过以下方式添加：
+如果你的目标会议/期刊不在预定义列表中（AAAI、IJCAI、ACL 等），可以通过以下方式添加多
 
 ### 编辑 venues.md
 
-在项目根目录有一个 `venues.md` 文件，专门用于用户自定义会议/期刊配置：
+在项目根目录有一个 `venues.md` 文件，专门用于用户自定义会议/期刊配置多
 
 ```bash
 # 打开配置文件
 open venues.md  # 或使用你喜欢的编辑器
 ```
 
-按照文件中的模板添加你的会议配置：
+按照文件中的模板添加你的会议配置多
 
 ```yaml
 ICSE-2025:
@@ -112,7 +112,7 @@ ICSE-2025:
 
 ### 预定义会议配置模板
 
-每个会议需要以下字段：
+每个会议需要以下字段多
 
 | 字段 | 说明 | 示例 |
 |------|------|------|
@@ -126,7 +126,7 @@ ICSE-2025:
 
 ---
 
-## 第四步：优化文献库（推荐）
+## 第四步多优化文献库（推荐）
 
 ### 手动添加论文
 
@@ -156,18 +156,18 @@ Skill(skill="cache-utils", action="read", args="{project}", domain="{domain}")
 | 添加论文到缓存 | 15-30 分钟 |
 | 检查/更新领域知识 | 15-30 分钟 |
 
-**总计**：约 1-2 小时
+**总计**多约 1-2 小时
 
 ---
 
-## 第四步：启动论文生成
+## 第四步多启动论文生成
 
 ```bash
 cd paper-factory
 claude
 ```
 
-在 Claude Code 中输入：
+在 Claude Code 中输入多
 
 ```
 我要生成一篇关于 [你的主题] 的学术论文。
@@ -175,34 +175,34 @@ claude
 请按 pipeline 开始。
 ```
 
-**重要说明**：
+**重要说明**多
 
-系统会自动读取 `CLAUDE.md`，然后通过 **Skill 层级调用**管理完整的 4 阶段论文生成流程：
+系统会自动读取 `CLAUDE.md`，然后通过 **Skill 层级调用**管理完整的 4 阶段论文生成流程多
 
-1. **Orchestrator Level** → 调用主 Skill：
+1. **Orchestrator Level** → 调用主 Skill多
    ```
    Skill(skill="paper-generation", args="{project-name}")
    ```
 
-2. **Phase Level** → 主 Skill 自动按顺序调用 4 个 Phase Skill：
-   - `paper-phase1-search` — 文献调研与工程分析
+2. **Phase Level** → 主 Skill 自动按顺序调用 4 个 Phase Skill多
+   - `paper-phase1-research` — 文献调研与理论分析
    - `paper-phase2-design` — 论文设计
    - `paper-phase3-writing` — 论文撰写
    - `paper-phase4-quality` — 质量评审
 
-3. **Agent 层** → Phase Skill 内部根据需要启动独立 Agent 进程：
-   - Phase 1: A1（文献）、A2（工程）、A3（MAS 文献）、A4（聚合）
+3. **Agent 层** → Phase Skill 内部根据需要启动独立 Agent 进程多
+   - Phase 1: A1（文献）、A3（MAS 文献）、A4（聚合）
    - Phase 2: B1（相关工作）、B2（实验设计）、B3（架构设计）
    - Phase 3: C1（章节撰写）、C2（图表设计）、C3（格式整合）
    - Phase 4: D1（同行评审）、D2（修订执行）
 
-**架构模式**：Skill 层同步执行（共享会话上下文），Agent 层异步执行（通过文件通信）
+**架构模式**多Skill 层同步执行（共享会话上下文），Agent 层异步执行（通过文件通信）
 
 ---
 
-## 第五步：等待与监控
+## 第五步多等待与监控
 
-完整 pipeline 通常需要 2-4 小时。你可以通过以下方式监控进度：
+完整 pipeline 通常需要 2-4 小时。你可以通过以下方式监控进度多
 
 ```bash
 # 查看当前阶段的输出文件
@@ -219,12 +219,12 @@ cat workspace/{project-name}/output/paper.md
 
 ## 配置调优
 
-`config.json` 含系统的核心配置：
+`config.json` 含系统的核心配置多
 
 ```json
 {
   "models": {
-    "reasoning": "opus",    // 深度分析任务（A2, A3, A4, B1-B3, D1, D2）
+    "reasoning": "opus",    // 深度分析任务（A3, A4, B1-B3, D1, D2）
     "writing": "sonnet"      // 内容生成任务（A1, C1-C3）
   },
   "quality": {
@@ -253,7 +253,7 @@ cat workspace/{project-name}/output/paper.md
 
 ## 产出结构
 
-生成完成后，工作空间的目录结构如下：
+生成完成后，工作空间的目录结构如下多
 
 ```
 workspace/{project-name}/
@@ -261,8 +261,6 @@ workspace/{project-name}/
 ├── phase1/                       # Research 产物（Agent + Skill 输出）
 │   ├── a1-literature-survey.json
 │   ├── a1-literature-survey.md
-│   ├── a2-engineering-analysis.json (条件)
-│   ├── a2-engineering-analysis.md (条件)
 │   ├── a3-mas-literature.json (条件)
 │   ├── a3-mas-literature.md (条件)
 │   ├── skill-mas-theory.json (条件)
@@ -301,7 +299,7 @@ workspace/{project-name}/
 
 **Q: Pipeline 途中失败怎么办？**
 
-系统会检测失败的 Agent 或 Skill，提供选项：重试该 Agent/Skill / 跳过 / 手动补充。
+系统会检测失败的 Agent 或 Skill，提供选项多重试该 Agent/Skill / 跳过 / 手动补充。
 
 **Q: 如何只重新运行某个阶段？**
 
@@ -321,7 +319,7 @@ workspace/{project-name}/
 
 **Q: `input-context.md` 必填哪些字段？**
 
-必填字段：
+必填字段多
 ```markdown
 - paper_title — 论文标题
 - target_system — 目标系统描述

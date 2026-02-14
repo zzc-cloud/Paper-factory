@@ -1,6 +1,6 @@
-# 论文工厂 — 文档中心
+# 论文工工 — 文档中心
 
-论文工厂是一个基于 Claude Code Agent Teams 的多智能体学术论文生成系统。
+论文工工是一个基于 Claude Code Agent Teams 的多智能体学术论文生成系统。
 
 ---
 
@@ -11,7 +11,7 @@
 
 ## 系统架构
 
-- [架构详解](architecture.md) — 4 阶段 Pipeline、12 个 Agent、Quality Gates
+- [架构详解](architecture.md) — 4 阶段 Pipeline、11 个 Agent、Quality Gates
 
 ## 工具与技能
 
@@ -32,7 +32,7 @@
 | `CLAUDE.md` | 系统 编排指令（系统核心） |
 | `config.json` | 模型、预算、质量阈值、并行执行配置 |
 | `.claude/skills/` | Skill 层 — 编排、理论分析、领域知识 |
-| `agents/` | Agent 层 — 12 个 Agent 系统提示定义 |
+| `agents/` | Agent 层 — 11 个 Agent 系统提示定义 |
 | `workspace/` | 运行时产物（按项目组织） |
 | `papers/` | 历史论文存档 |
 

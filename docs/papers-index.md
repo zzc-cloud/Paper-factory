@@ -17,7 +17,7 @@ cat workspace/{project}/phase4/d1-review-report.json | python3 -c "import sys,js
 
 ## 论文历史记录
 
-论文历史通过 Git 进行版本管理。查看历史论文：
+论文历史通过 Git 进行版本管理。查看历史论文多
 
 ```bash
 # 查看当前项目的论文历史提交
@@ -27,9 +27,9 @@ git log --oneline -- workspace/{project}/output/paper.md
 git show <commit-hash>:workspace/{project}/output/paper.md
 ```
 
-## 首篇论文：Cognitive Hub
+## 首篇论文多Cognitive Hub
 
-首篇论文记录（注意：论文存储在各项目的 workspace/ 下）：
+首篇论文记录（注意多论文存储在各项目的 workspace/ 下）多
 
 - **完整标题**: Cognitive Hub: A Multi-Agent Architecture for Ontology-Driven Natural Language Data Querying at Enterprise Scale
 - **项目名**: smart-query
@@ -44,10 +44,10 @@ git show <commit-hash>:workspace/{project}/output/paper.md
 
 ### 核心贡献
 
-- **认知中枢架构**：本体层（陈述性记忆）+ 技能层（程序性记忆）
-- **三策略串行执行**：Indicator Expert → Scenario Navigator → Term Analyst
-- **隐式上下文继承**：通过对话历史实现数字间接通信（Stigmergy）
-- **证据包融合**：三策略交叉验证，分级置信度评分
+- **认知中枢架构**多本体层（陈述性记忆）+ 技能层（程序性记忆）
+- **三策略串行执行**多Indicator Expert → Scenario Navigator → Term Analyst
+- **隐式上下文继承**多通过对话历史实现数字间接通信（Stigmergy）
+- **证据包融合**多三策略交叉验证，分级置信度评分
 
 ### 系统规模
 

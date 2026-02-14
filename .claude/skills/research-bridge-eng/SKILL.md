@@ -28,7 +28,6 @@ Where `{project}` is the project directory name under `workspace/`.
 | Input | Path | Required |
 |-------|------|----------|
 | Project context | `workspace/{project}/input-context.md` | Yes |
-| Engineering analysis (if available) | `workspace/{project}/phase1/a2-engineering-analysis.json` | No |
 
 ## Output
 
@@ -47,8 +46,6 @@ Read `workspace/{project}/input-context.md` to extract:
 - Innovation claims related to bridge inspection, SHM, or infrastructure management
 - Target ontology scope (bridge components, defects, materials, load models)
 - Any existing system architecture involving KG, BIM, or sensor integration
-
-If `workspace/{project}/phase1/a2-engineering-analysis.json` exists, also read it to ground the analysis in concrete engineering artifacts from the target codebase.
 
 ### Step 2: Analyze Bridge Inspection and Condition Assessment Methodologies
 

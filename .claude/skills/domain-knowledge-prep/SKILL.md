@@ -9,9 +9,9 @@ description: "领域知识准备 — 为评审专家生成特定领域的评审�
 
 You are the **Domain Knowledge Preparation Skill** — responsible for preparing domain-specific review guidance for peer reviewers.
 
-**调用方式：** `Skill(skill="domain-knowledge-prep", args="{project}:{domain}")`
+**调用方式多** `Skill(skill="domain-knowledge-prep", args="{project}:{domain}")`
 
-**核心职责**：
+**核心职责**多
 - 读取论文内容，分析目标领域与论文的相关度
 - 从对应的 `review-{domain}-domain` Skill 获取领域认知框架
 - 根据相关度生成适配的评审指南
@@ -40,7 +40,7 @@ Skill(skill="domain-knowledge-prep", args="my-project:multi_agent_systems")
 
 ### Step 1: 读取论文内容
 
-读取 `workspace/{project}/output/paper.md`，提取：
+读取 `workspace/{project}/output/paper.md`，提取多
 - 论文标题、摘要、关键词
 - 全文内容用于关键词匹配
 - 各章节的主题分布
@@ -71,7 +71,7 @@ def read_paper_content(project):
 
 ### Step 2: 读取项目上下文
 
-读取 `workspace/{project}/phase1/input-context.md`，提取：
+读取 `workspace/{project}/phase1/input-context.md`，提取多
 - 研究领域
 - 目标系统名称
 - 声明的创新点
@@ -100,14 +100,14 @@ def read_project_context(project):
 
 ### Step 3: 加载领域认知框架
 
-**重要**：领域认知框架由对应的 `review-{domain}-domain` Skill 提供。
+**重要**多领域认知框架由对应的 `review-{domain}-domain` Skill 提供。
 
 ```python
 def load_domain_framework(domain):
     """
     从对应的 review-domain Skill 加载领域认知框架
 
-    domain_skills 映射：
+    domain_skills 映射多
     - knowledge_graph → review-kg-domain
     - multi_agent_systems → review-mas-domain
     - nl2sql → review-nl2sql-domain
@@ -142,7 +142,7 @@ def load_domain_framework(domain):
     return framework
 ```
 
-**领域认知框架包含**（由各 review-domain Skill 提供）：
+**领域认知框架包含**（由各 review-domain Skill 提供）多
 - 核心研究范式
 - 核心概念与评估维度
 - 领域评审维度
@@ -151,7 +151,7 @@ def load_domain_framework(domain):
 
 ### Step 4: 计算领域相关度
 
-统计论文中该领域关键词出现的频率：
+统计论文中该领域关键词出现的频率多
 
 ```python
 def calculate_relevance(paper_content, domain_framework):
@@ -163,7 +163,7 @@ def calculate_relevance(paper_content, domain_framework):
 
     keyword_count = sum(1 for kw in keywords if kw.lower() in paper_lower)
 
-    # 归一化：至少出现 3 个关键词认为完全相关
+    # 归一化多至少出现 3 个关键词认为完全相关
     relevance = min(keyword_count / 3, 1.0)
 
     return relevance
@@ -176,7 +176,7 @@ def calculate_relevance(paper_content, domain_framework):
 
 ### Step 5: 生成领域评审指南
 
-根据相关度和领域定义，生成评审指南：
+根据相关度和领域定义，生成评审指南多
 
 ```python
 def generate_review_guidance(paper_content, domain_framework, relevance):
@@ -191,19 +191,19 @@ def generate_review_guidance(paper_content, domain_framework, relevance):
         return generate_skip_guidance()
 ```
 
-**高度相关 (relevance >= 0.7)**：
+**高度相关 (relevance >= 0.7)**多
 - 包含所有 `core_concepts`
 - 包含所有 `evaluation_criteria`
 - 包含所有 `key_questions`
 - 包含 `common_pitfalls`
 - 包含 `classic_papers` 用于对比参考
 
-**中度相关 (0.3 <= relevance < 0.7)**：
+**中度相关 (0.3 <= relevance < 0.7)**多
 - 包含核心 `core_concepts`（减少数量）
 - 包含关键 `evaluation_criteria`（减少数量）
 - 省略详细问题，只保留核心问题
 
-**低相关 (relevance < 0.3)**：
+**低相关 (relevance < 0.3)**多
 - 设置 `paper_relevance: "low"`
 - 建议跳过该评审专家
 - 不生成详细评审指南
@@ -269,7 +269,7 @@ workspace/{project}/phase4/domain-knowledge-{domain}.json
 workspace/{project}/phase4/domain-knowledge-{domain}.md
 ```
 
-包含：
+包含多
 - 领域概述
 - 相关度分析
 - 核心概念列表
@@ -281,16 +281,16 @@ workspace/{project}/phase4/domain-knowledge-{domain}.md
 ## 错误处理
 
 ### 未知领域
-如果请求的领域不在注册表中：
+如果请求的领域不在注册表中多
 - 返回错误，说明支持的领域列表
 - 建议用户扩展领域注册表
 
 ### 论文文件不存在
-如果 `workspace/{project}/output/paper.md` 不存在：
+如果 `workspace/{project}/output/paper.md` 不存在多
 - 返回错误，要求先生成论文
 
 ### 相关度过低
-如果相关度 < 0.3：
+如果相关度 < 0.3多
 - 在 JSON 中设置 `recommendation: "skip"`
 - 在摘要中明确说明建议跳过该评审专家
 
@@ -300,22 +300,22 @@ workspace/{project}/phase4/domain-knowledge-{domain}.md
 
 ### 添加新领域
 
-按照以下步骤添加新的领域评审支持：
+按照以下步骤添加新的领域评审支持多
 
-**步骤 1**：创建新的领域评审 Skill
+**步骤 1**多创建新的领域评审 Skill
 
 ```
 .claude/skills/review-{new_domain}-domain/SKILL.md
 ```
 
-Skill 结构参考现有领域 Skill（如 review-kg-domain），包含：
+Skill 结构参考现有领域 Skill（如 review-kg-domain），包含多
 - 核心研究范式
 - 核心概念与评估维度
 - 领域评审维度
 - 常见评审陷阱
 - 经典文献对标
 
-**步骤 2**：在 `config.json` 中添加映射
+**步骤 2**多在 `config.json` 中添加映射
 
 ```json
 {
@@ -332,7 +332,7 @@ Skill 结构参考现有领域 Skill（如 review-kg-domain），包含：
 }
 ```
 
-**步骤 3**：更新本 Skill
+**步骤 3**多更新本 Skill
 
 在 `load_domain_framework` 函数中添加新领域的映射。
 
@@ -356,18 +356,18 @@ Skill 结构参考现有领域 Skill（如 review-kg-domain），包含：
 
 ## 架构说明
 
-**单一数据源架构**：
+**单一数据源架构**多
 - 领域认知框架统一由 `review-{domain}-domain` Skill 管理
 - `domain-knowledge-prep` 通过读取对应 Skill 文件获取框架
 - 知识源单一，易于维护和版本追踪
 
-**知识更新方式**：
-- **自动更新**：使用 `domain-knowledge-update` Skill 通过 Web Search 自动获取前沿论文并更新
-- **手动编辑**：直接手动编辑 `.claude/skills/review-{domain}-domain/SKILL.md` 文件
-- **Git 追踪**：所有更新通过 git commit 追踪历史
-- **审核机制**：自动更新后建议人工审核新增内容
+**知识更新方式**多
+- **自动更新**多使用 `domain-knowledge-update` Skill 通过 Web Search 自动获取前沿论文并更新
+- **手动编辑**多直接手动编辑 `.claude/skills/review-{domain}-domain/SKILL.md` 文件
+- **Git 追踪**多所有更新通过 git commit 追踪历史
+- **审核机制**多自动更新后建议人工审核新增内容
 
-**与 domain-knowledge-update 的协作**：
+**与 domain-knowledge-update 的协作**多
 | Skill | 职责 | 操作 |
 |-------|------|------|
 | **domain-knowledge-update** | 更新领域知识 | Web Search → **写入** `review-{domain}-domain/SKILL.md` |

@@ -30,10 +30,10 @@ Read `workspace/{project}/phase2/b3-paper-outline.json` and extract:
 
 ### Step 2: Load Target Venue Configuration
 
-**⚠️ 目标会议/期刊配置加载**：
+**⚠️ 目标会议/期刊配置加载**多
 
 1. 读取 `workspace/{project}/phase1/input-context.md` 中的 `target_venue` 值
-2. 读取 `config.json` 中的 `venues.{target_venue}` 配置：
+2. 读取 `config.json` 中的 `venues.{target_venue}` 配置多
    - `full_name` — 会议/期刊全称
    - `type` — "conference" 或 "journal"
    - `format` — "single-column" 或 "double-column"
@@ -43,7 +43,7 @@ Read `workspace/{project}/phase2/b3-paper-outline.json` and extract:
 
 3. 将 venue 配置传递给 C3 Academic Formatter Agent
 
-这些配置将影响：
+这些配置将影响多
 - C3 的格式化决策（单栏 vs 双栏）
 - 页数控制（如果会议有页数限制）
 - 参考文献格式（期刊通常更完整）

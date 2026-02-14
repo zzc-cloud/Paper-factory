@@ -7,20 +7,20 @@ description: "Phase 1 并行执行增强 — 使用 Task 工具实现真正的 A
 
 ## Overview
 
-你 **Phase 1 并行执行增强器** — 使用 `Task` 工具实现 A1、A2、A3 Agent 的真正并行执行，替代当前的串行 Skill 调用模式。
+你 **Phase 1 并行执行增强器** — 使用 `Task` 工具实现 A1、A3 Agent 的真正并行执行，替代当前的串行 Skill 调用模式。
 
 `★ Insight ─────────────────────────────────────`
-- **并行执行原理**：通过 `Task` 工具的 `run_in_background` 参数，多个 Agent 可以真正并发执行，而非顺序等待
-- **调度模式**：Fan-out（并行分发独立任务）→ 等待完成 → Fan-in（聚合结果）→ 串行依赖（A4）
-- **错误隔离**：每个 Agent 在独立进程中运行，单个失败不影响其他 Agent 的执行
-`���────────────────────────────────────────────────`
+- **并行执行原理**多通过 `Task` 工具的 `run_in_background` 参数，多个 Agent 可以真正并发执行，而非顺序等待
+- **调度模式**多Fan-out（并行分发独立任务）→ 等待完成 → Fan-in（聚合结果）→ 串行依赖（A4）
+- **错误隔离**多每个 Agent 在独立进程中运行，单个失败不影响其他 Agent 的执行
+`★ ────────────────────────────────────────────────`
 
-**调用方式：** `Skill(skill="paper-phase1-parallel", args="{project}")`
+**调用方式多** `Skill(skill="paper-phase1-parallel", args="{project}")`
 
-**核心改进：**
-- **真正的并行执行** — A1/A2/A3 Agent 同时运行，而非顺序等待
+**核心改进多**
+- **真正的并行执行** — A1/A3 Agent 同时运行，而非顺序等待
 - **状态监控** — 通过 `TaskOutput` 实时追踪每个 Agent 的进度
-- **智能恢复** — 单个 Agent 失败时可以选择性重试，不影响��完成的工作
+- **智能恢复** — 单个 Agent 失败时可以选择性重试，不影响已完成的工作
 - **性能提升** — Phase 1 执行时间预计减少 40-60%
 
 ---
@@ -40,7 +40,6 @@ description: "Phase 1 并行执行增强 — 使用 Task 工具实现真正的 A
 │           ┌─────────────────────────────────────┐              │
 │           │  使用 Task 工具并行启动 Agent     │              │
 │           │  - A1: 始终激活                          │              │
-│           │  - A2: 条件激活 (codebase_path)    │              │
 │           │  - A3: 条件激活 (MAS 领域)       │              │
 │           │  每个使用 run_in_background=true │              │
 │           └─────────────────────────────────────┘              │
@@ -70,7 +69,7 @@ description: "Phase 1 并行执行增强 — 使用 Task 工具实现真正的 A
 **Extract:**
 - `paper_title` — 用于确定研究领域
 - `target_system` — 目标系统描述
-- `codebase_path` — **A2 激活条件**
+- `codebase_path` — 代码库路径（仅供参考，不再用于 A2 激活）
 - `innovations` — 创新点列表
 - `system_architecture` — 系统架构描述
 - `key_terminology` — 关键术语
@@ -79,7 +78,6 @@ description: "Phase 1 并行执行增强 — 使用 Task 工具实现真正的 A
 
 ```
 A1 (Literature Surveyor): ALWAYS activate
-A2 (Engineering Analyst): Activate IF codebase_path exists AND is valid directory
 A3 (MAS Literature): Activate IF project involves multi-agent systems
   - Keywords: "multi-agent", "agent communication", "coordination", "negotiation"
   - OR system_architecture mentions agent-based design
@@ -120,38 +118,7 @@ Return: brief confirmation when complete."""
 
 **Expected Output:** `workspace/{project}/phase1/a1-literature-survey.json` + `.md`
 
-#### Agent 2: Engineering Analyst (Conditional)
-
-**Only dispatch if `codebase_path` condition is met.**
-
-```python
-Task(
-    subagent_type="general-purpose",
-    model="opus",
-    name="A2-EngineeringAnalyst",
-    run_in_background=true,
-    prompt="""You are the Engineering Analyst Agent for Phase 1 research.
-
-READ: agents/phase1/a2-engineering-analyst.md for your full system prompt.
-
-CODEBASE TO ANALYZE: {codebase_path}
-
-YOUR TASK:
-1. Analyze codebase architecture and design patterns
-2. Identify technical innovations and trade-offs
-3. Extract engineering contributions
-
-OUTPUT FILES:
-- workspace/{project}/phase1/a2-engineering-analysis.json
-- workspace/{project}/phase1/a2-engineering-analysis.md
-
-Return: brief confirmation when complete."""
-)
-```
-
-**Expected Output:** `workspace/{project}/phase1/a2-engineering-analysis.json` + `.md`
-
-#### Agent 3: MAS Literature Researcher (Conditional)
+#### Agent 2: MAS Literature Researcher (Conditional)
 
 **Only dispatch if MAS domain condition is met.**
 
@@ -192,7 +159,6 @@ Return: brief confirmation when complete."""
 # Store returned task_id for each agent
 task_ids = {
     "A1": a1_task_id,
-    "A2": a2_task_id,  # if dispatched
     "A3": a3_task_id   # if dispatched
 }
 
@@ -207,7 +173,7 @@ for agent_name, task_id in task_ids.items():
 
 **Failure Handling:**
 - If A1 fails → **Critical** (mandatory agent), retry once
-- If A2/A3 fail → **Non-critical** (conditional agents), log and continue
+- If A3 fails → **Non-critical** (conditional agent), log and continue
 - Verify partial outputs in workspace before retry
 
 ---
@@ -276,10 +242,9 @@ Return: confirmation when complete."""
   "status": "passed|failed",
   "timestamp": "ISO-8601",
   "parallel_mode": true,
-  "dispatched_agents": ["A1", "A2", "A3"],
+  "dispatched_agents": ["A1", "A3"],
   "activation_strategy": {
     "A1": "always",
-    "A2": "conditional: codebase_path_found",
     "A3": "conditional: mas_domain"
   },
   "execution_time_seconds": 123,
@@ -318,8 +283,7 @@ Return: confirmation when complete."""
 
 ### Individual Agent Failure
 - **A1 Failure:** Critical — retry once, then abort if fails
-- **A2/A3 Failure:** Non-critical — log and continue
-- Apply recovery strategy based on agent criticality
+- **A3 Failure:** Non-critical — log and continue
 
 ### A4 Failure (Critical)
 - **Critical error** — Phase 2 cannot proceed
