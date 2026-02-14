@@ -15,7 +15,7 @@ You are the **Phase 3 Writing Orchestrator** — responsible for section writing
 - Each component depends on previous component's output
 - C1 may be called multiple times (once per section)
 
-**DO NOT** write paper content directly — delegate to Section Writer, Visualization Designer, and Academic Formatter teammates.
+**DO NOT** write paper content directly — delegate to Section Writer, Visualization Designer, and Academic Formatter Agents.
 
 ---
 
@@ -28,7 +28,27 @@ Read `workspace/{project}/phase2/b3-paper-outline.json` and extract:
 - Section count and order
 - Figure and table requirements
 
-### Step 2: Initialize Phase 3 Directories
+### Step 2: Load Target Venue Configuration
+
+**⚠️ 目标会议/期刊配置加载**：
+
+1. 读取 `workspace/{project}/phase1/input-context.md` 中的 `target_venue` 值
+2. 读取 `config.json` 中的 `venues.{target_venue}` 配置：
+   - `full_name` — 会议/期刊全称
+   - `type` — "conference" 或 "journal"
+   - `format` — "single-column" 或 "double-column"
+   - `page_limit` — 页数限制（数字或 null）
+   - `template` — 模板标识符
+   - `deadline_note` — 截稿提示
+
+3. 将 venue 配置传递给 C3 Academic Formatter Agent
+
+这些配置将影响：
+- C3 的格式化决策（单栏 vs 双栏）
+- 页数控制（如果会议有页数限制）
+- 参考文献格式（期刊通常更完整）
+
+### Step 3: Initialize Phase 3 Directories
 
 Ensure directories exist:
 - `workspace/{project}/phase3/sections/` — for section drafts
@@ -45,8 +65,6 @@ Create with `Bash` tool if missing.
 **Agent File:** `agents/phase3/c1-section-writer.md`
 
 **Model:** `config.models.writing` (typically sonnet)
-
-**Budget:** `config.agents.c1.budget`
 
 **Execution Pattern:**
 For each section in paper outline:
@@ -71,8 +89,6 @@ For each section in paper outline:
 
 **Model:** `config.models.writing` (typically sonnet)
 
-**Budget:** `config.agents.c2.budget`
-
 **Invocation Condition:** All C1 section writing complete
 
 **Task:**
@@ -96,14 +112,18 @@ For each section in paper outline:
 
 **Model:** `config.models.writing` (typically sonnet)
 
-**Budget:** `config.agents.c3.budget`
-
 **Invocation Condition:** C1 (all sections) AND C2 (figures) complete
 
 **Task:**
 - Read all section files: `workspace/{project}/phase3/sections/*.md`
 - Read figure files: `workspace/{project}/phase3/figures/*.md`
 - Read literature data: `workspace/{project}/phase1/a1-literature-survey.json`
+- **⚠️ Read venue configuration from `config.json.venues.{target_venue}`**
+- **⚠️ Apply venue-specific formatting:**
+  - Single-column vs double-column format
+  - Page limit enforcement (if applicable)
+  - Reference format style (conference vs journal)
+  - Template-specific requirements
 - Assemble complete paper with academic formatting
 - Add references and citations
 - Output: `workspace/{project}/output/paper.md`

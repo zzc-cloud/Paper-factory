@@ -269,13 +269,13 @@
 
 **注意**：D1 已扩展为多视角评审机制，支持两种执行模式：
 
-**模式 A：5 个独立专家评审（推荐用于专家回复协调）**
-并行启动 5 个专门评审专家 Agent：
-- **D1-Technical-Expert**：技术评审专家 — `agents/phase4/reviewers/d1-reviewer-technical-expert.md`
-- **D1-Domain-Expert**：领域评审专家（动态选择） — `agents/phase4/reviewers/d1-reviewer-domain-expert.md`
-- **D1-Clarity-Expert**：清晰度评审专家 — `agents/phase4/reviewers/d1-reviewer-clarity-expert.md`
-- **D1-Significance-Expert**：重要性评审专家 — `agents/phase4/reviewers/d1-reviewer-significance-expert.md`
-- **D1-Writing-Quality-Expert**：写作质量评审专家 — `agents/phase4/reviewers/d1-reviewer-writing-quality-expert.md`
+**模式 A：多专家评审（推荐用于专家回复协调）**
+评审包含两类专家：
+- **通用评审专家**（内嵌于 `agents/phase4/d1-peer-reviewer.md`）：
+  - **R1-Technical-Expert**：技术评审专家 — 技术实现、算法设计、系统架构
+  - **R2-Novelty-Expert**：新颖性评审专家 — 学术价值、原创性、贡献影响力
+  - **R3-Clarity-Expert**：清晰度评审专家 — 表述清晰度、逻辑流畅性、组织结构
+- **D1-Domain-Expert**：领域评审专家（动态选择） — `agents/phase4/d1-reviewer-domain-expert.md`
 
 **新模式关键特性**：
 - **Domain-Expert**（动态选择）：根据论文内容，选择最相关的 1-2 个领域专家，确保评审有针对性

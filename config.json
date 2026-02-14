@@ -4,76 +4,336 @@
     "writing": "sonnet"
   },
   "agents": {
-    "a1": { "model": "writing",   "budget": 3, "tools": ["WebSearch", "WebFetch", "Read", "Write"] },
-    "a2": { "model": "reasoning", "budget": 5, "tools": ["Read", "Glob", "Grep", "Write", "Bash"], "conditional": true, "condition": "Project has a codebase_path to analyze" },
-    "a3": { "model": "reasoning", "budget": 4, "tools": ["WebSearch", "WebFetch", "Read", "Write"], "conditional": true, "condition": "Project involves multi-agent architecture and needs latest MAS literature" },
-    "a4": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write", "Glob"] },
-    "b1": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write", "WebSearch"] },
-    "b2": { "model": "reasoning", "budget": 3, "tools": ["Read", "Write", "Glob"] },
-    "b3": { "model": "reasoning", "budget": 4, "tools": ["Read", "Write", "Glob"] },
-    "c1": { "model": "writing",   "budget": 2, "tools": ["Read", "Write"] },
-    "c2": { "model": "writing",   "budget": 3, "tools": ["Read", "Write"] },
-    "c3": { "model": "writing",   "budget": 2, "tools": ["Read", "Write", "Glob"] },
-    "d1": { "model": "reasoning", "budget": 5, "tools": ["Read", "Write"] },
-    "d2": { "model": "reasoning", "budget": 4, "tools": ["Read", "Write"] }
+    "a1": {
+      "model": "reasoning",
+      "tools": [
+        "WebSearch",
+        "WebFetch",
+        "Read",
+        "Write"
+      ]
+    },
+    "a2": {
+      "model": "reasoning",
+      "tools": [
+        "Read",
+        "Glob",
+        "Grep",
+        "Write",
+        "Bash"
+      ],
+      "conditional": true,
+      "condition": "Project has a codebase_path to analyze"
+    },
+    "a3": {
+      "model": "reasoning",
+      "tools": [
+        "WebSearch",
+        "WebFetch",
+        "Read",
+        "Write"
+      ],
+      "conditional": true,
+      "condition": "Project involves multi-agent architecture and needs latest MAS literature"
+    },
+    "a4": {
+      "model": "reasoning",
+      "tools": [
+        "Read",
+        "Write",
+        "Glob"
+      ]
+    },
+    "b1": {
+      "model": "reasoning",
+      "tools": [
+        "Read",
+        "Write",
+        "WebSearch"
+      ]
+    },
+    "b2": {
+      "model": "reasoning",
+      "tools": [
+        "Read",
+        "Write",
+        "Glob"
+      ]
+    },
+    "b3": {
+      "model": "reasoning",
+      "tools": [
+        "Read",
+        "Write",
+        "Glob"
+      ]
+    },
+    "c1": {
+      "model": "writing",
+      "tools": [
+        "Read",
+        "Write"
+      ]
+    },
+    "c2": {
+      "model": "writing",
+      "tools": [
+        "Read",
+        "Write"
+      ]
+    },
+    "c3": {
+      "model": "writing",
+      "tools": [
+        "Read",
+        "Write"
+      ]
+    },
+    "d1": {
+      "model": "reasoning",
+      "tools": [
+        "Read",
+        "Write"
+      ]
+    },
+    "d2": {
+      "model": "reasoning",
+      "tools": [
+        "Read",
+        "Write"
+      ]
+    }
   },
   "quality": {
-    "min_papers": 30,
-    "min_review_score": 8,
-    "max_review_iterations": 10,
-    "max_response_rounds": 2,
-    "dynamic_scoring": true
+    "min_papers": 40,
+    "min_review_score": 9.0,
+    "max_review_iterations": 15,
+    "max_response_rounds": 3,
+    "dynamic_scoring": true,
+    "required_sections": [
+      "abstract",
+      "introduction",
+      "related_work",
+      "methodology",
+      "experiments",
+      "results",
+      "discussion",
+      "conclusion"
+    ],
+    "section_min_word_count": {
+      "introduction": 800,
+      "related_work": 1500,
+      "methodology": 1200,
+      "experiments": 1000,
+      "discussion": 800
+    }
   },
   "paper": {
-    "target_word_count": 10000
+    "target_word_count": 10000,
+    "default_venue": "AAAI"
+  },
+  "parallel": {
+    "phase1_enabled": true,
+    "use_task_tool": true,
+    "timeout_per_agent": 300,
+    "retry_on_failure": true,
+    "max_retries": 1
+  },
+  "cache": {
+    "enabled": true,
+    "max_papers_per_domain": 500,
+    "purge_after_days": 365,
+    "auto_generate_index": true,
+    "domains": {
+      "multi_agent_systems": "MAS",
+      "knowledge_graph": "KG",
+      "nlp_to_sql": "NL2SQL",
+      "bridge_engineering": "Bridge"
+    }
   },
   "skills": {
-    "paper-generation": { "description": "论文生成主编排器" },
-    "paper-phase1-research": { "description": "Phase 1 文献调研与工程分析" },
-    "paper-phase2-design": { "description": "Phase 2 论文设计阶段" },
-    "paper-phase3-writing": { "description": "Phase 3 论文撰写阶段" },
-    "paper-phase4-quality": { "description": "Phase 4 质量保障阶段" },
-    "research-mas-theory": { "domain": "multi_agent_systems", "output": "skill-mas-theory.json" },
-    "research-kg-theory": { "domain": "knowledge_graph", "output": "skill-kg-theory.json" },
-    "research-nlp-sql": { "domain": "nlp_to_sql", "output": "skill-nlp-sql.json" },
-    "research-bridge-eng": { "domain": "bridge_engineering", "output": "skill-bridge-eng.json" },
-    "domain-knowledge-prep": { "description": "领域知识准备 — 为评审专家生成特定领域的评审指南和知识点" }
+    "paper-generation": {
+      "description": "论文生成主编排器"
+    },
+    "paper-phase1-research": {
+      "description": "Phase 1 文献调研与工程分析"
+    },
+    "paper-phase2-design": {
+      "description": "Phase 2 论文设计阶段"
+    },
+    "paper-phase3-writing": {
+      "description": "Phase 3 论文撰写阶段"
+    },
+    "paper-phase4-quality": {
+      "description": "Phase 4 质量保障阶段"
+    },
+    "domain-knowledge-prep": {
+      "description": "领域知识准备 — 为评审专家生成特定领域的评审指南和知识点"
+    },
+    "review-kg-domain": {
+      "description": "Knowledge Graph 领域评审认知框架"
+    },
+    "review-mas-domain": {
+      "description": "Multi-Agent Systems 领域评审认知框架"
+    },
+    "review-nl2sql-domain": {
+      "description": "NL2SQL 领域评审认知框架"
+    },
+    "review-bridge-domain": {
+      "description": "Bridge Engineering 领域评审认知框架"
+    },
+    "review-data-domain": {
+      "description": "Data Analysis & ML 领域评审认知框架"
+    },
+    "review-se-domain": {
+      "description": "Software Engineering 领域评审认知框架"
+    },
+    "review-hci-domain": {
+      "description": "HCI 领域评审认知框架"
+    }
   },
-  "domains": {
+  "domain_skills": {
     "knowledge_graph": {
+      "skill": "review-kg-domain",
       "full_name": "Knowledge Graphs and Ontology Engineering",
-      "keywords": ["KG", "ontology", "RDF", "OWL", "SPARQL", "knowledge graph", "RDFS"],
-      "core_concepts": ["RDF", "OWL", "SPARQL", "DL"],
-      "review_criteria": ["theory_accuracy", "ontology_design", "reasoning_evaluation"],
-      "classic_papers": ["RDF2004", "OWL2008", "Horrocks2008"]
+      "keywords": [
+        "KG",
+        "ontology",
+        "RDF",
+        "OWL",
+        "SPARQL",
+        "knowledge graph",
+        "RDFS"
+      ]
     },
     "multi_agent_systems": {
+      "skill": "review-mas-domain",
       "full_name": "Multi-Agent Systems (MAS)",
-      "keywords": ["multi-agent", "MAS", "BDI", "Contract Net", "Blackboard"],
-      "core_concepts": ["BDI", "coordination", "negotiation"],
-      "review_criteria": ["architecture_correctness", "protocol_design"],
-      "classic_papers": ["Wooldridge2000", "Smith1990"]
+      "keywords": [
+        "multi-agent",
+        "MAS",
+        "BDI",
+        "Contract Net",
+        "Blackboard",
+        "agent communication",
+        "coordination",
+        "negotiation"
+      ]
     },
     "nl2sql": {
+      "skill": "review-nl2sql-domain",
       "full_name": "Natural Language to SQL (NL2SQL / Text2SQL)",
-      "keywords": ["NL2SQL", "Text2SQL", "schema linking", "SQL generation"],
-      "core_concepts": ["schema linking", "SQL synthesis", "execution feedback"],
-      "review_criteria": ["coverage", "accuracy", "generalization"],
-      "classic_papers": ["Androud1990s", "Popescu1990s", "Yu2017"]
+      "keywords": [
+        "NL2SQL",
+        "Text2SQL",
+        "schema linking",
+        "SQL generation",
+        "text-to-SQL",
+        "natural language interface"
+      ]
     },
     "bridge_engineering": {
+      "skill": "review-bridge-domain",
       "full_name": "Bridge Engineering",
-      "keywords": ["bridge", "structural health", "inspection", "BIM", "SHM"],
-      "core_concepts": ["NDE", "sensors", "damage detection"],
-      "review_criteria": ["methodology", "sensor_fusion", "standard_compliance"],
-      "classic_papers": ["Sohn1990s", "Brown1990s", "GL ISO16739"]
+      "keywords": [
+        "bridge",
+        "structural health",
+        "inspection",
+        "BIM",
+        "SHM",
+        "non-destructive testing",
+        "load rating",
+        "damage detection"
+      ]
     },
     "data_analysis": {
+      "skill": "review-data-domain",
       "full_name": "Data Analysis and Machine Learning",
-      "keywords": ["data mining", "machine learning", "classification", "regression"],
-      "core_concepts": ["feature engineering", "model evaluation", "cross-validation"],
-      "review_criteria": ["novelty", "experiment_design", "reproducibility"],
-      "classic_papers": ["Breiman2001", "Hastie2009", "Kohavi1995"]
+      "keywords": [
+        "data mining",
+        "machine learning",
+        "classification",
+        "regression",
+        "clustering",
+        "feature engineering",
+        "cross-validation"
+      ]
+    },
+    "software_engineering": {
+      "skill": "review-se-domain",
+      "full_name": "Software Engineering",
+      "keywords": [
+        "software engineering",
+        "software development",
+        "DevOps",
+        "MLOps",
+        "agile",
+        "CI/CD",
+        "testing",
+        "code quality"
+      ]
+    },
+    "human_computer_interaction": {
+      "skill": "review-hci-domain",
+      "full_name": "Human-Computer Interaction",
+      "keywords": [
+        "HCI",
+        "user experience",
+        "UX",
+        "interface design",
+        "usability",
+        "user studies",
+        "interaction design"
+      ]
     }
+  },
+  "versioning": {
+    "enabled": true,
+    "mode": "milestones",
+    "max_versions_to_keep": 10,
+    "compress_old_versions": false
+  },
+  "confirmation": {
+    "mode": "threshold",
+    "threshold_score": 9.0,
+    "confirm_at_milestones": true,
+    "confirm_every_n_iterations": null,
+    "require_approval_for_final": true
+  },
+  "interaction": {
+    "mode": "interactive",
+    "required_checkpoints": [
+      "phase0_venue_selection",
+      "phase0_title_confirmation",
+      "phase0_abstract_framework",
+      "phase2_b3_outline_confirmation"
+    ],
+    "optional_checkpoints": [],
+    "allow_skip_optional": true,
+    "feedback_persistence": true,
+    "auto_apply_feedback": true
+  },
+  "venue_analysis": {
+    "enabled": true,
+    "auto_fetch_latest": false,
+    "cache_duration_days": 30,
+    "fallback_to_default": true,
+    "predefined_venues": [
+      "AAAI",
+      "IJCAI",
+      "ISWC",
+      "WWW",
+      "ACL",
+      "EMNLP",
+      "KR",
+      "AAMAS",
+      "TOIS",
+      "TKDE"
+    ]
+  },
+  "feedback": {
+    "enabled": true,
+    "priority_over_reviewer": true,
+    "track_status": true
   }
 }

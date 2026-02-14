@@ -13,7 +13,8 @@ You are the **Domain Knowledge Preparation Skill** — responsible for preparing
 
 **核心职责**：
 - 读取论文内容，分析目标领域与论文的相关度
-- 生成该领域的评审指南（core concepts、evaluation criteria、common pitfalls）
+- 从对应的 `review-{domain}-domain` Skill 获取领域认知框架
+- 根据相关度生成适配的评审指南
 - 输出结构化的领域知识供评审专家 Agent 使用
 
 **DO NOT** execute peer review — prepare knowledge for reviewers.
@@ -44,6 +45,30 @@ Skill(skill="domain-knowledge-prep", args="my-project:multi_agent_systems")
 - 全文内容用于关键词匹配
 - 各章节的主题分布
 
+```python
+def read_paper_content(project):
+    """
+    读取论文内容
+    """
+    paper_path = f"workspace/{project}/output/paper.md"
+
+    with open(paper_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    # 提取关键信息
+    title = extract_title(content)
+    abstract = extract_abstract(content)
+    keywords = extract_keywords(content)
+    full_text = content
+
+    return {
+        "title": title,
+        "abstract": abstract,
+        "keywords": keywords,
+        "full_text": full_text
+    }
+```
+
 ### Step 2: 读取项目上下文
 
 读取 `workspace/{project}/phase1/input-context.md`，提取：
@@ -51,229 +76,96 @@ Skill(skill="domain-knowledge-prep", args="my-project:multi_agent_systems")
 - 目标系统名称
 - 声明的创新点
 
-### Step 3: 加载领域定义
+```python
+def read_project_context(project):
+    """
+    读取项目上下文
+    """
+    context_path = f"workspace/{project}/phase1/input-context.md"
 
-从内置的领域注册表中加载目标领域的定义：
+    with open(context_path, 'r', encoding='utf-8') as f:
+        content = f.read()
 
-```json
-{
-  "knowledge_graph": {
-    "full_name": "Knowledge Graphs and Ontology Engineering",
-    "keywords": ["KG", "ontology", "RDF", "OWL", "SPARQL", "knowledge graph", "RDFS", "triple", "description logic"],
-    "core_concepts": [
-      {"name": "RDF", "expect": "论文应正确定义 RDF 三元组模型（subject, predicate, object）", "common_issues": ["与 XML 混淆", "忽略 blank node 处理"]},
-      {"name": "OWL", "expect": "应说明使用的 OWL 2 子语言（DL、QL、Full）", "common_issues": ["声称 OWL 支持但未指明子语言", "混淆 OWL 与 RDF Schema"]},
-      {"name": "SPARQL", "expect": "应使用 SPARQL 标准语法", "common_issues": ["与 SQL 混淆", "忽略查询优化"]},
-      {"name": "Description Logic", "expect": "应正确使用 DL 构子（如 ALC、SHIQ）", "common_issues": ["声称表达能力但未验证", "忽略推理复杂度"]},
-      {"name": "Ontology Alignment", "expect": "应讨论本体对齐方法（如匹配、映射）", "common_issues": ["忽视本体异构性", "缺乏对齐评估"]},
-      {"name": "Knowledge Graph Embedding", "expect": "应与经典 KGE 方法对比", "common_issues": ["缺乏 SOTA 比较", "评估指标不全面"]}
-    ],
-    "evaluation_criteria": [
-      "领域理论引用的准确性（是否引用经典的 KG 论文如 RDF2004、OWL2008、Horrocks2008）",
-      "本体设计方法的合理性（是否采用标准的本体设计模式如 Single Inheritance、Multilingual、 Modular）",
-      "推理方法的评估（是否对推理能力有量化评估，如查询响应时间、推理复杂度）",
-      "与 SOTA 的比较（是否与最新的 GNN、KGE 方法如 TransE、RotatE 对比）",
-      "应用场景的多样性（是否在多个领域/数据集上验证）"
-    ],
-    "key_questions": [
-      "论文声称的本体表达能力是否与使用的 OWL 子语言匹配？",
-      "图数据规模是否充分支撑实验结论（节点数、边数）？",
-      "是否讨论了本体对齐/融合的挑战？",
-      "推理方法是否与传统推理机（如 Pellet、HermiT）对比？",
-      "KG 嵌入方法是否与最新的图神经网络方法对比？"
-    ],
-    "common_pitfalls": [
-      "将知识图谱等同于关系数据库（忽视推理能力）",
-      "忽视本体演化与版本管理",
-      "缺少对推理复杂度的分析",
-      "声称支持 OWL DL 但未实际验证",
-      "与 KG 相关工作对比不充分（仅对比传统数据库）"
-    ],
-    "classic_papers": [
-      "RDF Primer (2004)",
-      "OWL Web Ontology Language (2004, 2008)",
-      "Resource Description Framework (RDF) (2004)",
-      "Horrocks et al.: Requirements for Ontology Languages (2008)",
-      "Bordes et al.: Translating Embeddings for Knowledge Graph Completion (2013)"
-    ]
-  },
-  "multi_agent_systems": {
-    "full_name": "Multi-Agent Systems (MAS)",
-    "keywords": ["multi-agent", "MAS", "BDI", "Contract Net", "Blackboard", "agent communication", "coordination", "negotiation", "emergent behavior"],
-    "core_concepts": [
-      {"name": "BDI Architecture", "expect": "应正确定义 Belief-Desire-Intention 模型", "common_issues": ["与规划系统混淆", "忽略信念更新机制"]},
-      {"name": "Agent Communication", "expect": "应说明通信协议（如 FIPA ACL、KQML）", "common_issues": ["忽视通信开销", "未讨论消息可靠性"]},
-      {"name": "Coordination Protocols", "expect": "应描述协调机制（如 Contract Net、Blackboard、Voting）", "common_issues": ["协调策略与任务特性不匹配", "缺乏死锁分析"]},
-      {"name": "Emergent Behavior", "expect": "应分析个体行为如何涌现为集体行为", "common_issues": ["缺乏涌现性验证", "个体最优不等于集体最优"]},
-      {"name": "Agent Organization", "expect": "应说明组织结构（如层次、扁平、混合）", "common_issues": ["忽视可扩展性", "缺乏中心化/去中心化分析"]}
-    ],
-    "evaluation_criteria": [
-      "MAS 架构是否与经典范式（BDI、Blackboard、Contract Net）对应",
-      "通信协议的设计是否考虑了可扩展性和可靠性",
-      "协调机制是否与问题特性匹配（如任务依赖、资源冲突）",
-      "是否提供了理论证明或形式化验证",
-      "实验是否在标准 MAS 平台（如 JADE、Jason）上验证",
-      "是否与最新的 LLM-based MAS 方法对比"
-    ],
-    "key_questions": [
-      "Agent 的 BDI 模型是否完整定义？信念如何更新？",
-      "通信协议如何处理消息丢失和顺序错乱？",
-      "协调机制是否能证明无死锁？",
-      "系统的可扩展性如何评估（节点数增加时的性能）？",
-      "是否与最新的 AutoGen、CrewAI、MetaGPT 系统对比？"
-    ],
-    "common_pitfalls": [
-      "声称多智能体但实际只是集中式系统",
-      "忽视通信开销和延迟",
-      "协调协议与任务特性不匹配",
-      "缺乏对系统收敛性的证明",
-      "未讨论安全性和恶意 Agent"
-    ],
-    "classic_papers": [
-      "Wooldridge et al.: Agent theories (2000)",
-      "Smith et al.: Contract Net protocols (1990)",
-      "Jennings et al.: Commitment protocols (2000)",
-      "Shoham & Leyton-Brown: BDI architecture (1990)",
-      "Lesser et al.: BRIDGE multi-agent system (1999)"
-    ]
-  },
-  "nl2sql": {
-    "full_name": "Natural Language to SQL (NL2SQL / Text2SQL)",
-    "keywords": ["NL2SQL", "Text2SQL", "schema linking", "SQL generation", "text-to-SQL", "natural language interface", "query interface"],
-    "core_concepts": [
-      {"name": "Schema Linking", "expect": "应正确定义如何将自然语言短语映射到数据库 schema", "common_issues": ["忽视值域模糊性", "缺少歧义处理"]},
-      {"name": "SQL Synthesis", "expect": "应生成符合语法的 SQL 查询", "common_issues": ["SQL 注入风险", "不支持嵌套查询"]},
-      {"name": "Execution Feedback", "expect": "应利用查询执行结果改进后续查询", "common_issues": ["忽视错误反馈", "缺少学习机制"]},
-      {"name": "Generalization", "expect": "应讨论跨数据库/跨领域的泛化能力", "common_issues": ["仅在单一数据集评估", "忽视 schema 差异"]}
-    ],
-    "evaluation_criteria": [
-      "Schema Linking 的准确性（是否正确识别表、列、关系）",
-      "SQL 查询的正确性和执行效率",
-      "对模糊和复杂查询的处理能力",
-      "跨数据库泛化能力（能否适应未见过的 schema）",
-      "与最新方法的比较（如基于 LLM 的方法、Spider、Crawler 基准）",
-      "用户研究或真实场景的评估"
-    ],
-    "key_questions": [
-      "Schema Linking 模块如何处理歧义（如同名列）？",
-      "是否支持多跳查询和复杂嵌套？",
-      "如何处理超出训练 schema 的查询？",
-      "是否与 Spider、WikiSQL 等基准对比？",
-      "是否评估了跨数据库泛化能力？",
-      "用户研究中的错误如何分析并改进系统？"
-    ],
-    "common_pitfalls": [
-      "仅在单一、干净的 schema 上评估",
-      "忽视 SQL 注入等安全问题",
-      "对复杂查询（多跳、嵌套）支持不足",
-      "缺少与最新 LLM-based 方法对比",
-      "忽视跨数据库泛化挑战"
-    ],
-    "classic_papers": [
-      "Androudakis et al.: Natural Language Interfaces for Databases (1990s)",
-      "Popescu et al.: Template-based NL2SQL (1990s)",
-      "Zhong et al.: NL2SQL with deep learning (2017)",
-      "Yu et al.: Seq2SQL (2018)",
-      "Scholak et al.: Spider benchmark (2019)"
-    ]
-  },
-  "bridge_engineering": {
-    "full_name": "Bridge Engineering",
-    "keywords": ["bridge", "structural health", "inspection", "BIM", "SHM", "non-destructive testing", "load rating", "damage detection"],
-    "core_concepts": [
-      {"name": "NDE (Non-Destructive Evaluation)", "expect": "应说明 NDE 方法类型（如超声波、雷达、冲击回弹）", "common_issues": ["忽视环境影响", "各方法互补性分析不足"]},
-      {"name": "Structural Health Monitoring (SHM)", "expect": "应描述传感器网络、数据采集、异常检测", "common_issues": ["传感器布设不足", "数据融合策略缺失"]},
-      {"name": "BIM Integration", "expect": "应讨论 BIM 与 SHM 的数据融合", "common_issues": ["数据格式不统一", "缺乏实时更新机制"]},
-      {"name": "Damage Assessment", "expect": "应定义损伤指标和评级标准", "common_issues": ["缺乏量化标准", "主观性过强"]},
-      {"name": "Load Testing", "expect": "应描述加载测试方法和评估", "common_issues": ["忽视实际交通荷载", "缺乏安全系数"]}
-    ],
-    "evaluation_criteria": [
-      "检测方法的准确性（灵敏度、特异度）",
-      "传感器网络的覆盖率和数据质量",
-      "BIM/KG 集成的有效性",
-      "与标准方法（如传统检测、商业 SHM 系统）的对比",
-      "实际桥梁应用或案例研究",
-      "成本效益分析"
-    ],
-    "key_questions": [
-      "NDE 方法的选择是否基于桥梁材料类型和结构特点？",
-      "传感器网络如何处理数据缺失和噪声？",
-      "BIM 模型如何与实际结构对应？",
-      "损伤检测算法的误报率和漏报率如何评估？",
-      "是否在真实桥梁上验证或在标准数据集上测试？",
-      "系统部署的成本和可行性如何？"
-    ],
-    "common_pitfalls": [
-      "仅在模拟数据上验证，缺乏实际应用",
-      "传感器类型和位置选择缺乏理论依据",
-      "忽视环境因素（温度、湿度、交通）的影响",
-      "BIM 与物理模型对齐不充分",
-      "缺乏长期可靠性和维护性分析"
-    ],
-    "classic_papers": [
-      "Sohn & Law: Bridge condition assessment (1990s)",
-      "Brown et al.: NDE methods for bridges (1990s-2000s)",
-      "GL: BIM standard (ISO 16739)",
-      "Strauss et al.: Structural health monitoring (2010s)",
-      "Farrar & Torrenti: Bridge monitoring review (2016)"
-    ]
-  },
-  "data_analysis": {
-    "full_name": "Data Analysis and Machine Learning",
-    "keywords": ["data mining", "machine learning", "classification", "regression", "clustering", "feature engineering", "cross-validation"],
-    "core_concepts": [
-      {"name": "Feature Engineering", "expect": "应说明特征选择和构造方法", "common_issues": ["忽视特征重要性", "数据泄露"]},
-      {"name": "Model Evaluation", "expect": "应使用适当的评估指标（准确率、F1、AUC）", "common_issues": ["仅用准确率", "忽视类别不平衡"]},
-      {"name": "Cross-Validation", "expect": "应说明验证策略（k-fold、分层、时间序列）", "common_issues": ["数据泄露", "忽视分布偏移"]},
-      {"name": "Statistical Significance", "expect": "应提供统计显著性检验", "common_issues": ["缺乏置信区间", "p-hacking"]}
-    ],
-    "evaluation_criteria": [
-      "方法的创新性（是否提出新算法或改进）",
-      "实验设计的严谨性（对比基线、消融实验）",
-      "评估指标的全面性（不能仅用准确率）",
-      "数据集的选择和代表性",
-      "可重复性（代码、数据公开）",
-      "与 SOTA 的公平比较"
-    ],
-    "key_questions": [
-      "特征选择是否有理论或实证支持？",
-      "是否进行了充分的消融实验验证各组件贡献？",
-      "如何处理类别不平衡问题？",
-      "是否提供了统计显著性检验和置信区间？",
-      "实验是否可重复（代码、数据公开）？",
-      "与基线方法的比较是否公平（相同设置、数据）？"
-    ],
-    "common_pitfalls": [
-      "数据泄露（特征或预处理中使用目标信息）",
-      "忽视类别不平衡问题",
-      "过度拟合（训练集表现好，测试集差）",
-      "cherry-picking 基线或超参数",
-      "缺乏统计显著性检验",
-      "不可复现（代码或数据不公开）"
-    ],
-    "classic_papers": [
-      "Breiman: Random Forests (2001)",
-      "Hastie et al.: The Elements of Statistical Learning (2009)",
-      "Kohavi: A Study of Cross-Validation (1995)",
-      "He & Garcia: Learning from Imbalanced Data (2009)"
-    ]
-  }
-}
+    # 提取关键信息
+    research_area = extract_research_area(content)
+    system_name = extract_system_name(content)
+    innovations = extract_innovations(content)
+
+    return {
+        "research_area": research_area,
+        "system_name": system_name,
+        "innovations": innovations
+    }
 ```
+
+### Step 3: 加载领域认知框架
+
+**重要**：领域认知框架由对应的 `review-{domain}-domain` Skill 提供。
+
+```python
+def load_domain_framework(domain):
+    """
+    从对应的 review-domain Skill 加载领域认知框架
+
+    domain_skills 映射：
+    - knowledge_graph → review-kg-domain
+    - multi_agent_systems → review-mas-domain
+    - nl2sql → review-nl2sql-domain
+    - bridge_engineering → review-bridge-domain
+    - data_analysis → review-data-domain
+    - software_engineering → review-se-domain
+    - human_computer_interaction → review-hci-domain
+    """
+    skill_mapping = {
+        "knowledge_graph": "review-kg-domain",
+        "multi_agent_systems": "review-mas-domain",
+        "nl2sql": "review-nl2sql-domain",
+        "bridge_engineering": "review-bridge-domain",
+        "data_analysis": "review-data-domain",
+        "software_engineering": "review-se-domain",
+        "human_computer_interaction": "review-hci-domain"
+    }
+
+    if domain not in skill_mapping:
+        raise ValueError(f"Unsupported domain: {domain}")
+
+    skill_name = skill_mapping[domain]
+
+    # 读取对应的 Skill 文件
+    skill_path = f".claude/skills/{skill_name}/SKILL.md"
+    with open(skill_path, 'r', encoding='utf-8') as f:
+        skill_content = f.read()
+
+    # 解析 Skill 内容，提取领域认知框架
+    framework = parse_domain_framework(skill_content)
+
+    return framework
+```
+
+**领域认知框架包含**（由各 review-domain Skill 提供）：
+- 核心研究范式
+- 核心概念与评估维度
+- 领域评审维度
+- 常见评审陷阱及识别方法
+- 经典文献对标清单
 
 ### Step 4: 计算领域相关度
 
 统计论文中该领域关键词出现的频率：
 
 ```python
-def calculate_relevance(paper_content, domain_keywords):
+def calculate_relevance(paper_content, domain_framework):
     """
     计算论文与目标领域的相关度 [0, 1]
     """
     paper_lower = paper_content.lower()
-    keyword_count = sum(1 for kw in domain_keywords if kw.lower() in paper_lower)
+    keywords = domain_framework.get("keywords", [])
+
+    keyword_count = sum(1 for kw in keywords if kw.lower() in paper_lower)
+
     # 归一化：至少出现 3 个关键词认为完全相关
     relevance = min(keyword_count / 3, 1.0)
+
     return relevance
 ```
 
@@ -285,6 +177,19 @@ def calculate_relevance(paper_content, domain_keywords):
 ### Step 5: 生成领域评审指南
 
 根据相关度和领域定义，生成评审指南：
+
+```python
+def generate_review_guidance(paper_content, domain_framework, relevance):
+    """
+    根据相关度生成评审指南
+    """
+    if relevance >= 0.7:
+        return generate_full_guidance(domain_framework)
+    elif relevance >= 0.3:
+        return generate_simplified_guidance(domain_framework)
+    else:
+        return generate_skip_guidance()
+```
 
 **高度相关 (relevance >= 0.7)**：
 - 包含所有 `core_concepts`
@@ -395,38 +300,77 @@ workspace/{project}/phase4/domain-knowledge-{domain}.md
 
 ### 添加新领域
 
-在 `config.json` 的 `domains` 注册表中添加新条目：
+按照以下步骤添加新的领域评审支持：
+
+**步骤 1**：创建新的领域评审 Skill
+
+```
+.claude/skills/review-{new_domain}-domain/SKILL.md
+```
+
+Skill 结构参考现有领域 Skill（如 review-kg-domain），包含：
+- 核心研究范式
+- 核心概念与评估维度
+- 领域评审维度
+- 常见评审陷阱
+- 经典文献对标
+
+**步骤 2**：在 `config.json` 中添加映射
 
 ```json
 {
-  "domains": {
+  "skills": {
+    "review-{new_domain}-domain": { "description": "{New Domain} 领域评审认知框架" }
+  },
+  "domain_skills": {
     "new_domain": {
+      "skill": "review-{new_domain}-domain",
       "full_name": "New Domain Full Name",
-      "keywords": ["keyword1", "keyword2", ...],
-      "core_concepts": [
-        {"name": "Concept 1", "expect": "期望用法", "common_issues": ["常见问题"]}
-      ],
-      "evaluation_criteria": ["评审标准 1", "评审标准 2"],
-      "key_questions": ["问题 1", "问题 2"],
-      "common_pitfalls": ["常见问题 1", "常见问题 2"],
-      "classic_papers": ["经典论文 1", "经典论文 2"]
+      "keywords": ["keyword1", "keyword2", ...]
     }
   }
 }
 ```
 
-然后在 `SKILL.md` 的 `load_domain_definitions` 步骤中添加对应字段。
+**步骤 3**：更新本 Skill
+
+在 `load_domain_framework` 函数中添加新领域的映射。
 
 ---
 
 ## 支持的领域
 
-| 标识符 | 全称 | 关键词数 |
-|--------|------|----------|
-| knowledge_graph | Knowledge Graphs and Ontology Engineering | 8 |
-| multi_agent_systems | Multi-Agent Systems (MAS) | 9 |
-| nl2sql | Natural Language to SQL | 7 |
-| bridge_engineering | Bridge Engineering | 7 |
-| data_analysis | Data Analysis and Machine Learning | 8 |
+| 标识符 | 全称 | Skill 文件 |
+|--------|------|-----------|
+| knowledge_graph | Knowledge Graphs and Ontology Engineering | review-kg-domain |
+| multi_agent_systems | Multi-Agent Systems (MAS) | review-mas-domain |
+| nl2sql | Natural Language to SQL | review-nl2sql-domain |
+| bridge_engineering | Bridge Engineering | review-bridge-domain |
+| data_analysis | Data Analysis and Machine Learning | review-data-domain |
+| software_engineering | Software Engineering | review-se-domain |
+| human_computer_interaction | Human-Computer Interaction | review-hci-domain |
 
 **可扩展**: 如需添加新领域，按照扩展指南操作。
+
+---
+
+## 架构说明
+
+**单一数据源架构**：
+- 领域认知框架统一由 `review-{domain}-domain` Skill 管理
+- `domain-knowledge-prep` 通过读取对应 Skill 文件获取框架
+- 知识源单一，易于维护和版本追踪
+
+**知识更新方式**：
+- **自动更新**：使用 `domain-knowledge-update` Skill 通过 Web Search 自动获取前沿论文并更新
+- **手动编辑**：直接手动编辑 `.claude/skills/review-{domain}-domain/SKILL.md` 文件
+- **Git 追踪**：所有更新通过 git commit 追踪历史
+- **审核机制**：自动更新后建议人工审核新增内容
+
+**与 domain-knowledge-update 的协作**：
+| Skill | 职责 | 操作 |
+|-------|------|------|
+| **domain-knowledge-update** | 更新领域知识 | Web Search → **写入** `review-{domain}-domain/SKILL.md` |
+| **domain-knowledge-prep** | 准备评审指南 | **读取** `review-{domain}-domain/SKILL.md` → 生成评审指南 |
+
+两者操作同一个 Skill 文件，实现单一数据源的读写分离。

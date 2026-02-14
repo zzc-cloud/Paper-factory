@@ -1,6 +1,6 @@
 ---
 name: paper-phase1-research
-description: "Phase 1 文献调研与工程分析 — 素材收集阶段。"
+description: "Phase 1 文献调研与工程分析 — 素材收集阶段，支持缓存优化和并行执行。"
 ---
 
 # Phase 1: Research Orchestrator
@@ -11,13 +11,75 @@ You are the **Phase 1 Research Orchestrator** — responsible for literature sur
 
 **调用方式：** `Skill(skill="paper-phase1-research", args="{project}")`
 
-**执行模式：** LLM 自主决策 + 并行 Agent + 串行 Skill
+**执行模式：** 根据配置选择串行或并行模式
+- **串行模式** (默认)：顺序启动 Agent，简单可靠
+- **并行模式** (config.parallel.phase1_enabled=true)：使用 `paper-phase1-parallel` Skill 实现真正的并发执行
 
 - **Fan-out：** Spawn multiple agents in parallel for independent analysis
 - **Fan-in：** Aggregate all outputs via A4 (Innovation Formalizer)
-- **Domain Skills：** Call domain analysis Skills serially in Team Lead's session
+- **Domain Skills：** Call domain analysis Skills serially in 系统's session
+
+**缓存支持** (config.cache.enabled=true)：
+- **首次执行**：建立缓存基础，检索并存储论文
+- **后续执行**：从缓存读取已处理论文，只检索新增内容
+- **手动添加**：支持用户直接在缓存目录添加论文
 
 **DO NOT** write paper content — your role is coordination and aggregation.
+
+---
+
+## 缓存集成 (Cache Integration)
+
+### Step 0: 确定项目领域
+
+从 `input-context.md` 分析项目涉及的研究领域：
+
+| 领域标识 | 判断条件 |
+|----------|----------|
+| `multi_agent_systems` | 关键词：multi-agent, MAS, BDI, agent coordination |
+| `knowledge_graph` | 关键词：knowledge graph, ontology, RDF, OWL, SPARQL |
+| `nlp_to_sql` | 关键词：NL2SQL, Text2SQL, schema linking, SQL generation |
+| `bridge_engineering` | 关键词：bridge, SHM, BIM, structural health |
+
+记录主要领域到 `primary_domain` 变量，用于后续缓存路径解析。
+
+### Step 0.5: 初始化或加载缓存
+
+**调用：** `Skill(skill="cache-utils", action="init", args="{project}", domain="{primary_domain}")`
+
+**逻辑：**
+1. 检查 `workspace/{project}/.cache/` 目录结构
+2. 如不存在则创建：`papers/{domain}/`, `search-history/{domain}/`
+3. 初始化 `search-history/{domain}/processed-ids.txt`
+4. 创建或更新 `papers/{domain}/.last-update.json`
+
+**输出：** 无返回值，确保目录结构完整
+
+### Step 0.6: 读取已缓存论文
+
+**调用：** `Skill(skill="cache-utils", action="read", args="{project}", domain="{primary_domain}")`
+
+**返回格式：**
+```json
+[
+  {
+    "id": "arxiv-2402-xxxxx",
+    "title": "Paper Title",
+    "authors": ["Author A", "Author B"],
+    "year": 2024,
+    "venue": "arXiv preprint arXiv:2402.xxxxx",
+    "source": "websearch",
+    "tags": ["multi-agent", "cognitive architecture"],
+    "status": "read",
+    "file": "workspace/{project}/.cache/papers/{domain}/arxiv-2402-xxxxx.md"
+  },
+  ...
+]
+```
+
+**使用：**
+- 将缓存的论文传递给 A1 Agent 作为"已有论文"参考
+- 在 WebSearch 前告知 Agent 哪些论文已处理过
 
 ---
 
@@ -55,8 +117,6 @@ Record activation decisions in memory for Quality Gate 1.
 
 **Model:** `config.models.writing` (typically sonnet)
 
-**Budget:** `config.agents.a1.budget`
-
 **Task:**
 - Search and categorize 30+ academic papers relevant to research topic
 - Extract metadata: titles, authors, venues, years, citations
@@ -69,8 +129,6 @@ Record activation decisions in memory for Quality Gate 1.
 **Agent File:** `agents/phase1/a2-engineering-analyst.md`
 
 **Model:** `config.models.reasoning` (typically opus)
-
-**Budget:** `config.agents.a2.budget`
 
 **Condition:** Activate only if `codebase_path` exists in input-context.md and points to valid directory
 
@@ -86,8 +144,6 @@ Record activation decisions in memory for Quality Gate 1.
 **Agent File:** `agents/phase1/a3-mas-theorist.md`
 
 **Model:** `config.models.reasoning` (typically opus)
-
-**Budget:** `config.agents.a3.budget`
 
 **Condition:** Activate only if project deeply involves multi-agent systems AND requires latest MAS literature support
 
@@ -110,7 +166,7 @@ If any agent fails → Log error, apply recovery strategy (retry/skip/manual).
 
 ## Domain Skill Invocation (Serial)
 
-Execute activated domain Skills one by one in Team Lead's session. Each Skill returns JSON to `workspace/{project}/phase1/skill-*.json`.
+Execute activated domain Skills one by one in 系统's session. Each Skill returns JSON to `workspace/{project}/phase1/skill-*.json`.
 
 ### research-mas-theory
 
@@ -155,8 +211,6 @@ Execute activated domain Skills one by one in Team Lead's session. Each Skill re
 **Agent File:** `agents/phase1/a4-innovation-formalizer.md`
 
 **Model:** `config.models.reasoning`
-
-**Budget:** `config.agents.a4.budget`
 
 **Task:**
 - Use `Glob` to discover all available analysis files in `workspace/{project}/phase1/`
@@ -261,7 +315,7 @@ You are the **Phase 1 Research Orchestrator** — responsible for literature sur
 
 - **Fan-out:** Spawn multiple agents in parallel for independent analysis
 - **Fan-in:** Aggregate all outputs via A4 (Innovation Formalizer)
-- **Domain Skills:** Call domain analysis Skills serially in Team Lead's session
+- **Domain Skills:** Call domain analysis Skills serially in 系统's session
 
 **DO NOT** write paper content — your role is coordination and aggregation.
 
@@ -301,8 +355,6 @@ Record activation decisions in memory for Quality Gate 1.
 
 **Model:** `config.models.writing` (typically sonnet)
 
-**Budget:** `config.agents.a1.budget`
-
 **Task:**
 - Search and analyze 30+ academic papers relevant to the research topic
 - Categorize papers by research theme (methodology, technique, application, etc.)
@@ -316,8 +368,6 @@ Record activation decisions in memory for Quality Gate 1.
 **Agent File:** `agents/phase1/a2-engineering-analyst.md`
 
 **Model:** `config.models.reasoning` (typically opus)
-
-**Budget:** `config.agents.a2.budget`
 
 **Condition:** Activate only if `codebase_path` exists in input-context.md and points to valid directory
 
@@ -334,8 +384,6 @@ Record activation decisions in memory for Quality Gate 1.
 **Agent File:** `agents/phase1/a3-mas-theorist.md`
 
 **Model:** `config.models.reasoning` (typically opus)
-
-**Budget:** `config.agents.a3.budget`
 
 **Condition:** Activate only if project deeply involves multi-agent systems AND requires latest MAS literature support
 
@@ -358,7 +406,7 @@ If any agent fails → Log error, apply recovery strategy (retry/skip/manual).
 
 ## Domain Skill Invocation (Serial)
 
-Execute activated domain Skills one by one in Team Lead's session. Each Skill returns JSON to `workspace/{project}/phase1/skill-*.json`.
+Execute activated domain Skills one by one in 系统's session. Each Skill returns JSON to `workspace/{project}/phase1/skill-*.json`.
 
 ### research-mas-theory
 
@@ -403,8 +451,6 @@ Execute activated domain Skills one by one in Team Lead's session. Each Skill re
 **Agent File:** `agents/phase1/a4-innovation-formalizer.md`
 
 **Model:** `config.models.reasoning`
-
-**Budget:** `config.agents.a4.budget`
 
 **Task:**
 - Use `Glob` to discover all available analysis files in `workspace/{project}/phase1/`

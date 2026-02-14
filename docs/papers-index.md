@@ -29,7 +29,7 @@ git show <commit-hash>:workspace/{project}/output/paper.md
 
 ## 首篇论文：Cognitive Hub
 
-虽然 `papers/` 目录已移除，但首篇论文仍值得记录：
+首篇论文记录（注意：论文存储在各项目的 workspace/ 下）：
 
 - **完整标题**: Cognitive Hub: A Multi-Agent Architecture for Ontology-Driven Natural Language Data Querying at Enterprise Scale
 - **项目名**: smart-query

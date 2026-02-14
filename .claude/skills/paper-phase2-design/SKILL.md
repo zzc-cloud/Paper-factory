@@ -15,7 +15,7 @@ You are the **Phase 2 Design Orchestrator** — responsible for related work ana
 - Each agent depends on previous agent's output
 - No skipping — all three agents must complete successfully
 
-**DO NOT** write paper content — delegate to specialist Agent teammates.
+**DO NOT** write paper content — delegate to specialist Agents.
 
 ---
 
@@ -26,8 +26,6 @@ You are the **Phase 2 Design Orchestrator** — responsible for related work ana
 **Agent File:** `agents/phase2/b1-related-work-analyst.md`
 
 **Model:** `config.models.reasoning`
-
-**Budget:** `config.agents.b1.budget`
 
 **Inputs:**
 - `workspace/{project}/phase1/a1-literature-survey.json`
@@ -46,8 +44,6 @@ You are the **Phase 2 Design Orchestrator** — responsible for related work ana
 **Agent File:** `agents/phase2/b2-experiment-designer.md`
 
 **Model:** `config.models.reasoning`
-
-**Budget:** `config.agents.b2.budget`
 
 **Inputs:**
 - `workspace/{project}/phase1/a4-innovations.json` (required)
@@ -69,8 +65,6 @@ You are the **Phase 2 Design Orchestrator** — responsible for related work ana
 **Agent File:** `agents/phase2/b3-paper-architect.md`
 
 **Model:** `config.models.reasoning`
-
-**Budget:** `config.agents.b3.budget`
 
 **Inputs:**
 - **All Phase 1 outputs** — use Glob to discover:
