@@ -1,19 +1,17 @@
 # Venue Analyzer Skill
 
-> **期刊配置解析器** — 解析 `venues.md` 中的期刊/会议配置，验证配置完整性，生成写作风格适配文件。
->
-> **V2 新增**多交互式论文生成流程 — 读取扩展的期刊配置（包括写作风格、审稿标准、历史数据），生成 `venue-style-guide.md` 指导后续 Phase 的写作风格适配。
+> **期刊配置解析器** — 解析 `venues.md` 中的期刊/会议配置，验证配置完整性，生成写作风格适配文件。读取扩展的期刊配置（包括写作风格、审稿标准、历史数据），生成 `venue-style-guide.md` 指导后续 Phase 的写作风格适配。
 
 ---
 
 ## Skill 概述
 
-本 Skill 是论文生成流程中"期刊属性定位"的核心组件，负责多
+本 Skill 是论文生成流程中"期刊属性定位"的核心组件，负责：
 
-1. **解析期刊配置**多从 `venues.md` 读取目标会议/期刊的完整配置
-2. **验证配置完整性**多确保写作风格配置（writing_style）和审稿标准（review_criteria）存在
-3. **生成风格指南**多创建 `workspace/{project}/venue-style-guide.md`
-4. **检测期刊类型**多区分预定义期刊和自定义期刊（混合模式）
+1. **解析期刊配置**：从 `venues.md` 读取目标会议/期刊的完整配置
+2. **验证配置完整性**：确保写作风格配置（writing_style）和审稿标准（review_criteria）存在
+3. **生成风格指南**：创建 `workspace/{project}/venue-style-guide.md`
+4. **检测期刊类型**：区分预定义期刊和自定义期刊（混合模式）
 
 ---
 
@@ -28,9 +26,9 @@
 
 ## 输出
 
-### 1. 主输出多`workspace/{project}/venue-style-guide.md`
+### 1. 主输出：`workspace/{project}/venue-style-guide.md`
 
-结构化的写作风格指南文件，包含多
+结构化的写作风格指南文件，包含：
 - 基本信息（全称、类型、格式、页数限制）
 - 摘要要求（字数范围、结构建议）
 - Introduction 指导（深度、长度、结构建议）
@@ -40,7 +38,7 @@
 - Discussion & Conclusion 指导（重点、长度建议）
 - 审稿标准（权重分布、必需评估、特别注意）
 
-### 2. 副助输出多`workspace/{project}/phase0/venue-analysis.json`
+### 2. 副助输出：`workspace/{project}/phase0/venue-analysis.json`
 
 ```json
 {
@@ -82,7 +80,7 @@
   "analysis_path": "workspace/{project}/phase0/venue-analysis.json",
   "is_predefined": false,
   "warnings": [
-    "自定义期刊多请手动补充写作风格配置以获得最佳适配效果",
+    "自定义期刊：请手动补充写作风格配置以获得最佳适配效果",
     "建议参考同类型会议/期刊的配置模板"
   ]
 }
@@ -103,7 +101,7 @@
 
 ## 执行流程
 
-### Step 1多初始化与验证
+### Step 1：初始化与验证
 
 ```bash
 # 构建项目目录结构
@@ -118,36 +116,36 @@ if [ ! -d "${project_dir}" ]; then
 fi
 ```
 
-### Step 2多读取 venues.md
+### Step 2：读取 venues.md
 
 使用 Read 工具读取 `/Users/yyzz/Desktop/MyClaudeCode/paper-factory/venues.md`，解析 YAML 配置块。
 
-### Step 3多定位目标期刊配置
+### Step 3：定位目标期刊配置
 
 1. 在 venues.md 中搜索 `target_venue` 对应的 YAML 块
 2. 如果找到，判断是否包含 `writing_style` 字段
 3. 如果未找到，返回错误和建议
 
-### Step 4多验证配置完整性
+### Step 4：验证配置完整性
 
-检查以下字段是否存在多
-- 基本字段多`full_name`, `type`, `format`, `page_limit`, `template`
-- 写作风格多`writing_style`（V2 新增）
-  - 子字段多`abstract_length`, `abstract_structure`, `intro_depth`, ...
-- 审稿标准多`review_criteria`（V2 新增）
-  - 子字段多`novelty_weight`, `technical_weight`, `presentation_weight`, ...
-- 历史数据多`historical_data`（V2 新增，可选）
-  - 子字段多`acceptance_rate`, `review_cycle`, `trending_topics`, ...
+检查以下字段是否存在：
+- 基本字段：`full_name`, `type`, `format`, `page_limit`, `template`
+- 写作风格：`writing_style`
+  - 子字段：`abstract_length`, `abstract_structure`, `intro_depth`, ...
+- 审稿标准：`review_criteria`
+  - 子字段：`novelty_weight`, `technical_weight`, `presentation_weight`, ...
+- 历史数据：`historical_data`（可选）
+  - 子字段：`acceptance_rate`, `review_cycle`, `trending_topics`, ...
 
-### Step 5多生成 venue-style-guide.md
+### Step 5：生成 venue-style-guide.md
 
-根据期刊配置生成 Markdown 格式的写作风格指南。模板如下多
+根据期刊配置生成 Markdown 格式的写作风格指南。模板如下：
 
 ```markdown
 # {full_name} 写作风格指南
 
 > 本指南由 Venue Analyzer Skill 自动生成，基于 venues.md 中的期刊配置。
-> 生成时间多{timestamp}
+> 生成时间：{timestamp}
 
 ---
 
@@ -165,9 +163,9 @@ fi
 
 ## 摘要要求
 
-- **推荐字数**多{abstract_length.min} - {abstract_length.max} 字（推荐多{abstract_length.recommended} 字）
-- **结构建议**多{abstract_structure 数组，用中文描述}
-- **内容要点**多基于期刊特点的摘要写作建议
+- **推荐字数**：{abstract_length.min} - {abstract_length.max} 字（推荐：{abstract_length.recommended} 字）
+- **结构建议**：{abstract_structure 数组，用中文描述}
+- **内容要点**：基于期刊特点的摘要写作建议
 
 ### 摘要结构模板
 
@@ -182,9 +180,9 @@ fi
 
 ## Introduction
 
-- **深度要求**多{intro_depth 中文描述}
-- **推荐长度**多{intro_length.min} - {intro_length.max} 字
-- **结构建议**多基于期刊特点的 Introduction 写作建议
+- **深度要求**：{intro_depth 中文描述}
+- **推荐长度**：{intro_length.min} - {intro_length.max} 字
+- **结构建议**：基于期刊特点的 Introduction 写作建议
 
 ### Introduction 结构建议
 
@@ -198,9 +196,9 @@ fi
 
 ## Related Work
 
-- **深度要求**多{related_work_depth 中文描述}
-- **组织方式**多{related_work_organization 中文描述}
-- **引用要求**多基于期刊特点的相关工作写作建议
+- **深度要求**：{related_work_depth 中文描述}
+- **组织方式**：{related_work_organization 中文描述}
+- **引用要求**：基于期刊特点的相关工作写作建议
 
 ### Related Work 结构建议
 
@@ -213,9 +211,9 @@ fi
 
 ## Methodology
 
-- **详略程度**多{method_detail 中文描述}
-- **算法描述**多{algorithm_description 中文描述}
-- **理论证明**多{theory_proof 中文描述}
+- **详略程度**：{method_detail 中文描述}
+- **算法描述**：{algorithm_description 中文描述}
+- **理论证明**：{theory_proof 中文描述}
 
 ### Methodology 写作建议
 
@@ -225,10 +223,10 @@ fi
 
 ## Experiments
 
-- **格式**多{experiment_format 中文描述}
-- **必需评估**多{required_evaluations 数组，用中文描述}
-- **基线对比**多{# 如果有 baselines_required，添加相关要求}
-- **统计检验**多{statistical_tests 数组，用中文描述}
+- **格式**：{experiment_format 中文描述}
+- **必需评估**：{required_evaluations 数组，用中文描述}
+- **基线对比**：{# 如果有 baselines_required，添加相关要求}
+- **统计检验**：{statistical_tests 数组，用中文描述}
 
 ### Experiments 结构建议
 
@@ -243,8 +241,8 @@ fi
 
 ## Discussion & Conclusion
 
-- **重点关注**多{discussion_focus 数组，用中文描述}
-- **Conclusion 长度**多{conclusion_length.min} - {conclusion_length.max} 字
+- **重点关注**：{discussion_focus 数组，用中文描述}
+- **Conclusion 长度**：{conclusion_length.min} - {conclusion_length.max} 字
 
 ### Discussion 结构建议
 
@@ -294,18 +292,18 @@ fi
 
 ## 写作建议总结
 
-基于以上分析，本期刊/会议的写作应重点多
+基于以上分析，本期刊/会议的写作应重点：
 
-1. **核心优势**多{# 根据期刊特点总结}
-2. **避免雷区**多{# 根据审稿标准总结}
-3. **成功策略**多{# 根据历史数据总结}
+1. **核心优势**：{# 根据期刊特点总结}
+2. **避免雷区**：{# 根据审稿标准总结}
+3. **成功策略**：{# 根据历史数据总结}
 ```
 
-### Step 6多生成 venue-analysis.json
+### Step 6：生成 venue-analysis.json
 
 保存期刊分析结果到 `workspace/{project}/phase0/venue-analysis.json`。
 
-### Step 7多返回结果
+### Step 7：返回结果
 
 根据配置完整性返回相应的 JSON 结果。
 
@@ -314,7 +312,7 @@ fi
 ## 期刊类型判断逻辑
 
 ```python
-# 伪代码多判断期刊类型
+# 伪代码：判断期刊类型
 PREDEFINED_VENUES = [
     "AAAI", "IJCAI", "ISWC", "WWW", "ACL", "EMNLP",
     "KR", "AAMAS", "TOIS", "TKDE"
@@ -355,7 +353,7 @@ def generate_warnings(has_writing_style, has_review_criteria):
 
 ## 混合模式处理
 
-根据用户选择，采用混合模式多
+根据用户选择，采用混合模式：
 
 ### 预定义期刊（AAAI, IJCAI 等）
 
@@ -366,7 +364,7 @@ def generate_warnings(has_writing_style, has_review_criteria):
 ### 自定义期刊
 
 - 从 venues.md 读取用户配置
-- 如果缺少 `writing_style` 或 `review_criteria`多
+- 如果缺少 `writing_style` 或 `review_criteria`：
   - 生成基础风格指南（使用通用默认值）
   - 在返回值中添加 warnings
   - 在风格指南中标注"配置不完整，建议补充"
@@ -434,9 +432,65 @@ Skill(skill="venue-analyzer", args="my-project,CUSTOM-CONF-2025")
 
 ---
 
+## LaTeX 模板关联（V3 新增）
+
+### 模板解析流程
+
+在 Step 5（生成 venue-style-guide.md）之后，新增模板关联步骤：
+
+1. 读取 `templates/manifest.json`
+2. 在 `targetVenues` 数组中查找 `target_venue`
+3. 如果找到匹配 → 记录模板 ID、主文件、引擎、样式文件
+4. 如果未找到 → 使用 `arxiv`（default）模板
+
+### 模板信息输出
+
+在 `venue-analysis.json` 中新增 `template` 字段：
+
+```json
+{
+  "venue_id": "ACL",
+  "template": {
+    "id": "acl",
+    "mainFile": "acl_latex.tex",
+    "engine": "pdflatex",
+    "bibStyle": "acl_natbib",
+    "format": "double-column",
+    "styleFiles": ["acl.sty", "acl_natbib.bst"],
+    "templateDir": "templates/acl/"
+  }
+}
+```
+
+### venue-style-guide.md 新增模板章节
+
+在风格指南末尾追加：
+
+```markdown
+---
+
+## LaTeX 模板信息
+
+| 属性 | 值 |
+|------|------|
+| **模板 ID** | {template.id} |
+| **主文件** | {template.mainFile} |
+| **推荐引擎** | {template.engine} |
+| **参考文献样式** | {template.bibStyle} |
+| **格式** | {template.format} |
+| **样式文件** | {template.styleFiles} |
+
+> 此模板将在 Phase 3 的 C4（LaTeX 编译）阶段使用。
+> 模板源文件位于 `templates/{template.id}/` 目录。
+```
+
+---
+
 ## 与其他 Skill 的集成
 
-1. **paper-generation**多在 Phase 0 之前调用本 Skill
-2. **interaction-manager**多根据 `is_predefined` 和 warnings 决定如何处理自定义期刊
-3. **paper-phase2-design**多B3-paper-architect 读取 `venue-style-guide.md` 来设计论文章节结构
-4. **paper-phase3-writing**多C1-section-writer 和 C3-academic-formatter 参考 `venue-style-guide.md` 进行写作和格式化
+1. **paper-generation**：在 Phase 0 之前调用本 Skill
+2. **interaction-manager**：根据 `is_predefined` 和 warnings 决定如何处理自定义期刊
+3. **paper-phase2-design**：B3-paper-architect 读取 `venue-style-guide.md` 来设计论文章节结构
+4. **paper-phase3-writing**：C1-section-writer 和 C3-academic-formatter 参考 `venue-style-guide.md` 进行写作和格式化
+5. **c4-latex-compiler**：读取 `venue-analysis.json` 中的 `template` 字段，选择正确的 LaTeX 模板进行编译
+6. **template-transfer**：读取 `templates/manifest.json` 进行跨模板迁移

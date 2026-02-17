@@ -6,7 +6,7 @@
 
 ## 一句话介绍
 
-通过 **11 个专业化智能体** 分 **4 个阶段** 完成学术论文的全流程生成——从文献调研到同行评审。
+通过 **10 个专业化智能体** 分 **4 个阶段** 完成学术论文的全流程生成——从文献调研到同行评审。
 
 ---
 
@@ -23,43 +23,45 @@
 ## 系统架构
 
 ```
-[codebase-analyzer] → 生成 input-context.md（前置工具，可选）
-                              ↓
+[前置工具] codebase-analyzer → 生成 input-context.md（可选，当无素材时使用）
+                                    ↓
 Phase 0: Startup   →  期刊选择 → 题目确认 → 摘要框架确认（交互式）
                       ════ 用户确认 ════
-Phase 1: Research  →  A1 文献调研 / A3 理论构建（并行）→ A4 创新形式化
+Phase 1: Research  →  A1 文献调研 → B1 相关工作分析 → 创新聚合（内联）
                       ════ Quality Gate 1 ════
-Phase 2: Design    →  B1 相关工作 → B2 实验设计 → B3 结构设计（串行）
+Phase 2: Design    →  B2 实验设计 → B3 结构设计（串行）
                       ════ Quality Gate 2 ════ + 大纲确认
-Phase 3: Writing   → C1 章节撰写 → C2 图表设计 → C3 格式整合（串行）
+Phase 3: Writing   →  C1 章节撰写 → C2 图表设计 → C3 格式整合 → C4 LaTeX编译（串行）
                       ════ Quality Gate 3 ════
-Phase 4: Quality   → D1 同行评审 ⇄ D2 修订执行（迭代循环）
+Phase 4: Quality   →  D1 同行评审 ⇄ D2 修订执行（迭代循环）
                       ════ Quality Gate 4 ════
                               ▼
-                          output/paper.md
+                    output/paper.md + paper.tex + paper.pdf
 ```
 
-**并行执行优化**：Phase 1 支持真正的并行执行模式（通过 `config.json` 配置），预期能减少 40-60% 的执行时间。详见 [Phase 1 并行执行优化](docs/phase1-parallel-optimization.md)。
+**串行执行** Phase 1 采用串行执行模式（A1 → B1 → 创新聚合），简化架构，提高可靠性。创新聚合不再作为独立 Agent，而是由编排器内联执行。
 
 详细架构请查看 [架构详解](docs/architecture.md)。
 
 ---
 
-## 11 个智能体
+## 10 个智能体
 
 | Phase | Agent | 角色 | 模型 |
 |-------|---------|-------|--------|
-| Research | A1 | 文献调研 | Sonnet |
-| Research | A3 | 理论构建 | Opus   |
-| Research | A4 | 创新形式化 | Opus   |
-| Design  | B1 | 相关工作分析 | Opus   |
-| Design  | B2 | 实验设计 | Opus   |
-| Design  | B3 | 结构设计 | Opus   |
-| Writing | C1 | 章节撰写 | Sonnet  |
-| Writing | C2 | 图表设计 | Sonnet  |
-| Writing | C3 | 格式整合 | Sonnet  |
-| Quality | D1 | 同行评审 | Opus   |
-| Quality | D2 | 修订执行 | Opus   |
+| Research | A1 | 文献调研（含 arXiv API） | Opus |
+| Research | B1 | 相关工作分析 | Opus |
+| Design  | B2 | 实验设计   | Opus   |
+| Design  | B3 | 结构设计   | Opus   |
+| Writing | C1 | 章节撰写   | Sonnet  |
+| Writing | C2 | 图表设计   | Sonnet  |
+| Writing | C3 | 格式整合   | Sonnet  |
+| Writing | C4 | LaTeX 编译 | Sonnet  |
+| Quality | D1 | 同行评审   | Opus   |
+| Quality | D2 | 修订执行   | Opus   |
+
+> **前置工具**：`codebase-analyzer` — 从代码库自动生成 input-context.md（独立 Skill，不计入流水线 Agent）
+> **后置工具**：`template-transfer` — 将论文从一个会议格式转换为另一个格式（独立 Skill，按需调用）
 
 ---
 
@@ -68,40 +70,79 @@ Phase 4: Quality   → D1 同行评审 ⇄ D2 修订执行（迭代循环）
 ```
 paper-factory/
 ├── CLAUDE.md              # 系统 编排指令（系统核心）
-├── config.json            # 配置：模型、质量阈值、领域映射
+├── config.json            # 配置多模型、质量阈值、领域映射
 ├── venues.md              # 会议/期刊配置（所有预定义和用户自定义会议/期刊）
+├── templates/             # LaTeX 模板库
+│   ├── manifest.json      # 模板清单（含 targetVenues）
+│   ├── acl/               # ACL/EMNLP/NAACL 模板
+│   ├── cvpr/              # CVPR/ICCV/ECCV 模板
+│   ├── neurips/           # NeurIPS 模板
+│   ├── icml/              # ICML 模板
+│   ├── lncs/              # Springer LNCS 模板（ISWC/ESWC）
+│   ├── aaai/              # AAAI Press 模板（AAAI/IJCAI/KR）
+│   ├── acm/               # ACM 模板（WWW/KDD/TOIS/TKDE）
+│   └── arxiv/             # arXiv 通用模板（默认）
 ├── .claude/
 │   └── skills/           # 技能模块
-│   ├── paper-generation/       # 主编排器
-│   ├── paper-phase1-research/  # Phase 1 编排
-│   ├── paper-phase2-design/     # Phase 2 编排
-│   ├── paper-phase3-writing/    # Phase 3 编排
-│   ├── paper-phase4-quality/     # Phase 4 编排
-│   ├── venue-analyzer/            # 期刊配置解析器
-│   ├── interaction-manager/       # 交互管理器
-│   ├── feedback-collector/        # 反馈收集器
-│   ├── version-manager/         # 版本快照与版本管理
-│   ├── domain-knowledge-prep/    # 领域知识准备（引用 review-domain Skills）
-│   ├── domain-knowledge-update/  # 领域知识动态更新
-│   ├── review-kg-domain/         # KG 领域评审认知框架
-│   ├── review-mas-domain/         # MAS 领域评审认知框架
-│   ├── review-nl2sql-domain/      # NL2SQL 领域评审认知框架
-│   ├── review-bridge-domain/     # Bridge Engineering 领域评审认知框架
-│   ├── review-data-domain/       # Data Analysis 领域评审认知框架
-│   ├── review-se-domain/         # Software Engineering 领域评审认知框架
-│   ├── review-hci-domain/         # HCI 领域评审认知框架
-│   ├── cache-utils/             # 论文缓存工具集
-│   └── paper-cacher/           # 论文缓存管理
-├── agents/                # Agent 系统提示
-│   ├── phase1/             # A1, A3-A4
-│   ├── phase2/             # B1-B3
-│   ├── phase3/             # C1-C3
-│   ├── phase4/             # D1（通用评审）+ D2（修订）+ 领域专家
-│   ├── docs/                  # 完整文档
+│       ├── paper-generation/      # 主编排器
+│       ├── paper-phase1-research/
+│       ├── paper-phase2-design/
+│       ├── paper-phase3-writing/
+│       ├── paper-phase4-quality/
+│       ├── codebase-analyzer/         # 代码库分析工具（前置工具）
+│       ├── venue-analyzer/            # 期刊配置解析器（含模板关联）
+│       ├── interaction-manager/       # 交互管理器
+│       ├── feedback-collector/        # 反馈收集器（人类审稿员）
+│       ├── version-manager/         # 版本快照与版本管理
+│       ├── domain-knowledge-update/  # 领域知识动态更新
+│       ├── template-transfer/         # 模板转换（会议格式一键切换）
+│       ├── a1-literature-surveyor/    # A1 文献调研专家（含 arXiv API）
+│       ├── b1-related-work-analyst/   # B1 相关工作分析专家
+│       ├── b2-experiment-designer/    # B2 实验设计专家
+│       ├── b3-paper-architect/        # B3 论文架构设计专家
+│       ├── c1-section-writer/         # C1 章节撰写专家
+│       ├── c2-visualization-designer/ # C2 可视化设计专家
+│       ├── c3-academic-formatter/     # C3 学术格式化专家
+│       ├── c4-latex-compiler/         # C4 LaTeX 编译专家（含诊断修复）
+│       ├── d1-general-reviewer/          # D1 通用评审专家
+│       ├── d1-reviewer-domain-expert/ # D1 领域评审专家
+│       ├── d2-revision-specialist/    # D2 修订执行专家
+│       └── ...其他技能
+├── docs/                  # 完整文档
+│   └── domain-knowledge/  # 领域知识文档（5 个领域，纯 Markdown）
+│       ├── mas.md         # MAS 领域知识（理论 + 评审）
+│       ├── kg.md          # KG 领域知识（理论 + 评审）
+│       ├── nl2sql.md      # NL2SQL 领域知识（理论 + 评审）
+│       ├── bridge.md      # Bridge 领域知识（理论 + 评审）
+│       └── data.md        # Data 领域知识（理论 + 评审）
 ├── workspace/             # 运行时产物（按项目组织）
-│   └── cache/                # 论文缓存系统
-│       └── papers/          # 论文缓存（Markdown + Frontmatter）
-│       └── search-history/  # 检索历史（增量更新）
+│   └── {project}/
+│       ├── input-context.md
+│       ├── phase0/
+│       │   ├── venue-analysis.json
+│       │   ├── title-options.json
+│       │   └── abstract-framework.md
+│       ├── venue-style-guide.md
+│       ├── user-feedback.json
+│       ├── phase1/
+│       ├── phase2/
+│       ├── phase3/
+│       ├── phase4/
+│       ├── quality-gates/
+│       ├── .cache/            # 论文缓存系统
+│       │   ├── papers/          # 论文缓存（Markdown + Frontmatter）
+│       │   └── search-history/  # 检索历史（增量更新）
+│       ├── versions/          # 版本管理目录
+│       │   ├── meta.json      # 版本索引
+│       │   ├── V01/            # 版本快照
+│       │   ├── V02/            # 版本快照
+│       │   └── ...
+│       └── output/
+│           ├── paper.md       # Markdown 论文
+│           ├── paper.tex      # LaTeX 源码（C4 输出）
+│           ├── references.bib # BibTeX 参考文献（C4 输出）
+│           ├── paper.pdf      # PDF（如编译成功）
+│           └── compile-log.json # 编译报告
 ```
 
 使用 Bash 工具配合 `mkdir -p` 实现幂等目录创建。
@@ -111,14 +152,16 @@ paper-factory/
 ## 技术亮点
 
 - **CLAUDE.md 驱动** — 系统 自主编排，无需外部脚本
-- **并行 + 串行混合** — Phase 1 并行，Phase 2-4 串行/迭代
+- **串行执行** — Phase 1 采用串行模式，简化架构，提高可靠性
 - **质量门控** — 每阶段自动验证输出完整性
 - **动态调整** — 根据中间结果调整策略（补充搜索、额外修订等）
 - **通用框架** — 不绑定特定论文主题，通过 `input-context.md` 适配
 - **论文缓存系统** — 支持增量检索和手动添加，第二次生成速度提升 60-80%
 - **版本管理与用户确认** — Phase 4 支持版本快照（V1/V2/V3...）、里程碑确认和人类审稿员反馈注入
 - **交互式启动** — Phase 0 支持期刊选择、题目确认、摘要框架确认，减少后期返工
-- **期刊属性定位** — 根据目标期刊动态适配格式、风格和内容要求
+- **领域知识统一** — 5 个领域知识文档同时服务于理论分析和领域评审
+- **LaTeX 编译系统** — C4 自动将 Markdown 转换为 LaTeX，支持编译诊断与自动修复
+- **多模板支持** — 内置 8 套会议/期刊 LaTeX 模板，支持 template-transfer 一键格式切换
 
 ---
 
@@ -149,4 +192,4 @@ paper-factory/
 
 ---
 
-**最后更新**: 2026-02-14
+**最后更新**: 2026-02-18

@@ -1,0 +1,117 @@
+{
+  "templates": [
+    {
+      "id": "acl",
+      "label": "ACL",
+      "mainFile": "acl_latex.tex",
+      "engine": "pdflatex",
+      "bibStyle": "acl_natbib",
+      "format": "double-column",
+      "category": "academic",
+      "description": "ACL 会议论文模板，适用于自然语言处理领域",
+      "tags": ["ACL", "EMNLP", "NAACL", "NLP"],
+      "styleFiles": ["acl.sty", "acl_natbib.bst"],
+      "targetVenues": ["ACL", "EMNLP", "NAACL", "COLING", "EACL"]
+    },
+    {
+      "id": "cvpr",
+      "label": "CVPR",
+      "mainFile": "main.tex",
+      "engine": "pdflatex",
+      "bibStyle": "ieeenat_fullname",
+      "format": "double-column",
+      "category": "academic",
+      "description": "CVPR 会议论文模板，适用于计算机视觉领域",
+      "tags": ["CVPR", "Computer Vision", "ICCV", "ECCV"],
+      "styleFiles": ["cvpr.sty", "ieeenat_fullname.bst"],
+      "targetVenues": ["CVPR", "ICCV", "ECCV"]
+    },
+    {
+      "id": "neurips",
+      "label": "NeurIPS",
+      "mainFile": "main.tex",
+      "engine": "pdflatex",
+      "bibStyle": "plainnat",
+      "format": "single-column",
+      "category": "academic",
+      "description": "NeurIPS 会议论文模板，适用于机器学习领域",
+      "tags": ["NeurIPS", "Machine Learning"],
+      "styleFiles": [],
+      "targetVenues": ["NeurIPS"]
+    },
+    {
+      "id": "icml",
+      "label": "ICML",
+      "mainFile": "main.tex",
+      "engine": "pdflatex",
+      "bibStyle": "icml",
+      "format": "double-column",
+      "category": "academic",
+      "description": "ICML 会议论文模板，适用于机器学习领域",
+      "tags": ["ICML", "Machine Learning"],
+      "styleFiles": [],
+      "targetVenues": ["ICML"]
+    },
+    {
+      "id": "lncs",
+      "label": "Springer LNCS",
+      "mainFile": "main.tex",
+      "engine": "pdflatex",
+      "bibStyle": "splncs04",
+      "format": "single-column",
+      "category": "academic",
+      "description": "Springer LNCS 模板，适用于 ISWC/ESWC 等语义网和知识图谱领域会议",
+      "tags": ["LNCS", "Springer", "ISWC", "ESWC", "Semantic Web", "Knowledge Graph"],
+      "styleFiles": ["splncs04.bst"],
+      "classFile": "llncs.cls",
+      "classSource": "https://www.springer.com/gp/computer-science/lncs/conference-proceedings-guidelines",
+      "targetVenues": ["ISWC", "ESWC", "K-CAP"]
+    },
+    {
+      "id": "aaai",
+      "label": "AAAI Press",
+      "mainFile": "main.tex",
+      "engine": "pdflatex",
+      "bibStyle": "aaai",
+      "format": "double-column",
+      "category": "academic",
+      "description": "AAAI Press 模板，适用于 AAAI/IJCAI/KR 等 AI 顶级会议",
+      "tags": ["AAAI", "IJCAI", "KR", "AI"],
+      "styleFiles": ["aaai25.sty"],
+      "classSource": "https://aaai.org/authorkit/",
+      "targetVenues": ["AAAI", "IJCAI", "KR"]
+    },
+    {
+      "id": "acm",
+      "label": "ACM",
+      "mainFile": "main.tex",
+      "engine": "pdflatex",
+      "bibStyle": "ACM-Reference-Format",
+      "format": "double-column",
+      "category": "academic",
+      "description": "ACM 模板，适用于 WWW/KDD/TOIS/TKDE 等 ACM 系列会议和期刊",
+      "tags": ["ACM", "WWW", "KDD", "TOIS", "TKDE", "SIGMOD"],
+      "styleFiles": [],
+      "classFile": "acmart.cls",
+      "classSource": "TexLive 自带，无需额外下载",
+      "targetVenues": ["WWW", "KDD", "TOIS", "TKDE", "SIGMOD"]
+    },
+    {
+      "id": "arxiv",
+      "label": "arXiv (通用)",
+      "mainFile": "template.tex",
+      "engine": "pdflatex",
+      "bibStyle": "plain",
+      "format": "single-column",
+      "category": "academic",
+      "description": "arXiv 通用预印本模板，适用于任何领域的论文投稿",
+      "tags": ["arXiv", "preprint", "通用"],
+      "styleFiles": ["arxiv.sty"],
+      "targetVenues": ["AAMAS", "default"]
+    }
+  ],
+  "categories": [
+    { "id": "all", "label": "所有", "labelEn": "All" },
+    { "id": "academic", "label": "学术论文", "labelEn": "Academic" }
+  ]
+}

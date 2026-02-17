@@ -13,32 +13,15 @@
         "Write"
       ]
     },
-    "a3": {
-      "model": "reasoning",
-      "tools": [
-        "WebSearch",
-        "WebFetch",
-        "Read",
-        "Write"
-      ],
-      "conditional": true,
-      "condition": "Project involves multi-agent architecture and needs latest MAS literature"
-    },
-    "a4": {
-      "model": "reasoning",
-      "tools": [
-        "Read",
-        "Write",
-        "Glob"
-      ]
-    },
     "b1": {
       "model": "reasoning",
       "tools": [
         "Read",
         "Write",
         "WebSearch"
-      ]
+      ],
+      "phase": 1,
+      "description": "相关工作分析 - 从 Phase 2 前移到 Phase 1"
     },
     "b2": {
       "model": "reasoning",
@@ -76,6 +59,16 @@
         "Read",
         "Write"
       ]
+    },
+    "c4": {
+      "model": "writing",
+      "tools": [
+        "Read",
+        "Write",
+        "Bash",
+        "Glob"
+      ],
+      "description": "LaTeX 编译 — Markdown→LaTeX→PDF 转换 + 编译诊断修复"
     },
     "d1": {
       "model": "reasoning",
@@ -120,12 +113,28 @@
     "target_word_count": 10000,
     "default_venue": "AAAI"
   },
+  "latex": {
+    "enabled": true,
+    "engine_priority": ["pdflatex", "xelatex", "latexmk", "tectonic"],
+    "max_compile_fix_attempts": 5,
+    "fallback_to_tex_only": true,
+    "template_dir": "templates/",
+    "default_template": "arxiv"
+  },
+  "search": {
+    "arxiv_api_enabled": true,
+    "arxiv_max_results_per_query": 10,
+    "semantic_scholar_enabled": false,
+    "search_strategy": "arxiv_first",
+    "generate_bibtex": true
+  },
   "parallel": {
-    "phase1_enabled": true,
+    "phase1_enabled": false,
     "use_task_tool": true,
     "timeout_per_agent": 300,
     "retry_on_failure": true,
-    "max_retries": 1
+    "max_retries": 1,
+    "deprecated": "并行模式已移除，Phase 1 现在只支持串行执行"
   },
   "cache": {
     "enabled": true,
@@ -144,10 +153,10 @@
       "description": "论文生成主编排器"
     },
     "paper-phase1-research": {
-      "description": "Phase 1 文献调研与理论分析"
+      "description": "Phase 1 文献调研与相关工作分析（串行执行）"
     },
     "paper-phase2-design": {
-      "description": "Phase 2 论文设计阶段"
+      "description": "Phase 2 论文设计阶段（B2 → B3）"
     },
     "paper-phase3-writing": {
       "description": "Phase 3 论文撰写阶段"
@@ -155,34 +164,28 @@
     "paper-phase4-quality": {
       "description": "Phase 4 质量保障阶段"
     },
-    "domain-knowledge-prep": {
-      "description": "领域知识准备 — 为评审专家生成特定领域的评审指南和知识点"
+    "requirements-spec": {
+      "description": "需求规范协议 — 模糊指令澄清与结构化需求确认"
     },
-    "review-kg-domain": {
-      "description": "Knowledge Graph 领域评审认知框架"
+    "research-interview": {
+      "description": "研究访谈 — 6 阶段结构化访谈提炼研究规范"
     },
-    "review-mas-domain": {
-      "description": "Multi-Agent Systems 领域评审认知框架"
+    "research-ideation": {
+      "description": "研究构思 — 从模糊主题生成 3-5 个研究方向"
     },
-    "review-nl2sql-domain": {
-      "description": "NL2SQL 领域评审认知框架"
+    "devils-advocate": {
+      "description": "魔鬼代言人 — 论文撰写前的批判性审查"
     },
-    "review-bridge-domain": {
-      "description": "Bridge Engineering 领域评审认知框架"
+    "quality-scorer": {
+      "description": "量化评分引擎 — 内容质量量化评估"
     },
-    "review-data-domain": {
-      "description": "Data Analysis & ML 领域评审认知框架"
-    },
-    "review-se-domain": {
-      "description": "Software Engineering 领域评审认知框架"
-    },
-    "review-hci-domain": {
-      "description": "HCI 领域评审认知框架"
+    "exploration-manager": {
+      "description": "探索沙箱管理器 — 轻量级实验空间管理"
     }
   },
   "domain_skills": {
     "knowledge_graph": {
-      "skill": "review-kg-domain",
+      "doc": "docs/domain-knowledge/kg.md",
       "full_name": "Knowledge Graphs and Ontology Engineering",
       "keywords": [
         "KG",
@@ -195,7 +198,7 @@
       ]
     },
     "multi_agent_systems": {
-      "skill": "review-mas-domain",
+      "doc": "docs/domain-knowledge/mas.md",
       "full_name": "Multi-Agent Systems (MAS)",
       "keywords": [
         "multi-agent",
@@ -209,7 +212,7 @@
       ]
     },
     "nl2sql": {
-      "skill": "review-nl2sql-domain",
+      "doc": "docs/domain-knowledge/nl2sql.md",
       "full_name": "Natural Language to SQL (NL2SQL / Text2SQL)",
       "keywords": [
         "NL2SQL",
@@ -221,7 +224,7 @@
       ]
     },
     "bridge_engineering": {
-      "skill": "review-bridge-domain",
+      "doc": "docs/domain-knowledge/bridge.md",
       "full_name": "Bridge Engineering",
       "keywords": [
         "bridge",
@@ -235,7 +238,7 @@
       ]
     },
     "data_analysis": {
-      "skill": "review-data-domain",
+      "doc": "docs/domain-knowledge/data.md",
       "full_name": "Data Analysis and Machine Learning",
       "keywords": [
         "data mining",
@@ -245,33 +248,6 @@
         "clustering",
         "feature engineering",
         "cross-validation"
-      ]
-    },
-    "software_engineering": {
-      "skill": "review-se-domain",
-      "full_name": "Software Engineering",
-      "keywords": [
-        "software engineering",
-        "software development",
-        "DevOps",
-        "MLOps",
-        "agile",
-        "CI/CD",
-        "testing",
-        "code quality"
-      ]
-    },
-    "human_computer_interaction": {
-      "skill": "review-hci-domain",
-      "full_name": "Human-Computer Interaction",
-      "keywords": [
-        "HCI",
-        "user experience",
-        "UX",
-        "interface design",
-        "usability",
-        "user studies",
-        "interaction design"
       ]
     }
   },
@@ -329,5 +305,65 @@
     "enabled": true,
     "priority_over_reviewer": true,
     "track_status": true
+  },
+  "requirements_spec": {
+    "enabled": true,
+    "auto_trigger": true,
+    "min_blocked_to_trigger": 2,
+    "must_fields": ["paper_title", "innovations", "system_architecture", "key_terminology"],
+    "should_fields": ["target_venue", "target_system"],
+    "may_fields": ["codebase_path", "additional_context"]
+  },
+  "devils_advocate": {
+    "enabled": true,
+    "interactive": true,
+    "min_challenges": 5,
+    "max_challenges": 7,
+    "inject_defense_notes": true
+  },
+  "scoring": {
+    "enabled": true,
+    "base_score": 100,
+    "thresholds": {
+      "block": 70,
+      "pass": 85,
+      "excellent": 95
+    },
+    "gate_checks": {
+      "gate1": {
+        "min_papers": {"weight": -30, "severity": "critical"},
+        "min_gaps": {"weight": -15, "severity": "major"},
+        "innovation_support": {"weight": -20, "severity": "critical"},
+        "output_format": {"weight": -10, "severity": "major"}
+      },
+      "gate2": {
+        "experiment_coverage": {"weight": -20, "severity": "critical"},
+        "baseline_count": {"weight": -15, "severity": "major"},
+        "metric_clarity": {"weight": -10, "severity": "major"},
+        "section_coverage": {"weight": -15, "severity": "critical"},
+        "logic_coherence": {"weight": -5, "severity": "minor"}
+      },
+      "gate3": {
+        "section_word_count": {"weight": -5, "severity": "major"},
+        "citation_format": {"weight": -3, "severity": "minor"},
+        "figure_reference": {"weight": -5, "severity": "major"},
+        "abstract_completeness": {"weight": -10, "severity": "critical"},
+        "terminology_consistency": {"weight": -3, "severity": "minor"},
+        "latex_compilation": {"weight": -100, "severity": "fatal"}
+      },
+      "gate4": {
+        "review_score": {"weight": -30, "severity": "critical"},
+        "critical_issues_addressed": {"weight": -15, "severity": "critical"},
+        "version_history": {"weight": -5, "severity": "minor"},
+        "feedback_processed": {"weight": -10, "severity": "major"}
+      }
+    }
+  },
+  "exploration": {
+    "enabled": true,
+    "quality_threshold": 60,
+    "max_active_experiments": 5,
+    "auto_archive_after_days": 30,
+    "promote_requires_confirmation": true
   }
 }

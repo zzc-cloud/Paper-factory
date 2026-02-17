@@ -9,15 +9,15 @@ description: "版本快照与版本管理 — 为论文迭代创建版本快照�
 
 你是 **Version Manager（版本管理器）** — 负责论文迭代过程中的版本控制、快照管理和历史追溯。
 
-**调用方式**多`Skill(skill="version-manager", args="{project}:{action}")`
+**调用方式**：`Skill(skill="version-manager", args="{project}:{action}")`
 
-**可用操作**多
+**可用操作**：
 - `create` — 创建新版本快照
 - `compare` — 比较两个版本
 - `rollback` — 回滚到指定版本
 - `history` — 显示版本历史
 
-**核心职责**多
+**核心职责**：
 - 在论文迭代的关键点创建完整快照
 - 维护版本元数据和索引
 - 生成人类可读的变更日志
@@ -168,9 +168,9 @@ change_log_content = f"""# {new_version_id} 变更日志
 
 ## 行动项统计
 
-- 关键多{metadata['action_items_summary'].get('critical_addressed', 0)}/{metadata['action_items_summary'].get('critical_total', 0)}
-- 重要多{metadata['action_items_summary'].get('important_addressed', 0)}/{metadata['action_items_summary'].get('important_total', 0)}
-- 次要多{metadata['action_items_summary'].get('minor_addressed', 0)}/{metadata['action_items_summary'].get('minor_total', 0)}
+- 关键：{metadata['action_items_summary'].get('critical_addressed', 0)}/{metadata['action_items_summary'].get('critical_total', 0)}
+- 重要：{metadata['action_items_summary'].get('important_addressed', 0)}/{metadata['action_items_summary'].get('important_total', 0)}
+- 次要：{metadata['action_items_summary'].get('minor_addressed', 0)}/{metadata['action_items_summary'].get('minor_total', 0)}
 
 ---
 
@@ -179,9 +179,9 @@ change_log_content = f"""# {new_version_id} 变更日志
 **修改章节**: {', '.join(metadata['changes_from_previous'].get('sections_modified', []))}
 
 **变更统计**:
-- 新增行数多{metadata['changes_from_previous'].get('added_lines', 0)}
-- 删除行数多{metadata['changes_from_previous'].get('removed_lines', 0)}
-- 净变化多{metadata['changes_from_previous'].get('added_lines', 0) - metadata['changes_from_previous'].get('removed_lines', 0)} 行
+- 新增行数：{metadata['changes_from_previous'].get('added_lines', 0)}
+- 删除行数：{metadata['changes_from_previous'].get('removed_lines', 0)}
+- 净变化：{metadata['changes_from_previous'].get('added_lines', 0) - metadata['changes_from_previous'].get('removed_lines', 0)} 行
 
 ---
 
@@ -231,7 +231,7 @@ write_json(f"workspace/{project}/versions/meta.json", meta)
 v1_metadata = read_json(f"workspace/{project}/versions/{version1}/metadata.json")
 v2_metadata = read_json(f"workspace/{project}/versions/{version2}/metadata.json")
 
-diff_report = f"""## 版本比较多{version1} vs {version2}
+diff_report = f"""## 版本比较：{version1} vs {version2}
 
 ### 评分变化
 
@@ -340,7 +340,7 @@ def compute_changes(current_paper, previous_paper):
             "removed_lines": 0
         }
 
-    # 简化版多使用行数差异
+    # 简化版：使用行数差异
     current_lines = current_paper.split('\\n')
     previous_lines = previous_paper.split('\\n')
 

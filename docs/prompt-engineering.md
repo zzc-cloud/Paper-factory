@@ -1,193 +1,168 @@
 # Prompt 汇总
 
-> 本文档记录 Paper Factory 项目构建过程中使用的关键 prompt 和架构演进历史。仅供项目维护参考。
+> 本文档记录 Paper Factory 项目构建过程中使用的关键 prompt。按迭代阶段组织，每条 prompt 合并多轮交互为最终版。仅供项目维护参考。
 
 ---
 
-## 项目构建篇
+## 第一阶段：系统初始化（8b37e03）
 
-**1. Skills 清理**
+**1. 项目创建**
+
+> 我有一个 NL2SQL 项目（Smart Query），需要生成一篇学术论文。请设计一个多智能体论文生成系统：12 个专业化 Agent 分 4 阶段（Research → Design → Writing → Quality）协作，用 Bash 编排器 + claude -p 管道模式实现。每个 Agent 有独立的系统提示和输出格式。
+
+**2. 首篇论文生成**
+
+> 基于 workspace/smart-query/ 下的素材，按 pipeline 生成论文。主题：Cognitive Hub - Multi-Agent Architecture for Ontology-Driven NL Data Querying。
+
+---
+
+## 第二阶段：Agent Teams 架构迁移（c5007ca）
+
+**3. 架构迁移**
+
+> 将系统从 Bash 编排器迁移到 Claude Code Agent Teams 架构。用 CLAUDE.md 作为 Team Lead 编排指令取代 orchestrator.sh，用 config.json 取代 config.env。通用化所有 12 个 Agent 的系统提示，去除 Smart Query 硬编码，支持任意论文主题。重组 workspace 为多项目结构。删除所有 bash 脚本。
+
+---
+
+## 第三阶段：Skill 体系构建（ec71d51）
+
+**4. Skill 模块化**
+
+> 将 12 个 Agent 迁移为 paper-* Skill 模块（4 个 Phase Skill + 8 个领域 Skill）。新增通用评审模块（Technical/Novelty/Clarity/Significance/Experimental Rigor 五维度）和 domain-knowledge-prep 技能。构建完整的 docs/ 文档体系。清理过时的技能模块。
+
+**5. Skills 清理**
 
 > 这是一个论文生成项目，请探查 .claude/skills 下所有已安装的 Skills，评估哪些是本项目用不到的，直接剔除。
 
-**2. Skills 安装**
+**6. Skills 安装**
 
 > 从 https://github.com/anthropics/skills 、https://github.com/obra/superpowers 、https://github.com/affaan-m/everything-claude-code 三个仓库中筛选适合本项目的 Skill 并安装。项目使用 Python，目前处于迭代阶段，工程迭代类 Skill 也需要。obra/superpowers 下的 writing-skills 也要装。
 
-**3. 文档模块构建**
+**7. 文档模块构建**
 
-> 构建一个 Markdown 格式的 docs/ 文档模块，包含多1. 设计理念 2. 已安装 Skill 列表 3. MCP 工具参考 4. 已生成论文索引。同时将 README.md 中的详细内容迁移到 docs/ 下，README 只保留精简入口。
+> 构建一个 Markdown 格式的 docs/ 文档模块，包含：1. 设计理念 2. 已安装 Skill 列表 3. MCP 工具参考 4. 已生成论文索引。同时将 README.md 中的详细内容迁移到 docs/ 下，README 只保留精简入口。
 
-**4. Prompt 汇总**
+---
+## 第三阶段补充：文档清理（1a8fddc）
 
-> 新增一个文档，将项目构建和论文生成过程中用到的所有 prompt 汇总留存。每条 prompt 合并多轮交互为一句最终版。
+**8. 论文目录清理**
+
+> 移除 papers/ 目录，论文历史通过 Git 管理。更新 papers-index.md 添加 Git 历史查询指南，清理 CLAUDE.md 和 README.md 中的 papers/ 引用。
+
+---
+
+## 第四阶段：交互式启动与领域知识系统（9393e13）
+
+**9. Phase 0 交互式启动**
+
+> 新增 Phase 0 交互式启动阶段：期刊选择（venue-analyzer 解析 venues.md）、题目确认（生成 3 个候选）、摘要框架确认。用 AskUserQuestion 实现关键节点的用户确认，减少后期返工。
+
+**10. 期刊配置系统**
+
+> 创建 venues.md 作为会议/期刊配置中心，包含预定义期刊（AAAI、ACL、VLDB 等）的格式要求、写作风格、评审标准。新增 venue-analyzer Skill 解析配置并生成 venue-style-guide.md。
+
+**11. 交互管理组件**
+
+> 新增三个交互管理 Skill：interaction-manager（管理关键交互节点确认）、feedback-collector（结构化存储用户反馈并自动应用到策略）、version-manager（版本快照 V01/V02...、元数据管理、变更日志、版本回滚）。
+
+**12. 领域知识体系**
+
+> 创建 5 个领域知识文档（docs/domain-knowledge/）：KG、MAS、NL2SQL、Bridge、Data。每个文档包含理论分析和评审认知两部分。新增 domain-knowledge-update Skill 通过 Web Search 获取前沿论文并更新领域知识。
+
+**13. 领域评审认知框架**
+
+> 新增 5 个领域评审认知框架 Skill（review-kg-domain、review-mas-domain 等），为 D1 领域评审专家提供特定领域的评审标准和知识注入。
+
+**14. 论文缓存系统**
+
+> 新增 paper-cacher Skill 实现论文缓存系统，支持增量检索和手动添加。缓存格式为 Markdown + Frontmatter，存储在 workspace/{project}/.cache/papers/。第二次生成速度提升 60-80%。
+
+**15. config.json 扩展**
+
+> 扩展 config.json 新增配置项：interaction（交互节点配置）、venue_analysis（期刊分析配置）、versioning（版本管理配置）、confirmation（用户确认模式和阈值）、domain_skills（5 个领域映射含文档路径和关键词）。
+
+---
+
+## 第五阶段：架构精简与统一（97b5cc3）
+
+**16. A2 独立化**
+
+> 将 A2（Engineering Analyst）从 Phase 1 流水线 Agent 移至独立的 codebase-analyzer Skill，作为前置工具。Agent 数量从 12 减至 11。更新所有文档中的 Agent 计数和 A2 相关引用。
+
+**17. 去版本标记**
+
+> 清除所有文档中的版本标记（V2 新增、v1.x、本次更新等），版本历史统一由 git 管理。将 V2 交互式组件（Phase 0、venue-analyzer、interaction-manager、feedback-collector）合并到主文档内容，不再标注为"新增"。
+
+---
+
+## 第六阶段：持续优化
+
+**18. CLAUDE.md 评估与精简**
+
+> 评估 CLAUDE.md 是否内容过多。结论：在迭代开发阶段保留全局架构信息（架构图、Agent 表格、目录结构）有助于每次新对话的即时认知，仅删除营销性质的"技术亮点"和冗余的"一句话介绍"。
+
+**19. 领域评审合并**
+
+> 将 5 个独立的领域评审 Skill（review-kg-domain 等）合并到领域知识文档中，评审认知框架作为文档的一部分而非独立 Skill。D1 领域评审专家直接读取 docs/domain-knowledge/ 下的对应文档。
+
+**20. D1 评审拆分**
+
+> 将 D1 同行评审拆分为 d1-general-reviewer（通用评审：技术、新颖性、清晰度、重要性、实验严谨性五维度）和 d1-reviewer-domain-expert（领域评审：基于特定领域知识深度评审）。Phase 4 动态选择领域专家。
+
+**21. Phase 1 串行化**
+
+> Phase 1 从并行执行改为串行执行（A1 → B1 → 创新聚合）。创新聚合不再作为独立 Agent（原 A4），改由编排器内联执行。简化架构，提高可靠性。
+
+---
+
+## 第七阶段：LaTeX 模板系统与编译流水线
+
+**22. LaTeX 模板系统**
+
+> 研究 OpenPrism 项目的模板系统设计，为 paper-factory 引入 LaTeX 模板库。创建 templates/ 目录，包含 8 个模板（acl, cvpr, neurips, icml, lncs, aaai, acm, arxiv），通过 manifest.json 的 targetVenues 字段实现多对一映射（一个模板服务多个会议）。
+
+**23. C4 LaTeX 编译 Agent**
+
+> 新增 C4 LaTeX 编译专家（c4-latex-compiler Skill），将 Markdown 论文转换为 LaTeX 源码并编译 PDF。支持多引擎（pdflatex/xelatex/lualatex）、自动诊断修复、模板自动选择。Agent 数量从 9 增至 10。
+
+**24. 模板转换工具**
+
+> 新增 template-transfer Skill，支持论文在不同会议/期刊格式间一键转换（如 ACL→AAAI）。
+
+**25. KG 领域模板补全**
+
+> 为知识图谱领域补全 LaTeX 模板：Springer LNCS（ISWC/ESWC/K-CAP）、AAAI Press（AAAI/IJCAI/KR）、ACM（WWW/KDD/TOIS/TKDE/SIGMOD）。venues.md 移除冗余的 template 字段，manifest.json 成为模板查找的唯一数据源。
+
+**26. targetVenues 命名统一**
+
+> 将 manifest.json 中的 venueMapping 字段重命名为 targetVenues，全项目统一更新引用。
 
 ---
 
 ## 论文生成篇
 
+**标准生成指令**
+
 > 我要生成一篇关于 [主题] 的学术论文，素材在 workspace/[project]/input-context.md，请按 pipeline 开始。
 
----
+**从代码库生成**
 
-## 架构演进记录
+> 我有一个代码库在 [路径]，请先用 codebase-analyzer 生成 input-context.md，然后按 pipeline 生成论文。
 
-### 领域知识架构重构
+**指定期刊生成**
 
-从"双层知识架构"（config.json + Web Search）重构为"单一数据源架构"（review-{domain}-domain Skill）。
+> 生成论文，project: [project]，目标期刊：[期刊名]。
 
-**工作内容**多
-- 删除 `references/` 和 `workspace/domain-knowledge/` 目录
-- 创建 `domain-knowledge-update` Skill（通过 Web Search 直接更新 Skill 文件）
-- 简化 `domain-knowledge-prep` Skill（直接读取 review-{domain}-domain/SKILL.md）
-- 更新核心文档，移除"静态层/动态层"概念
+**领域知识更新**
 
-**技术要点**多
-- **单一数据源**多领域知识统一存储在 `review-{domain}-domain/SKILL.md`
-- **读写分离**多`domain-knowledge-update` 写入，`domain-knowledge-prep` 读取
-- **可自举系统**多通过 Web Search 自动更新 Skill 文件
+> 更新 [领域] 的领域知识文档，搜索最新的研究进展和前沿论文。
 
 ---
 
-### Phase 4 多视角评审机制
+## Prompt 汇总
 
-**工作内容**多
-- 新增 5 个独立评审专家 Agent
-- D2 Revision Specialist 支持与 5 个评审专家的多轮交互与辩论
-- paper-phase4-quality Skill 整合专家辩论为评审-修订-辩论迭代循环
-- 配置项 `quality.max_response_rounds` 控制每轮迭代的专家回复轮数
+> 新增一个文档，将项目构建和论文生成过程中用到的所有 prompt 汇总留存。每条 prompt 合并多轮交互为一句最终版。
 
 ---
 
-### Skill 层级架构重构
-
-**工作内容**多
-- 4 个 Phase Skill 统一命名为 `paper-phase*` 格式
-- 创建主 Orchestrator Skill `paper-generation`（约 350 行）
-- architecture.md 从纯 Agent 架构描述重写为 Skill + Agent 混合架构
-- 创建完整的 Agent 目录文档（agents-catalog.md）
-
-**技术要点**多
-- Skill vs Agent 的分界线多理论分析等轻量任务用 Skill，文献检索等重量任务用 Agent
-- Skill 在主会话中同步执行，Agent 作为独立进程异步执行
-
----
-
-### Phase 4 架构扁平化
-
-**工作内容**多
-- 删除冗余的 reviewer 子目录和文件（已由 d1-peer-reviewer.md 内嵌 R1/R2/R3 覆盖）
-- 领域评审专家 `d1-reviewer-domain-expert.md` 移至 `agents/phase4/` 根目录
-- 更新所有引用路径
-
-**最终结构**多
-```
-agents/phase4/
-├── d1-peer-reviewer.md          # 通用评审（内嵌 R1/R2/R3）
-├── d1-reviewer-domain-expert.md   # 领域评审专家（动态 Skill）
-└── d2-revision-specialist.md      # 修订专家
-```
-
-**技术要点**多
-- 扁平化减少不必要的子目录层级
-- 领域专家通过 Skill 动态加载，通用专家静态内嵌
-
----
-
-**最后更新**: 2026-02-14
-
----
-
-### 论文缓存系统
-
-**工作内容**多
-- 创建 `cache-utils` Skill（缓存管理核心：initCache、readPaperCache、writePaperCache、searchWithCache）
-- 创建 `paper-cacher` Skill（用户手动添加论文接口）
-- 扩展 config.json 的 cache 配置节
-- 更新 paper-phase1-research Skill 集成缓存步骤
-- 创建用户准备文档（user-responsibilities.md、pre-generation-checklist.md）
-
-**技术要点**多
-- **Markdown + Frontmatter 格式**多机器可解析 + 人类可读可编辑
-- **增量更新策略**多通过 `processed-ids.txt` 追踪已处理论文
-- 第二次生成速度提升 60-80%，WebSearch API 调用减少 70-90%
-
----
-
-### 文档术语一致性更新
-
-**工作内容**多
-- 移除误导性术语："Agent 层s" → "Skill + Agent 混合架构"
-- 更新所有核心文档的术语引用
-- 术语一致性原则：术语替换遵循"一对多"或"多对一"原则
-
----
-
-### 会议配置 Markdown 化
-
-**工作内容**多
-- 所有会议/期刊配置从 `config.json` 迁移至根目录 `venues.md`
-- 包含 10 个预定义会议/期刊配置（AAAI、IJCAI、ACL、EMNLP、ISWC、WWW、KR、AAMAS、TOIS、TKDE）
-- 使用 YAML + Markdown 格式，支持用户自定义添加
-
-**技术要点**多
-- **单一真相源**多所有会议配置统一管理在 venues.md
-- **人类可读**多相比 JSON 更易编辑
-- **Git 友好**多用户配置修改与系统配置分离
-
----
-
-### Phase 1 并行执行优化
-
-**工作内容**多
-- 创建 `paper-phase1-parallel` Skill（使用 Task 工具的 `run_in_background` 实现真正并发）
-- 扩展 config.json 的 parallel 配置节
-- 更新 paper-phase1-research Skill 添加并行模式路由
-
-**技术要点**多
-- 通过配置开关 `config.parallel.phase1_enabled` 控制
-- 错误隔离：单个 Agent 失败不影响其他 Agent
-- Phase 1 执行时间减少 40-60%
-
----
-
-### 版本管理与用户确认机制
-
-**工作内容**多
-- 扩展 config.json 新增 versioning、confirmation、feedback 三个配置节
-- 创建 `version-manager` Skill（版本快照创建、比较、回滚、历史显示）
-- 修改 Phase 4 Skill 集成版本快照和用户确认
-- 增强 D2 修订专家支持用户反馈优先处理
-
-**技术要点**多
-- **版本模式**多all / milestones / smart / off
-- **确认模式**多full / threshold / skip
-- **反馈优先级**多用户反馈高于评审意见
-
----
-
-### 交互式论文生成流程
-
-**工作内容**多
-- 扩展 venues.md 添加 writing_style、review_criteria、historical_data
-- 创建 3 个交互式组件 Skill：venue-analyzer、interaction-manager、feedback-collector
-- 设计 4 个关键交互节点（Phase 0.1 期刊选择、0.2 题目确认、0.3 摘要框架、2.5 大纲确认）
-- 扩展 config.json 新增 interaction、venue_analysis 配置节
-
-**技术要点**多
-- **人类在环设计**多通过 AskUserQuestion 工具实现关键节点确认
-- **增量架构演进**多Phase 0 插入不影响现有 Phases 1-4
-- 早期确认可减少 60-70% 的后期返工成本
-
----
-
-### A2 重构为独立前置工具
-
-**工作内容**多
-- A2（Engineering Analyst）从 Phase 1 流水线 Agent 移至独立 `codebase-analyzer` Skill
-- 系统从 12 个 Agent 精简为 11 个
-- 更新所有文档中的 Agent 计数和 A2 引用
-
-**技术要点**多
-- A2 仅在用户没有 `input-context.md` 但有代码库时使用
-- 作为前置工具不计入流水线 Agent
+**最后更新**: 2026-02-18

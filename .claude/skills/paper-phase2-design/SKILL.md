@@ -1,130 +1,138 @@
 ---
 name: paper-phase2-design
-description: "Executes Phase 2 (Design) with strict serial execution: B1 → B2 → B3. Invoked by paper-generation orchestrator."
+description: "执行 Phase 2（设计阶段），严格串行执行：B2 → B3。由 paper-generation 编排器调用。"
 ---
 
-# Phase 2: Design Orchestrator
+# Phase 2: 设计阶段编排器
 
-## Overview
+## 概述
 
-You are the **Phase 2 Design Orchestrator** — responsible for related work analysis, experiment design, and paper architecture design.
+你是 **Phase 2 设计阶段编排器** — 负责实验设计和论文架构设计。
 
-**Invocation:** `Skill(skill="paper-phase2-design", args="{project}")`
+**调用方式：** `Skill(skill="paper-phase2-design", args="{project}")`
 
-**Execution Mode:** Strict serial — B1 → B2 → B3
-- Each agent depends on previous agent's output
-- No skipping — all three agents must complete successfully
+**执行模式：** 严格串行 — B2 → B3
+- B3 依赖 B2 的输出
+- 不可跳过 — 两个 Agent 必须全部成功完成
 
-**DO NOT** write paper content — delegate to specialist Agents.
+**不要** 编写论文内容 — 委托给专业 Agent。
 
 ---
 
-## Agent Execution (Serial)
+## Agent 执行（串行）
 
-### B1: Related Work Analyst
+### B2: 实验设计师
 
-**Agent File:** `agents/phase2/b1-related-work-analyst.md`
+**Skill：** `Skill(skill="b2-experiment-designer", args="{project}")`
 
-**Model:** `config.models.reasoning`
+**模型：** `config.models.reasoning`
 
-**Inputs:**
-- `workspace/{project}/phase1/a1-literature-survey.json`
-- `workspace/{project}/phase1/a4-innovations.json`
+**输入：**
+- `workspace/{project}/phase1/innovation-synthesis.json`（必需）
+- `workspace/{project}/input-context.md`（必需）
+- **所有可用的 Phase 1 文件** — 使用 Glob 发现：
+  - `workspace/{project}/phase1/*.json`（所有 Agent 输出）
+  - `workspace/{project}/phase1/skill-*.json`（所有 Skill 输出）
 
-**Task:**
-- Analyze related work from literature survey
-- Position project's innovations within existing research landscape
-- Identify research gaps and opportunities
-- Output: `workspace/{project}/phase2/b1-related-work.json` + `.md`
+**任务：**
+- 设计严格的实验来验证每个创新点
+- 定义评估指标和基线
+- 指定数据集、参数和流程
+- 输出：`workspace/{project}/phase2/b2-experiment-design.json` + `.md`
 
-**Spawn and wait** for completion, then verify output files exist.
+**启动方式：**
+```
+Task(
+    subagent_type="general-purpose",
+    model=config.models.reasoning,
+    name="B2-ExperimentDesigner",
+    prompt="""You are the B2 Experiment Designer agent for project "{project}".
 
-### B2: Experiment Designer
+Call Skill(skill="b2-experiment-designer", args="{project}") and follow its instructions completely.
 
-**Agent File:** `agents/phase2/b2-experiment-designer.md`
+Return a brief confirmation when complete."""
+)
+```
 
-**Model:** `config.models.reasoning`
+**启动并等待** 完成，然后验证输出文件存在。
 
-**Inputs:**
-- `workspace/{project}/phase1/a4-innovations.json` (required)
-- `workspace/{project}/input-context.md` (required)
-- **All available Phase 1 files** — use Glob to discover:
-  - `workspace/{project}/phase1/*.json` (all agent outputs)
-  - `workspace/{project}/phase1/skill-*.json` (all skill outputs)
+### B3: 论文架构师
 
-**Task:**
-- Design rigorous experiments to validate each innovation
-- Define evaluation metrics and baselines
-- Specify datasets, parameters, and procedures
-- Output: `workspace/{project}/phase2/b2-experiment-design.json` + `.md`
+**Skill：** `Skill(skill="b3-paper-architect", args="{project}")`
 
-**Spawn and wait** for completion, then verify output files exist.
+**模型：** `config.models.reasoning`
 
-### B3: Paper Architect
-
-**Agent File:** `agents/phase2/b3-paper-architect.md`
-
-**Model:** `config.models.reasoning`
-
-**Inputs:**
-- **All Phase 1 outputs** — use Glob to discover:
+**输入：**
+- **所有 Phase 1 输出** — 使用 Glob 发现：
   - `workspace/{project}/phase1/*.json`
-- **All Phase 2 outputs so far** — use Glob to discover:
-  - `workspace/{project}/phase2/b1-related-work.json`
+- **Phase 2 B2 输出**：
   - `workspace/{project}/phase2/b2-experiment-design.json`
 
-**Task:**
-- Design complete paper structure with sections
-- Define section titles, content flow, and dependencies
-- Specify figures, tables, and their placement
-- Output: `workspace/{project}/phase2/b3-paper-outline.json` + `.md`
+**任务：**
+- 设计完整的论文结构和章节
+- 定义章节标题、内容流程和依赖关系
+- 指定图表及其放置位置
+- 输出：`workspace/{project}/phase2/b3-paper-outline.json` + `.md`
 
-**Spawn and wait** for completion, then verify output files exist.
+**启动方式：**
+```
+Task(
+    subagent_type="general-purpose",
+    model=config.models.reasoning,
+    name="B3-PaperArchitect",
+    prompt="""You are the B3 Paper Architect agent for project "{project}".
+
+Call Skill(skill="b3-paper-architect", args="{project}") and follow its instructions completely.
+
+Return a brief confirmation when complete."""
+)
+```
+
+**启动并等待** 完成，然后验证输出文件存在。
 
 ---
 
 ## Quality Gate 2
 
-**Expected Files (6 total):**
-- `phase2/b1-related-work.json` + `.md`
+**预期文件（共 4 个）：**
 - `phase2/b2-experiment-design.json` + `.md`
 - `phase2/b3-paper-outline.json` + `.md`
 
-**Verification:**
-1. Use Glob: `workspace/{project}/phase2/*.json` and `*.md`
-2. Compare expected vs found
-3. Write `workspace/{project}/quality-gates/gate-2.json`
+**验证：**
+1. 使用 Glob：`workspace/{project}/phase2/*.json` 和 `*.md`
+2. 比较预期与实际找到的文件
+3. 写入 `workspace/{project}/quality-gates/gate-2.json`
 
-If all files present → Status: "passed", continue to Phase 3.
-If any missing → Status: "failed", error handling.
-
----
-
-## Error Handling
-
-### Agent Failure
-
-If any agent (B1, B2, B3) fails:
-1. Log failure details
-2. Options: Retry once / Skip to Phase 3 / Manual intervention
-3. Update gate status to "failed"
-
-**Note:** Phase 2 has strict serial dependencies — cannot skip agents. A failure in B1 blocks B2 and B3.
-
-### B2 Special Case
-
-If B2 lacks Phase 1 inputs (e.g., skill outputs missing):
-- Proceed with available inputs only
-- Log limitation in gate record
-- May affect experiment design quality
+如果所有文件都存在 → 状态："passed"，继续到 Phase 3。
+如果有任何缺失 → 状态："failed"，错误处理。
 
 ---
 
-## Success Criteria
+## 错误处理
 
-Phase 2 is **COMPLETE** when:
-1. Quality Gate 2 status is "passed"
-2. All three agent outputs exist
-3. B3 paper outline exists and is valid
+### Agent 失败
 
-Report completion to orchestrator and return to Phase 3.
+如果任何 Agent（B2、B3）失败：
+1. 记录失败详情
+2. 选项：重试一次 / 跳到 Phase 3 / 人工干预
+3. 更新 Gate 状态为 "failed"
+
+**注意：** Phase 2 有严格的串行依赖 — 不能跳过 Agent。B2 失败会阻塞 B3。
+
+### B2 特殊情况
+
+如果 B2 缺少 Phase 1 输入（例如，Skill 输出缺失）：
+- 仅使用可用输入继续
+- 在 Gate 记录中记录限制
+- 可能影响实验设计质量
+
+---
+
+## 成功标准
+
+Phase 2 **完成** 的条件：
+1. Quality Gate 2 状态为 "passed"
+2. 两个 Agent 输出都存在
+3. B3 论文大纲存在且有效
+
+向编排器报告完成并返回到 Phase 3。

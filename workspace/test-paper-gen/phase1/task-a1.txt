@@ -1,8 +1,0 @@
-Spawn a teammate named "A1 - Literature Surveyor" with model sonnet.
-System prompt: [A1 文献调研专家系统提示内容]
-Task: 请为主题为"大语言模型与领域知识图谱融合的智能数控故障诊断系统研究"的论文进行文献调研。
-- 搜索并分析 30+ 相关学术论文
-- 按研究主题分类（方法论、技术、应用等）
-- 提取元数据多标题、作者、会议/期刊、年份、引用数
-- 输出到多/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/test-paper-gen/phase1/a1-literature-survey.json 和 .md
-Budget: $3

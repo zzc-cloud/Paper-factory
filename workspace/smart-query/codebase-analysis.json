@@ -1,0 +1,394 @@
+{
+  "agent_id": "a2-codebase-analyzer",
+  "status": "complete",
+  "timestamp": "2026-02-14T12:00:00Z",
+  "summary": "分析了 Smart Query 智能问数系统代码库中的 60 个 Python 文件（17,607 行）、23 个 Skill 文件（6,554 行）和 73 个知识文档（21,283 行）。识别了 7 种架构模式和 14 个潜在学术创新点。",
+  "data": {
+    "architecture": {
+      "layers": [
+        {
+          "name": "领域本体知识图谱层",
+          "description": "基于 Neo4j 的三层分层知识图谱",
+          "sub_layers": [
+            {
+              "name": "魔数师指标层",
+              "nodes": 163284,
+              "hierarchy": "SECTOR → CATEGORY → THEME → SUBPATH → INDICATOR",
+              "levels": 5
+            },
+            {
+              "name": "数据资产层",
+              "nodes": 35379,
+              "hierarchy": "SCHEMA → TABLE_TOPIC → TABLE",
+              "levels": 3,
+              "details": {
+                "schemas": 9,
+                "table_topics": 83,
+                "tables": 35287
+              }
+            },
+            {
+              "name": "术语标准层",
+              "nodes": 40319,
+              "details": {
+                "terms": 39558,
+                "data_standards": 761
+              }
+            }
+          ],
+          "cross_layer_relationships": {
+            "total": 197973,
+            "HAS_INDICATOR": 147464,
+            "UPSTREAM": 50509
+          },
+          "relationship_types": 7,
+          "key_files": [
+            "ontology-layer/src/load/main.py",
+            "ontology-layer/src/load/neo4j_loader.py",
+            "ontology-layer/src/load/embedding_generator.py",
+            "ontology-layer/config.py"
+          ]
+        },
+        {
+          "name": "MCP 工具服务层",
+          "description": "通过 Model Context Protocol 暴露知识图谱操作工具",
+          "tools_count": 28,
+          "servers": [
+            {
+              "name": "ontology_server",
+              "backend": "Neo4j",
+              "tools": 20,
+              "file": "mcp-server/ontology_server.py",
+              "lines": 1250,
+              "key_tools": [
+                "layered_keyword_search",
+                "hybrid_search_tables",
+                "get_indicator_field_mapping",
+                "get_table_dependencies",
+                "get_table_heat_info",
+                "search_terms_by_keyword",
+                "get_tables_by_term"
+              ]
+            },
+            {
+              "name": "simple_resources_server",
+              "backend": "MySQL",
+              "tools": 8,
+              "file": "mcp-server/simple_resources_server.py",
+              "lines": 900,
+              "key_tools": [
+                "get_table_columns_bigmeta",
+                "execute_sql",
+                "find_indicators_by_name"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "认知推理层（Skills）",
+          "description": "基于 Claude Code Skill 架构的认知模块化推理系统",
+          "skills_count": 5,
+          "skills": [
+            {
+              "name": "smart-query",
+              "role": "主编排器",
+              "lines": 791,
+              "file": ".claude/skills/smart-query/SKILL.md"
+            },
+            {
+              "name": "smart-query-indicator",
+              "role": "策略一：指标驱动",
+              "lines": 456,
+              "file": ".claude/skills/smart-query-indicator/SKILL.md"
+            },
+            {
+              "name": "smart-query-scenario",
+              "role": "策略二：场景驱动",
+              "lines": 455,
+              "file": ".claude/skills/smart-query-scenario/SKILL.md"
+            },
+            {
+              "name": "smart-query-term",
+              "role": "策略三：术语驱动",
+              "lines": 509,
+              "file": ".claude/skills/smart-query-term/SKILL.md"
+            },
+            {
+              "name": "sql-generation",
+              "role": "SQL 生成",
+              "lines": 1259,
+              "file": ".claude/skills/sql-generation/SKILL.md"
+            }
+          ]
+        }
+      ],
+      "PLACEHOLDER_COMPONENTS": true,
+      "information_flow": {
+        "input": "用户自然语言数据需求",
+        "stage_1_clarification": "阶段 0：需求澄清（理解用户意图）",
+        "stage_2_strategy_1": "策略一：魔数师指标驱动搜索 → 证据包 1（指标 ID、业务路径、候选字段）",
+        "stage_3_strategy_2": "策略二：Schema→Topic→Table 收敛路径 + 混合检索 → 证据包 2（候选表、热度信息）",
+        "stage_4_strategy_3": "策略三：术语搜索 + 语义增强 → 证据包 3（字段分布、数据标准语义）",
+        "stage_5_adjudication": "综合裁决：三证据包交叉验证 + 血缘关系分析 → 完整证据包（主表 + 关联表 + JOIN 条件）",
+        "stage_6_sql_generation": "SQL 生成：基于完整证据包设计 SQL 结构 → 生成可执行 SQL",
+        "output": "带业务注释的完整 SQL 查询 + 探查轨迹"
+      }
+    },
+    "patterns": [
+      {
+        "name": "Orchestrator Pattern（编排器模式）",
+        "description": "主编排器协调三个独立策略 Skill 的串行执行",
+        "evidence": ".claude/skills/smart-query/SKILL.md"
+      },
+      {
+        "name": "Serial Execution with Implicit Context Inheritance（串行执行 + 隐式上下文继承）",
+        "description": "三策略串行执行，通过对话历史实现语义累积",
+        "evidence": ".claude/skills/smart-query/SKILL.md, docs/knowledge/research-exploration.md"
+      },
+      {
+        "name": "Evidence Fusion（证据融合）",
+        "description": "三个独立证据包在综合裁决阶段进行交叉验证和融合",
+        "evidence": ".claude/skills/smart-query/SKILL.md"
+      },
+      {
+        "name": "Convergent Path Navigation（收敛路径导航）",
+        "description": "Schema→Topic→Table 逐步缩小搜索空间",
+        "evidence": ".claude/skills/smart-query-scenario/SKILL.md"
+      },
+      {
+        "name": "Dual Retrieval（双重检索）",
+        "description": "收敛路径（结构化）+ 混合检索（语义）强制并行执行",
+        "evidence": ".claude/skills/smart-query-scenario/SKILL.md, docs/knowledge/smart-query-design.md"
+      },
+      {
+        "name": "Pre-computed Mapping（预计算映射）",
+        "description": "ETL 阶段预计算指标→字段映射，存储到节点属性",
+        "evidence": "ontology-layer/src/load/main.py (step_22)"
+      },
+      {
+        "name": "Lineage-Driven Discovery（血缘驱动发现）",
+        "description": "基于血缘关系自动发现关联表和推断 JOIN 条件",
+        "evidence": ".claude/skills/smart-query/SKILL.md, mcp-server/ontology_server.py"
+      }
+    ],
+    "metrics": {
+      "knowledge_graph": {
+        "total_nodes": 238982,
+        "indicator_layer_nodes": 163284,
+        "data_asset_layer_nodes": 35379,
+        "term_standard_layer_nodes": 40319,
+        "cross_layer_relationships": 197973,
+        "relationship_types": 7,
+        "schemas": 9,
+        "table_topics": 83,
+        "tables": 35287,
+        "terms": 39558,
+        "data_standards": 761,
+        "vector_indexes": 3,
+        "embedding_dimensions": 384
+      },
+      "system_components": {
+        "mcp_tools": 28,
+        "core_skills": 5,
+        "total_skills": 23,
+        "etl_steps": 22,
+        "mysql_source_tables": 10,
+        "layer_priorities": 5
+      },
+      "code_statistics": {
+        "python_files": 60,
+        "python_lines": 17607,
+        "skill_files": 23,
+        "skill_lines": 6554,
+        "markdown_files": 73,
+        "markdown_lines": 21283,
+        "ontology_layer_files": 46,
+        "mcp_server_files": 2,
+        "json_config_files": 12
+      }
+    },
+    "potential_innovations": [
+      {
+        "id": 1,
+        "title": "领域本体作为认知中枢层",
+        "category": "architecture",
+        "academic_value": "high",
+        "evidence_files": [
+          "ontology-layer/src/load/main.py",
+          ".claude/skills/smart-query/SKILL.md",
+          "docs/knowledge/research-exploration.md"
+        ]
+      },
+      {
+        "id": 2,
+        "title": "三层分层知识图谱设计",
+        "category": "knowledge_engineering",
+        "academic_value": "high",
+        "evidence_files": [
+          "ontology-layer/config.py",
+          "ontology-layer/src/transform/build_hierarchy.py",
+          "ontology-layer/src/transform/build_physical_hierarchy.py",
+          "ontology-layer/src/transform/build_term_standard.py"
+        ]
+      },
+      {
+        "id": 3,
+        "title": "三策略串行推理与语义累积效应",
+        "category": "reasoning",
+        "academic_value": "high",
+        "evidence_files": [
+          ".claude/skills/smart-query/SKILL.md",
+          ".claude/skills/smart-query-indicator/SKILL.md",
+          ".claude/skills/smart-query-scenario/SKILL.md",
+          ".claude/skills/smart-query-term/SKILL.md",
+          "docs/knowledge/research-exploration.md"
+        ]
+      },
+      {
+        "id": 4,
+        "title": "证据包融合与 LLM 裁决机制",
+        "category": "reasoning",
+        "academic_value": "high",
+        "evidence_files": [
+          ".claude/skills/smart-query/SKILL.md",
+          "docs/knowledge/research-exploration.md"
+        ]
+      },
+      {
+        "id": 5,
+        "title": "收敛路径导航与双重检索机制",
+        "category": "retrieval",
+        "academic_value": "high",
+        "evidence_files": [
+          ".claude/skills/smart-query-scenario/SKILL.md",
+          "mcp-server/ontology_server.py",
+          "docs/knowledge/smart-query-design.md"
+        ]
+      },
+      {
+        "id": 6,
+        "title": "字段级向量化与固定比例混合检索",
+        "category": "retrieval",
+        "academic_value": "medium",
+        "evidence_files": [
+          "ontology-layer/src/load/embedding_generator.py",
+          "mcp-server/ontology_server.py"
+        ]
+      },
+      {
+        "id": 7,
+        "title": "血缘关系驱动的关联表发现与 JOIN 推断",
+        "category": "data_engineering",
+        "academic_value": "high",
+        "evidence_files": [
+          "mcp-server/ontology_server.py",
+          ".claude/skills/smart-query/SKILL.md",
+          "ontology-layer/src/load/neo4j_loader.py"
+        ]
+      },
+      {
+        "id": 8,
+        "title": "孤点表过滤机制",
+        "category": "data_quality",
+        "academic_value": "medium",
+        "evidence_files": [
+          "mcp-server/ontology_server.py",
+          ".claude/skills/smart-query/SKILL.md"
+        ]
+      },
+      {
+        "id": 9,
+        "title": "预计算指标-字段映射",
+        "category": "optimization",
+        "academic_value": "medium",
+        "evidence_files": [
+          "ontology-layer/src/load/main.py",
+          "ontology-layer/src/extract/bizview_parser.py",
+          "ontology-layer/src/load/neo4j_loader.py"
+        ]
+      },
+      {
+        "id": 10,
+        "title": "认知模块化架构",
+        "category": "architecture",
+        "academic_value": "high",
+        "evidence_files": [
+          ".claude/skills/smart-query/SKILL.md",
+          ".claude/skills/smart-query-indicator/SKILL.md",
+          ".claude/skills/smart-query-scenario/SKILL.md",
+          ".claude/skills/smart-query-term/SKILL.md",
+          "docs/knowledge/smart-query-design.md"
+        ]
+      },
+      {
+        "id": 11,
+        "title": "22 步 ETL 流水线与断点续传",
+        "category": "data_engineering",
+        "academic_value": "medium",
+        "evidence_files": [
+          "ontology-layer/src/load/main.py",
+          "ontology-layer/src/extract/",
+          "ontology-layer/src/transform/"
+        ]
+      },
+      {
+        "id": 12,
+        "title": "分层关键词检索与渐进降级",
+        "category": "retrieval",
+        "academic_value": "medium",
+        "evidence_files": [
+          "mcp-server/ontology_server.py",
+          ".claude/skills/smart-query-indicator/SKILL.md"
+        ]
+      },
+      {
+        "id": 13,
+        "title": "术语驱动的独立发现路径与语义增强层",
+        "category": "retrieval",
+        "academic_value": "high",
+        "evidence_files": [
+          ".claude/skills/smart-query-term/SKILL.md",
+          "mcp-server/ontology_server.py",
+          "ontology-layer/src/extract/extract_glossary.py"
+        ]
+      },
+      {
+        "id": 14,
+        "title": "多层级跨域表评估",
+        "category": "data_engineering",
+        "academic_value": "medium",
+        "evidence_files": [
+          "ontology-layer/config.py",
+          ".claude/skills/smart-query-scenario/SKILL.md"
+        ]
+      }
+    ],
+    "files_analyzed": {
+      "total_files": 133,
+      "python_files": 60,
+      "skill_files": 23,
+      "markdown_files": 73,
+      "json_files": 12,
+      "total_python_lines": 17607,
+      "total_skill_lines": 6554,
+      "total_markdown_lines": 21283,
+      "key_files_read": [
+        "CLAUDE.md",
+        ".mcp.json",
+        ".claude/skills/smart-query/SKILL.md",
+        ".claude/skills/smart-query-indicator/SKILL.md",
+        ".claude/skills/smart-query-scenario/SKILL.md",
+        ".claude/skills/smart-query-term/SKILL.md",
+        ".claude/skills/sql-generation/SKILL.md",
+        "mcp-server/ontology_server.py",
+        "mcp-server/simple_resources_server.py",
+        "ontology-layer/config.py",
+        "ontology-layer/src/load/main.py",
+        "ontology-layer/src/load/embedding_generator.py",
+        "ontology-layer/src/load/neo4j_loader.py",
+        "docs/knowledge/research-exploration.md",
+        "docs/knowledge/smart-query-design.md"
+      ]
+    }
+  }
+}

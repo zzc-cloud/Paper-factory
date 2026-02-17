@@ -1,24 +1,24 @@
 ---
 name: domain-knowledge-update
-description: "领域知识动态更新 — 通过 Web Search 获取前沿论文，直接更新对应的 review-{domain}-domain Skill 文件。"
+description: "领域知识动态更新 — 通过 Web Search 获取前沿论文和技术进展，同时更新 docs/domain-knowledge/ 下领域知识文档的理论分析和评审认知两部分。"
 ---
 
 # Domain Knowledge Update Skill
 
 ## 概述
 
-You are the **Domain Knowledge Update Skill** — responsible for dynamically updating domain knowledge through Web Search and directly updating the corresponding `review-{domain}-domain` Skill file.
+你是 **领域知识动态更新工具** — 负责通过 Web Search 获取前沿研究，**同时更新** `docs/domain-knowledge/{domain}.md` 文档的理论分析和评审认知两部分。
 
-**调用方式多** `Skill(skill="domain-knowledge-update", args="{domain}")`
+**调用方式：** `Skill(skill="domain-knowledge-update", args="{domain}")`
 
-**核心职责多**
-- Search for cutting-edge research papers in the target domain (past 2 years)
-- Analyze paper content to extract core concepts and research trends
-- **Directly update** the corresponding `review-{domain}-domain/SKILL.md` file
-- Generate a summary report of changes
-- All updates are tracked via git
+**核心职责：**
+- 搜索目标领域的前沿论文和技术进展（近 2 年）
+- 从论文中提取**理论层**和**评审层**两类知识更新
+- **直接更新**对应的 `docs/domain-knowledge/{domain}.md` 文档
+- 生成变更摘要报告
+- 通过 git 追踪所有更新
 
-**DO NOT** execute peer review — focus on knowledge acquisition and update.
+**不要**执行评审或理论分析 — 只做知识获取和文件更新。
 
 ---
 
@@ -26,10 +26,18 @@ You are the **Domain Knowledge Update Skill** — responsible for dynamically up
 
 **args 格式**: `{domain}`
 
-- `{domain}`: Target domain identifier (e.g., "knowledge_graph", "multi_agent_systems", "nl2sql", "bridge_engineering")
+支持的领域标识符：
+
+| 标识符 | 文档路径 | 全称 |
+|--------|-----------|------|
+| knowledge_graph | docs/domain-knowledge/kg.md | Knowledge Graphs and Ontology Engineering |
+| multi_agent_systems | docs/domain-knowledge/mas.md | Multi-Agent Systems (MAS) |
+| nl2sql | docs/domain-knowledge/nl2sql.md | Natural Language to SQL |
+| bridge_engineering | docs/domain-knowledge/bridge.md | Bridge Engineering |
+| data_analysis | docs/domain-knowledge/data.md | Data Analysis and Machine Learning |
 
 **示例调用**:
-```bash
+```
 Skill(skill="domain-knowledge-update", args="knowledge_graph")
 Skill(skill="domain-knowledge-update", args="multi_agent_systems")
 ```
@@ -38,291 +46,274 @@ Skill(skill="domain-knowledge-update", args="multi_agent_systems")
 
 ## 执行步骤
 
-### Step 1: Domain Validation and Skill Path Resolution
+### Step 1: 验证领域并解析 Skill 路径
 
 ```python
 SUPPORTED_DOMAINS = {
-    "knowledge_graph": {"skill": "review-kg-domain", "full_name": "Knowledge Graphs and Ontology Engineering"},
-    "multi_agent_systems": {"skill": "review-mas-domain", "full_name": "Multi-Agent Systems"},
-    "nl2sql": {"skill": "review-nl2sql-domain", "full_name": "Natural Language to SQL"},
-    "bridge_engineering": {"skill": "review-bridge-domain", "full_name": "Bridge Engineering"},
-    "data_analysis": {"skill": "review-data-domain", "full_name": "Data Analysis and Machine Learning"},
-    "software_engineering": {"skill": "review-se-domain", "full_name": "Software Engineering"},
-    "human_computer_interaction": {"skill": "review-hci-domain", "full_name": "Human-Computer Interaction"}
+    "knowledge_graph": {"doc": "docs/domain-knowledge/kg.md", "full_name": "Knowledge Graphs and Ontology Engineering"},
+    "multi_agent_systems": {"doc": "docs/domain-knowledge/mas.md", "full_name": "Multi-Agent Systems"},
+    "nl2sql": {"doc": "docs/domain-knowledge/nl2sql.md", "full_name": "Natural Language to SQL"},
+    "bridge_engineering": {"doc": "docs/domain-knowledge/bridge.md", "full_name": "Bridge Engineering"},
+    "data_analysis": {"doc": "docs/domain-knowledge/data.md", "full_name": "Data Analysis and Machine Learning"}
 }
-
-def get_skill_path(domain):
-    """获取对应 review-domain Skill 的文件路径"""
-    if domain not in SUPPORTED_DOMAINS:
-        raise ValueError(f"Unsupported domain: {domain}")
-    skill_name = SUPPORTED_DOMAINS[domain]["skill"]
-    return f".claude/skills/{skill_name}/SKILL.md"
 ```
 
-### Step 2: Search for Cutting-Edge Papers
+### Step 2: 读取并理解当前领域知识文档结构
 
-```python
-def search_recent_papers(domain):
-    """
-    Search for recent research papers in the target domain
-    """
-    domain_info = SUPPORTED_DOMAINS[domain]
-    current_year = 2025  # 或从系统获取当前年份
+**关键原则：不要硬编码 section 名称。** 不同领域的文档结构不完全一致（例如 MAS 用"第一层：核心理论知识"，KG 用"Part 1: 理论分析"）。
 
-    # 构建搜索查询
-    search_query = f"{domain_info['full_name']} recent research papers {current_year-1} {current_year}"
+1. 使用 `Read` 工具读取 `docs/domain-knowledge/{domain}.md` 的完整内容
+2. **语义识别**文件的两大部分：
+   - **理论分析部分**：包含范式、方法、形式化框架、技术组件等学术理论内容
+   - **评审认知部分**：包含评审维度、核心概念评估、常见陷阱、经典文献等评审标准
+3. 记录每个部分的起止位置和子 section 列表，用于后续精准插入
 
-    # 使用 WebSearch 搜索
-    search_results = WebSearch(
-        query=search_query,
-        result_limits=10
-    )
-
-    return search_results
+**输出：** 内部数据结构（不写文件），包含：
+```json
+{
+  "theory_section": {
+    "start_heading": "## Part 1: 理论分析",
+    "subsections": ["核心研究范式", "关键技术组件", "评估维度"],
+    "has_sota_tools": true,
+    "has_paradigms": true,
+    "has_methods": true
+  },
+  "review_section": {
+    "start_heading": "## Part 2: 评审认知框架",
+    "subsections": ["核心概念与评估维度", "经典文献对标", "SOTA 对比清单", "领域特定评审问题"],
+    "has_classic_papers": true,
+    "has_sota_checklist": true
+  }
+}
 ```
 
-### Step 3: Paper Analysis and Knowledge Extraction
+### Step 3: 多维度搜索前沿论文
 
-```python
-def analyze_papers_and_extract_updates(search_results, domain):
-    """
-    分析论文并提取知识更新
-    """
-    extracted_updates = {
-        "new_concepts": [],
-        "new_criteria": [],
-        "new_papers": [],
-        "new_pitfalls": [],
-        "updated_descriptions": []
-    }
+**不要只用一条通用查询。** 分别搜索理论进展和工具/方法更新：
 
-    for result in search_results:
-        try:
-            # 使用 WebFetch 获取论文内容
-            paper_content = WebFetch(
-                url=result['url'],
-                description=f"Extract domain knowledge updates for {domain}"
-            )
+**搜索策略（3 轮）：**
 
-            # 提取各类更新
-            concepts = extract_new_concepts(paper_content, domain)
-            criteria = extract_new_criteria(paper_content, domain)
-            papers = extract_new_papers(paper_content, result)
-            pitfalls = extract_new_pitfalls(paper_content, domain)
+**轮次 1 — 理论与方法进展：**
+```
+WebSearch("{domain_full_name} new method framework approach 2025 2026")
+```
+目标：发现新的理论范式、新的形式化方法、新的架构模式
 
-            extracted_updates["new_concepts"].extend(concepts)
-            extracted_updates["new_criteria"].extend(criteria)
-            extracted_updates["new_papers"].extend(papers)
-            extracted_updates["new_pitfalls"].extend(pitfalls)
+**轮次 2 — 工具与系统更新：**
+```
+WebSearch("{domain_full_name} benchmark tool system state-of-the-art 2025 2026")
+```
+目标：发现新的 SOTA 工具、新的基准测试、新的系统实现
 
-        except Exception as e:
-            print(f"Error analyzing paper {result['url']}: {str(e)}")
-            continue
+**轮次 3 — 综述与趋势：**
+```
+WebSearch("{domain_full_name} survey review trends challenges 2025 2026")
+```
+目标：发现领域趋势、新兴研究方向、未解决的挑战
 
-    return extracted_updates
+**每轮搜索 5-10 条结果，总计 15-30 条候选。**
+
+### Step 4: 论文分析与双层知识提取
+
+对每篇可访问的论文，使用 `WebFetch` 获取内容，然后提取**两层**知识：
+
+**理论层提取（服务于 Phase 1 理论分析）：**
+
+| 提取类型 | 说明 | 插入位置 |
+|---------|------|---------|
+| `new_paradigm` | 新的研究范式或架构模式 | 理论部分 → 范式/架构 subsection |
+| `new_method` | 新的方法、算法或技术 | 理论部分 → 方法/技术组件 subsection |
+| `new_formalization` | 新的形式化框架或数学模型 | 理论部分 → 形式化 subsection |
+| `sota_tool_update` | 新的 SOTA 工具、系统或基准 | 理论部分 → 评估维度 或 评审部分 → SOTA 清单 |
+
+**评审层提取（服务于 Phase 4 领域评审）：**
+
+| 提取类型 | 说明 | 插入位置 |
+|---------|------|---------|
+| `new_concept` | 新的核心概念及其评审要点 | 评审部分 → 核心概念 subsection |
+| `new_paper` | 重要的新经典文献 | 评审部分 → 经典文献 subsection |
+| `new_pitfall` | 新发现的常见问题或陷阱 | 评审部分 → 常见陷阱/评审问题 subsection |
+| `sota_update` | SOTA 对比清单的更新 | 评审部分 → SOTA 对比清单 |
+
+### Step 5: 语义定位与精准插入
+
+**核心原则：使用 LLM 语义理解定位插入位置，不硬编码 section 名称。**
+
+对于每条提取的知识更新，执行以下流程：
+
+1. **判断归属层**：该知识属于理论层还是评审层？
+2. **语义匹配 subsection**：在对应层中，找到语义最匹配的 subsection
+3. **去重检查**：该知识是否已存在于文件中（语义相似度判断）
+4. **格式适配**：按照该 subsection 的现有格式生成插入内容
+5. **使用 Edit 工具精准插入**：在匹配的 subsection 末尾追加
+
+**理论层插入格式示例：**
+
+新范式/方法：
+```markdown
+#### {N+1}. {新范式名称}
+
+**核心理论**：{作者} ({年份})。{一句话描述}。
+
+**关键特征**：
+- {特征 1}
+- {特征 2}
+- {特征 3}
+
+**映射指导**：{如何将目标系统映射到此范式}
 ```
 
-### Step 4: Read and Parse Current Skill File
-
-```python
-def read_current_skill(skill_path):
-    """
-    读取当前的 Skill 文件内容
-    """
-    with open(skill_path, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    # 解析现有内容结构
-    parsed = {
-        "header": extract_header(content),
-        "core_paradigms": extract_section(content, "核心研究范式"),
-        "core_concepts": extract_section(content, "核心概念与评估维度"),
-        "evaluation_dimensions": extract_section(content, "领域评审维度"),
-        "common_pitfalls": extract_section(content, "常见评审陷阱"),
-        "classic_papers": extract_section(content, "经典文献")
-    }
-
-    return content, parsed
+新工具/系统（追加到 SOTA 清单）：
+```markdown
+- **{类别}**：在现有列表末尾追加新工具名称
 ```
 
-### Step 5: Merge Updates into Skill Content
+**评审层插入格式示例：**
 
-```python
-def merge_updates_to_skill(current_content, updates, domain):
-    """
-    将更新合并到 Skill 文件中
-    """
-    updated_content = current_content
-
-    # 1. 添加新的核心概念
-    for concept in updates["new_concepts"]:
-        updated_content = insert_new_concept(updated_content, concept)
-
-    # 2. 添加新的评估标准
-    for criterion in updates["new_criteria"]:
-        updated_content = insert_new_criterion(updated_content, criterion)
-
-    # 3. 添加新的经典文献
-    for paper in updates["new_papers"]:
-        updated_content = insert_new_paper(updated_content, paper)
-
-    # 4. 添加新的常见陷阱
-    for pitfall in updates["new_pitfalls"]:
-        updated_content = insert_new_pitfall(updated_content, pitfall)
-
-    # 5. 更新版本信息
-    updated_content = update_version_info(updated_content)
-
-    return updated_content
-
-def insert_new_concept(content, concept):
-    """
-    在"核心概念与评估维度"部分插入新概念
-    """
-    concept_section = find_section(content, "核心概念与评估维度")
-
-    new_concept_text = f"""
-#### {concept['name']}
-
-**期望用法**多
-- {concept['expect']}
-
-**常见问题**多
-{chr(10).join(f"- {issue}" for issue in concept['common_issues'])}
-
-**评审要点**多
-- {concept['review_points']}
-"""
-
-    # 在该部分末尾插入
-    return insert_at_end_of_section(content, "核心概念与评估维度", new_concept_text)
+新核心概念：
+```markdown
+#### {概念名称}
+- **期望用法**：{正确使用方式}
+- **常见问题**：{常见误用}
+- **评审要点**：{评审时应检查什么}
 ```
 
-### Step 6: Write Updated Skill File
-
-```python
-def write_updated_skill(skill_path, updated_content):
-    """
-    写入更新后的 Skill 文件
-    """
-    with open(skill_path, 'w', encoding='utf-8') as f:
-        f.write(updated_content)
-
-    return skill_path
+新经典文献（追加到表格）：
+```markdown
+| {作者} ({年份}) | {为什么重要} | {应在何处引用} |
 ```
 
-### Step 7: Generate Update Summary
+### Step 6: 执行文件更新
+
+1. 对所有待插入的更新按 section 位置排序（从文件末尾向前插入，避免行号偏移）
+2. 使用 `Edit` 工具逐条插入
+3. 每次插入后验证文件结构完整性
+
+**去重规则：**
+- 如果新范式/方法与现有内容语义重复 → 跳过，记录到摘要
+- 如果新工具已在 SOTA 清单中 → 跳过
+- 如果新文献已在经典文献表中 → 跳过
+- 如果新概念与现有概念高度相似 → 考虑更新现有条目而非新增
+
+### Step 7: 生成变更摘要
+
+写入摘要到控制台输出（不写文件）：
 
 ```markdown
-# Domain Knowledge Update Summary
+# 领域知识更新摘要
 
-## Domain: {domain_full_name}
-**Date**: {current_date}
-**Skill File Updated**: {skill_path}
+## 领域：{domain_full_name}
+**更新时间**：{current_date}
+**Skill 文件**：docs/domain-knowledge/{domain}.md
 
-## Changes Summary
+## 理论层更新
 
-### New Core Concepts Added ({count})
+### 新增范式/架构 ({count})
+{paradigm_list}
+
+### 新增方法/技术 ({count})
+{method_list}
+
+### SOTA 工具更新 ({count})
+{tool_list}
+
+## 评审层更新
+
+### 新增核心概念 ({count})
 {concept_list}
 
-### New Evaluation Criteria Added ({count})
-{criteria_list}
-
-### New Classic Papers Added ({count})
+### 新增经典文献 ({count})
 {paper_list}
 
-### New Common Pitfalls Identified ({count})
+### 新增评审陷阱 ({count})
 {pitfall_list}
 
-## Source Papers Analyzed
+### SOTA 对比清单更新 ({count})
+{sota_list}
+
+## 跳过的重复项 ({count})
+{skipped_list}
+
+## 分析的论文来源 ({count})
 {source_papers}
-
-## Git Commit Message
 ```
-git add .claude/skills/{skill_name}/SKILL.md
-git commit -m "docs: update {domain} domain knowledge with recent research
 
-- Added {n} new core concepts
-- Added {n} new evaluation criteria
-- Added {n} new classic papers
-- Added {n} new common pitfalls
+### Step 8: Git 提交
+
+```bash
+git add docs/domain-knowledge/{domain}.md
+git commit -m "knowledge: update {domain} domain knowledge (theory + review)
+
+Theory updates:
+- {n} new paradigms/methods
+- {n} SOTA tool updates
+
+Review updates:
+- {n} new concepts
+- {n} new classic papers
+- {n} new pitfalls
 
 Source: Web Search {date}"
 ```
-```
 
 ---
 
-## 领域知识存储架构
+## 领域知识文件的双层结构
+
+每个 `docs/domain-knowledge/{domain}.md` 文档包含两层内容：
 
 ```
-.claude/skills/
-├── review-kg-domain/SKILL.md       ← KG 领域知识的唯一存储（可被此 Skill 更新）
-├── review-mas-domain/SKILL.md      ← MAS 领域知识的唯一存储
-├── review-nl2sql-domain/SKILL.md   ← NL2SQL 领域知识的唯一存储
-├── review-bridge-domain/SKILL.md   ← Bridge Engineering 领域知识的唯一存储
-├── review-data-domain/SKILL.md     ← Data Analysis 领域知识的唯一存储
-├── review-se-domain/SKILL.md       ← Software Engineering 领域知识的唯一存储
-├── review-hci-domain/SKILL.md      ← HCI 领域知识的唯一存储
-└── domain-knowledge-update/SKILL.md ← 更新工具（本 Skill）
+docs/domain-knowledge/{domain}.md
+├── 概述 + 调用方式
+├── 【理论分析层】← Phase 1 DK-Agent 读取，用于理论创新
+│   ├── 核心研究范式 / 范式映射
+│   ├── 关键技术组件 / 方法
+│   ├── 形式化框架（部分领域）
+│   └── 评估维度
+└── 【评审认知层】← Phase 4 评审专家读取，用于领域评审
+    ├── 核心概念与评估维度
+    ├── 经典文献对标
+    ├── SOTA 对比清单
+    └── 领域特定评审问题 / 常见陷阱
 ```
 
-**架构优势**多
-- **单一数据源**多每个领域的知识只存储在一个 Skill 文件中
-- **可自动更新**多通过此 Skill 使用 Web Search 自动更新
-- **可手动编辑**多也可以直接手动编辑 Skill 文件
-- **Git 可追溯**多所有更新通过 git commit 追踪
-- **直接读取**多评审专家直接读取对应的 Skill
+**本 Skill 同时更新两层**，确保理论分析和评审认知始终保持同步。
 
 ---
 
-## 支持的领域
+## 与流水线的协作关系
 
-| 标识符 | Skill 文件 | 全称 |
-|--------|-----------|------|
-| knowledge_graph | review-kg-domain | Knowledge Graphs and Ontology Engineering |
-| multi_agent_systems | review-mas-domain | Multi-Agent Systems (MAS) |
-| nl2sql | review-nl2sql-domain | Natural Language to SQL |
-| bridge_engineering | review-bridge-domain | Bridge Engineering |
-| data_analysis | review-data-domain | Data Analysis and Machine Learning |
-| software_engineering | review-se-domain | Software Engineering |
-| human_computer_interaction | review-hci-domain | Human-Computer Interaction |
+| 阶段 | 消费者 | 读取内容 | 用途 |
+|------|--------|---------|------|
+| Phase 1 | DK-Agent（理论分析） | 理论分析层 | 将目标系统映射到领域理论框架 |
+| Phase 4 | 评审专家 | 评审认知层 | 提供领域评审标准和评估维度 |
+| 维护期 | **本 Skill** | 两层都更新 | 通过 WebSearch 保持知识前沿性 |
 
 ---
 
 ## 错误处理
 
-### Search Errors
-- If no papers are found: Report warning, no update made
-- If search fails: Retry with alternative keywords
-- If too few results: Lower search constraints
+### 搜索错误
+- 某轮搜索无结果 → 跳过该轮，继续其他轮次
+- 搜索完全失败 → 使用备选关键词重试一次
+- 结果过少（< 5 条） → 放宽搜索条件（扩大时间范围到 3 年）
 
-### Analysis Errors
-- If paper content is unreadable: Skip to next paper
-- If extraction fails: Skip to next paper
-- If validation fails: Skip to next paper
+### 论文分析错误
+- 论文内容不可读 → 跳过，记录到摘要
+- WebFetch 失败 → 跳过，记录 URL
+- 提取结果为空 → 跳过
 
-### File Update Errors
-- If Skill file is not found: Report error with correct path
-- If file update fails: Report error, keep original file intact
-- Always create backup before updating
+### 文件更新错误
+- 领域知识文档不存在 → 报错并终止
+- Edit 操作失败 → 报错，保持原文件不变
+- 更新后文件结构异常 → 回滚（git checkout）
 
 ---
 
 ## 使用建议
 
-1. **定期更新**多每 1-2 个月执行一次，保持领域知识前沿性
-2. **审查更新**多更新后检查 Skill 文件，确保新增内容准确
-3. **Git 提交**多每次更新后通过 git commit 追踪变更历史
-4. **手动补充**多对于特别重要的新概念，可以手动编辑 Skill 文件
-
----
-
-## 与 domain-knowledge-prep 的协作
-
-| Skill | 职责 | 操作 |
-|-------|------|------|
-| **domain-knowledge-update** | 更新领域知识 | 读取 Web Search → **写入** `review-{domain}-domain/SKILL.md` |
-| **domain-knowledge-prep** | 准备评审指南 | **读取** `review-{domain}-domain/SKILL.md` → 生成评审指南 |
-
-两者操作同一个 Skill 文件，实现单一数据源的读写分离。
+1. **定期更新**：每 1-2 个月执行一次，保持领域知识前沿性
+2. **审查更新**：更新后检查领域知识文档，确保新增内容准确
+3. **Git 提交**：每次更新后通过 git commit 追踪变更历史
+4. **手动补充**：对于特别重要的新概念，可以手动编辑领域知识文档
+5. **理论层优先**：如果论文同时包含理论贡献和工具更新，优先提取理论贡献

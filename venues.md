@@ -3,13 +3,11 @@
 > 此文件是论文生成系统**唯一的会议/期刊配置源**。所有预定义和用户自定义的会议/期刊配置都在这里。
 > 系统在启动论文生成时会读取此文件，根据用户指定的 `target_venue` 查找对应配置并应用格式化规则。
 >
-> **V2 新增**多交互式论文生成流程 — 预定义期刊现在包含写作风格配置，用于生成 `venue-style-guide.md`，指导后续 Phase 的写作风格适配。
-
 ---
 
 ## 预定义会议列表
 
-以下系统预定义的会议/期刊配置，可以直接使用或作为参考模板多
+以下系统预定义的会议/期刊配置，可以直接使用或作为参考模板：
 
 ### AAAI
 
@@ -19,11 +17,10 @@ AAAI:
   type: "conference"
   format: "double-column"
   page_limit: 8
-  template: "aaai25"
   keywords: ["AAAI", "artificial intelligence", "AI conference"]
   deadline_note: "通常在 8-9 月截稿"
 
-  # 写作风格配置（V2 新增）
+  # 写作风格配置
   writing_style:
     abstract_length: {min: 200, max: 250, recommended: 225}
     abstract_structure: ["motivation", "approach", "results", "conclusion"]
@@ -64,7 +61,6 @@ IJCAI:
   type: "conference"
   format: "single-column"
   page_limit: 8
-  template: "ijcai25"
   keywords: ["IJCAI", "IJCAI", "artificial intelligence"]
   deadline_note: "通常在 1 月截稿"
 
@@ -108,7 +104,6 @@ ISWC:
   type: "conference"
   format: "single-column"
   page_limit: 15
-  template: "iswc2025"
   keywords: ["ISWC", "Semantic Web", "knowledge graph"]
   deadline_note: "通常在 10-11 月截稿"
 
@@ -152,7 +147,6 @@ WWW:
   type: "conference"
   format: "double-column"
   page_limit: 8
-  template: "www2025"
   keywords: ["WWW", "Web Conference", "web conference"]
   deadline_note: "通常在 10-11 月截稿"
 
@@ -196,7 +190,6 @@ ACL:
   type: "conference"
   format: "double-column"
   page_limit: 8
-  template: "acl2025"
   keywords: ["ACL", "computationa linguistics", "NLP"]
   deadline_note: "通常在 2 月截稿"
 
@@ -240,7 +233,6 @@ EMNLP:
   type: "conference"
   format: "double-column"
   page_limit: 8
-  template: "emnlp2025"
   keywords: ["EMNLP", "EMNLP", "NLP", "natural language processing"]
   deadline_note: "通常在 5-6 月截稿"
 
@@ -284,7 +276,6 @@ KR:
   type: "conference"
   format: "single-column"
   page_limit: 10
-  template: "kr2025"
   keywords: ["KR", "knowledge representation", "reasoning"]
   deadline_note: "通常在 11 月截稿"
 
@@ -328,7 +319,6 @@ AAMAS:
   type: "conference"
   format: "double-column"
   page_limit: 8
-  template: "aamas2025"
   keywords: ["AAMAS", "autonomous agents", "multiagent systems"]
   deadline_note: "通常在 5-6 月截稿"
 
@@ -372,7 +362,6 @@ TOIS:
   type: "journal"
   format: "single-column"
   page_limit: null
-  template: "acm-transactions"
   keywords: ["TOIS", "ACM TOIS", "information systems", "journal"]
   deadline_note: "期刊，全年可投稿"
 
@@ -416,7 +405,6 @@ TKDE:
   type: "journal"
   format: "single-column"
   page_limit: null
-  template: "acm-transactions"
   keywords: ["TKDE", "ACM TKDE", "knowledge discovery", "data mining", "journal"]
   deadline_note: "期刊，全年可投稿"
 
@@ -466,11 +454,10 @@ TKDE:
   type: "[conference | journal]"
   format: "[single-column | double-column]"
   page_limit: [数字 | null]
-  template: "[模板标识符]"
   keywords: ["关键词1", "关键词2", "..."]
   deadline_note: "[截稿提示]"
 
-  # 写作风格配置（V2 新增）
+  # 写作风格配置
   writing_style:
     abstract_length: {min: 数字, max: 数字, recommended: 数字}
     abstract_structure: ["元素1", "元素2", "..."]
@@ -512,7 +499,6 @@ TKDE:
 | `type` | 类型（conference 或 journal） | conference |
 | `format` | 格式（single-column 或 double-column） | double-column |
 | `page_limit` | 页数限制（数字或 null） | 12 或 null |
-| `template` | 模板标识符（用于内部识别） | icse2025 |
 | `keywords` | 关键词列表（用于文献搜索） | ["software engineering", "ICSE"] |
 | `deadline_note` | 截稿时间提示 | 通常在 8-9 月截稿 |
 
@@ -547,7 +533,7 @@ TKDE:
 
 ### 示例
 
-#### 示例 1多ICSE 2025（会议）
+#### 示例 1：ICSE 2025（会议）
 
 ```yaml
 ICSE-2025:
@@ -555,7 +541,6 @@ ICSE-2025:
   type: "conference"
   format: "double-column"
   page_limit: 12
-  template: "icse2025"
   keywords: ["software engineering", "ICSE", "software development", "testing"]
   deadline_note: "通常在 8-9 月截稿"
 
@@ -591,7 +576,7 @@ ICSE-2025:
     trending_topics: ["AI_assisted_SE", "DevOps", "microservices", "green_computing"]
 ```
 
-#### 示例 2多CHI 2025（会议）
+#### 示例 2：CHI 2025（会议）
 
 ```yaml
 CHI-2025:
@@ -599,7 +584,6 @@ CHI-2025:
   type: "conference"
   format: "single-column"
   page_limit: 10
-  template: "chi2025"
   keywords: ["CHI", "human-computer interaction", "UX", "user experience"]
   deadline_note: "通常在 9-10 月截稿"
 
@@ -635,7 +619,7 @@ CHI-2025:
     trending_topics: ["accessibility", "AI_in_HCI", "XR_VR_interfaces", "sustainable_HCI"]
 ```
 
-#### 示例 3多VLDB Journal（期刊）
+#### 示例 3：VLDB Journal（期刊）
 
 ```yaml
 VLDB-Journal:
@@ -643,7 +627,6 @@ VLDB-Journal:
   type: "journal"
   format: "single-column"
   page_limit: null
-  template: "vldb"
   keywords: ["VLDB", "database", "data management", "large-scale data"]
   deadline_note: "期刊，全年可投稿"
 

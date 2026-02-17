@@ -1,0 +1,99 @@
+% ACM Template — 适用于 WWW, TOIS, TKDE, KDD, SIGMOD 等 ACM 系列会议/期刊
+% 使用 acmart.cls（TexLive 自带，无需额外下载）
+% https://www.acm.org/publications/proceedings-template
+
+% sigconf = 会议论文（双栏），acmsmall = 期刊论文（单栏）
+\documentclass[sigconf,review,anonymous]{acmart}
+
+% 移除 ACM 版权信息（投稿阶段）
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
+
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\begin{document}
+
+\title{Paper Title}
+
+\author{First Author}
+\authornote{Both authors contributed equally to this research.}
+\email{first@example.com}
+\orcid{0000-0000-0000-0000}
+\affiliation{%
+  \institution{First Institution}
+  \streetaddress{Address}
+  \city{City}
+  \state{State}
+  \country{Country}
+  \postcode{00000}
+}
+
+\author{Second Author}
+\email{second@example.com}
+\affiliation{%
+  \institution{Second Institution}
+  \city{City}
+  \country{Country}
+}
+
+\renewcommand{\shortauthors}{Author et al.}
+
+\begin{abstract}
+The abstract should be a concise summary of the paper,
+approximately 200--250 words for conferences or 250--300 words for journals.
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10002951.10003317</concept_id>
+       <concept_desc>Information systems~Information retrieval</concept_desc>
+       <concept_significance>500</concept_significance>
+   </concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Information systems~Information retrieval}
+
+\keywords{first keyword, second keyword, third keyword}
+
+\maketitle
+
+\section{Introduction}
+
+Your introduction text here.
+
+\section{Related Work}
+
+Your related work text here.
+
+\section{Methodology}
+
+Your methodology text here.
+
+\section{Experiments}
+
+Your experiments text here.
+
+\section{Results and Discussion}
+
+Your results and discussion text here.
+
+\section{Conclusion}
+
+Your conclusion text here.
+
+\begin{acks}
+This work was supported by ...
+\end{acks}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}

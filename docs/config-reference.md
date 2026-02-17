@@ -1,22 +1,28 @@
 # config.json 配置参考
 
-> **系统中心化配置文件** — 控制模型分配、质量阈值、并行执行、缓存策略和领域映射
+> **系统中心化配置文件** — 控制模型分配、质量阈值、缓存策略、领域映射、版本管理、交互策略等
 
 ---
 
 ## 一、配置概览
 
-`config.json` 是论文工工系统的核心配置文件，通过单文件控制整个论文生成流程的方方面面。
+`config.json` 是论文工厂系统的核心配置文件，通过单文件控制整个论文生成流程的方方面面。
 
 ```mermaid
 graph TB
     A[config.json] --> B[models - 模型分配]
     A --> C[agents - Agent配置]
     A --> D[quality - 质量阈值]
-    A --> E[parallel - 并行执行]
+    A --> E[parallel - 并行执行（已废弃）]
     A --> F[cache - 缓存策略]
     A --> G[skills - 技能注册]
     A --> H[domain_skills - 领域映射]
+    A --> I[versioning - 版本管理]
+    A --> J[confirmation - 确认策略]
+    A --> K[interaction - 交互管理]
+    A --> L[venue_analysis - 期刊分析]
+    A --> M[codebase_analyzer - 代码库分析]
+    A --> N[feedback - 反馈管理]
 ```
 
 ### 配置节速查表
@@ -24,14 +30,20 @@ graph TB
 | 配置节 | 作用 | 关键参数 |
 |--------|------|----------|
 | **models** | 定义推理/写作使用的模型类型 | `reasoning: opus`, `writing: sonnet` |
-| **agents** | 11 个 Agent 的模型引用、工具权限、条件执行 | 每个 Agent 可定制模型、工具、激活条件 |
+| **agents** | 10 个 Agent 的模型引用、工具权限、条件执行 | 每个 Agent 可定制模型、工具、激活条件 |
 | **quality** | 质量门控阈值 | 最小论文字数、评审分数阈值、章节字数要求 |
-| **parallel** | Phase 1 并行执行开关 | `phase1_enabled: true`, 超时重试机制 |
+| **parallel** | Phase 1 并行执行开关（已废弃） | `phase1_enabled: false (已废弃)` |
 | **cache** | 论文缓存策略 | 自动生成索引、过期清理、领域映射 |
 | **skills** | Skill 注册表 | 描述与 Skill 文件的映射关系 |
-| **domain_skills** | 领域 → 评审专家的动态映射 | 基于 keywords 自动匹配 |
+| **domain_skills** | 领域 → 领域知识文档的映射 | 基于 keywords 自动匹配 |
+| **versioning** | 版本管理策略 | `mode: milestones`, 最大保留版本数 |
+| **confirmation** | 用户确认策略 | `mode: threshold`, 里程碑确认 |
+| **interaction** | 交互管理与检查点 | `mode: interactive`, 必选/可选检查点 |
+| **venue_analysis** | 期刊/会议分析配置 | 预定义期刊列表、缓存时长 |
+| **codebase_analyzer** | 代码库分析工具配置 | 模型选择、可用工具 |
+| **feedback** | 人类反馈管理 | 优先级、状态追踪 |
 
-> **会议/期刊配置**多所有目标会议/期刊的配置信息（格式、页数限制、模板等）已从 `config.json` 迁移至项目根目录的 [venues.md](../venues.md) 文件。这是系统唯一的会议/期刊配置源，支持用户自定义添加新会议/期刊。详见 [快速开始指南](getting-started.md#第三步自定义会议期刊配置可选)。
+> **会议/期刊配置**：所有目标会议/期刊的配置信息（格式、页数限制、模板等）已从 `config.json` 迁移至项目根目录的 [venues.md](../venues.md) 文件。这是系统唯一的会议/期刊配置源，支持用户自定义添加新会议/期刊。详见 [快速开始指南](getting-started.md#第三步自定义会议期刊配置可选)。
 
 ---
 
@@ -62,7 +74,7 @@ graph TB
 
 ### 修改指南
 
-降低成本时，可将部分推理任务改用 Sonnet多
+降低成本时，可将部分推理任务改用 Sonnet：
 
 ```json
 "models": {
@@ -75,7 +87,7 @@ graph TB
 
 ## 三、agents - Agent 配置
 
-定义 11 个 Agent 的模型引用、工具权限和条件执行逻辑。
+定义 10 个 Agent 的模型引用、工具权限和条件执行逻辑。
 
 ### 配置结构
 
@@ -97,25 +109,24 @@ graph TB
 | `conditional` | boolean | 是否为条件执行 Agent（可选） |
 | `condition` | string | 激活条件的描述（可选） |
 
-### 11 个 Agent 配置一览
+### 10 个 Agent 配置一览
 
 | Agent | 模型引用 | 核心工具 | 条件执行 |
 |-------|----------|----------|----------|
 | **A1** 文献调研 | `reasoning` | WebSearch, WebFetch, Read, Write | - |
-| **A3** 理论构建 | `reasoning` | WebSearch, WebFetch, Read, Write | MAS 架构相关 |
-| **A4** 创新形式化 | `reasoning` | Read, Write, Glob | - |
 | **B1** 相关工作 | `reasoning` | Read, Write, WebSearch | - |
 | **B2** 实验设计 | `reasoning` | Read, Write, Glob | - |
 | **B3** 结构设计 | `reasoning` | Read, Write, Glob | - |
 | **C1** 章节撰写 | `writing` | Read, Write | - |
 | **C2** 图表设计 | `writing` | Read, Write | - |
 | **C3** 格式整合 | `writing` | Read, Write, Glob | - |
+| **C4** LaTeX 编译 | `writing` | Read, Write, Bash | - |
 | **D1** 同行评审 | `reasoning` | Read, Write | - |
 | **D2** 修订执行 | `reasoning` | Read, Write | - |
 
 ### 修改示例
 
-为 A1 文献调研降本多
+为 A1 文献调研降本：
 
 ```json
 "a1": {
@@ -174,7 +185,7 @@ graph TB
 
 ### 修改指南
 
-**收紧质量标准**（可能增加生成时间和成本）多
+**收紧质量标准**（可能增加生成时间和成本）：
 
 ```json
 "quality": {
@@ -184,7 +195,7 @@ graph TB
 }
 ```
 
-**放质量标准**（加快生成）多
+**放松质量标准**（加快生成）：
 
 ```json
 "quality": {
@@ -196,17 +207,18 @@ graph TB
 
 ---
 
-## 五、parallel - 并行执行
+## 五、parallel - 并行执行（已废弃）
 
-控制 Phase 1 的并行执行优化。
+> **已废弃**：并行模式已移除，Phase 1 现在采用串行执行模式（A1 → B1 → 创新聚合）。此配置节仅为向后兼容保留。
 
 ```json
 "parallel": {
-  "phase1_enabled": true,
+  "phase1_enabled": false,
   "use_task_tool": true,
   "timeout_per_agent": 300,
   "retry_on_failure": true,
-  "max_retries": 1
+  "max_retries": 1,
+  "deprecated": "并行模式已移除，Phase 1 现在只支持串行执行"
 }
 ```
 
@@ -214,26 +226,12 @@ graph TB
 
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `phase1_enabled` | boolean | true | 是否启用 Phase 1 并行模式 |
-| `use_task_tool` | boolean | true | 是否使用 Task 工具实现并行 |
+| `phase1_enabled` | boolean | false | ~~是否启用 Phase 1 并行模式~~ **已废弃，固定为 false** |
+| `use_task_tool` | boolean | true | ~~是否使用 Task 工具实现并行~~ **已废弃** |
 | `timeout_per_agent` | int | 300 | 单个 Agent 超时时间（秒） |
 | `retry_on_failure` | boolean | true | 失败时是否重试 |
 | `max_retries` | int | 1 | 最大重试次数 |
-
-### 性能收益
-
-| 模式 | Phase 1 执行时间 | 节省 |
-|------|----------------|------|
-| 串行模式 | 15-20 分钟 | - |
-| 并行模式 | 8-12 分钟 | **40-60%** |
-
-### 禁用并行模式
-
-```json
-"parallel": {
-  "phase1_enabled": false  // 切换到串行模式
-}
-```
+| `deprecated` | string | - | 废弃说明信息 |
 
 ---
 
@@ -292,23 +290,11 @@ graph TB
 ```json
 "skills": {
   "paper-generation": { "description": "论文生成主编排器" },
-  "paper-phase1-research": { "description": "Phase 1 文献调研与理论分析" },
-  "paper-phase2-design": { "description": "Phase 2 论文设计阶段" },
+  "paper-phase1-research": { "description": "Phase 1 文献调研与相关工作分析（串行执行）" },
+  "paper-phase2-design": { "description": "Phase 2 论文设计阶段（B2 → B3）" },
   "paper-phase3-writing": { "description": "Phase 3 论文撰写阶段" },
   "paper-phase4-quality": { "description": "Phase 4 质量保障阶段" },
-  "research-mas-theory": { "domain": "multi_agent_systems", "output": "skill-mas-theory.json" },
-  "research-kg-theory": { "domain": "knowledge_graph", "output": "skill-kg-theory.json" },
-  "research-nlp-sql": { "domain": "nlp_to_sql", "output": "skill-nlp-sql.json" },
-  "research-bridge-eng": { "domain": "bridge_engineering", "output": "skill-bridge-eng.json" },
-  "domain-knowledge-prep": { "description": "领域知识准备" },
-  "domain-knowledge-update": { "description": "领域知识动态更新" },
-  "review-kg-domain": { "description": "Knowledge Graph 领域评审认知框架" },
-  "review-mas-domain": { "description": "Multi-Agent Systems 领域评审认知框架" },
-  "review-nl2sql-domain": { "description": "NL2SQL 领域评审认知框架" },
-  "review-bridge-domain": { "description": "Bridge Engineering 领域评审认知框架" },
-  "review-data-domain": { "description": "Data Analysis & ML 领域评审认知框架" },
-  "review-se-domain": { "description": "Software Engineering 领域评审认知框架" },
-  "review-hci-domain": { "description": "HCI 领域评审认知框架" }
+  "domain-knowledge-update": { "description": "领域知识动态更新（唯一保留的领域 Skill）" }
 }
 ```
 
@@ -316,44 +302,36 @@ graph TB
 
 ## 八、domain_skills - 领域映射
 
-定义领域与评审专家 Skill 的映射关系，实现动态专家选择。
+定义领域与领域知识文档的映射关系，用于 Phase 1 理论分析和 Phase 4 动态专家选择。
+
+> 5 个领域知识文件已从 Skill 降级为纯 Markdown 文档（`docs/domain-knowledge/`），Agent 通过 `Read` 工具直接读取。
 
 ```json
 "domain_skills": {
   "knowledge_graph": {
-    "skill": "review-kg-domain",
+    "doc": "docs/domain-knowledge/kg.md",
     "full_name": "Knowledge Graphs and Ontology Engineering",
     "keywords": ["KG", "ontology", "RDF", "OWL", "SPARQL", "knowledge graph", "RDFS"]
   },
   "multi_agent_systems": {
-    "skill": "review-mas-domain",
+    "doc": "docs/domain-knowledge/mas.md",
     "full_name": "Multi-Agent Systems (MAS)",
     "keywords": ["multi-agent", "MAS", "BDI", "Contract Net", "Blackboard", "agent communication", "coordination", "negotiation"]
   },
   "nl2sql": {
-    "skill": "review-nl2sql-domain",
+    "doc": "docs/domain-knowledge/nl2sql.md",
     "full_name": "Natural Language to SQL (NL2SQL / Text2SQL)",
     "keywords": ["NL2SQL", "Text2SQL", "schema linking", "SQL generation", "text-to-SQL", "natural language interface"]
   },
   "bridge_engineering": {
-    "skill": "review-bridge-domain",
+    "doc": "docs/domain-knowledge/bridge.md",
     "full_name": "Bridge Engineering",
     "keywords": ["bridge", "structural health", "inspection", "BIM", "SHM", "non-destructive testing", "load rating", "damage detection"]
   },
   "data_analysis": {
-    "skill": "review-data-domain",
+    "doc": "docs/domain-knowledge/data.md",
     "full_name": "Data Analysis and Machine Learning",
     "keywords": ["data mining", "machine learning", "classification", "regression", "clustering", "feature engineering", "cross-validation"]
-  },
-  "software_engineering": {
-    "skill": "review-se-domain",
-    "full_name": "Software Engineering",
-    "keywords": ["software engineering", "software development", "DevOps", "MLOps", "agile", "CI/CD", "testing", "code quality"]
-  },
-  "human_computer_interaction": {
-    "skill": "review-hci-domain",
-    "full_name": "Human-Computer Interaction",
-    "keywords": ["HCI", "user experience", "UX", "interface design", "usability", "user studies", "interaction design"]
   }
 }
 ```
@@ -362,23 +340,24 @@ graph TB
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| `skill` | string | 对应的评审 Skill 名称 |
+| `doc` | string | 对应的领域知识文档路径（`docs/domain-knowledge/*.md`） |
 | `full_name` | string | 领域完整名称 |
 | `keywords` | array | 匹配关键词列表 |
 
 ### 工作原理
 
-Phase 4 执行时，系统会多
-1. 读取 `input-context.md` 中的论文内容
-2. 匹配 `keywords` 判断论文所属领域
-3. 动态加载对应的 `review-*-domain` Skill 作为评审专家
+- **Phase 1**：编排器根据 `keywords` 识别领域后，启动 DK-Agent 通过 `Read` 读取对应的 `doc` 文档进行理论分析
+- **Phase 4**：编排器根据 `keywords` 判断论文所属领域，启动领域评审专家 Agent 读取对应的 `doc` 文档作为评审认知框架
 
 ### 新增领域
+
+1. 创建 `docs/domain-knowledge/your-domain.md`（包含理论分析 + 评审认知框架）
+2. 在 `domain_skills` 中添加映射：
 
 ```json
 "domain_skills": {
   "your_new_domain": {
-    "skill": "review-your-domain",
+    "doc": "docs/domain-knowledge/your-domain.md",
     "full_name": "Your New Domain Full Name",
     "keywords": ["keyword1", "keyword2", "keyword3"]
   }
@@ -387,11 +366,184 @@ Phase 4 执行时，系统会多
 
 ---
 
-## 九、常见配置场景
+## 九、versioning - 版本管理
 
-### 场景 1多降低成本
+控制 Phase 4 评审迭代过程中的版本快照与管理策略。
 
-将所有推理任务改用 Sonnet多
+```json
+"versioning": {
+  "enabled": true,
+  "mode": "milestones",
+  "max_versions_to_keep": 10,
+  "compress_old_versions": false
+}
+```
+
+### 参数说明
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `enabled` | boolean | true | 是否启用版本管理 |
+| `mode` | string | `"milestones"` | 版本创建模式：`all`（每次迭代）、`milestones`（里程碑时）、`smart`（智能判断）、`off`（关闭） |
+| `max_versions_to_keep` | int | 10 | 最大保留版本数 |
+| `compress_old_versions` | boolean | false | 是否压缩旧版本以节省空间 |
+
+### 版本模式说明
+
+| 模式 | 行为 | 适用场景 |
+|------|------|----------|
+| `all` | 每次评审迭代都创建版本快照 | 需要完整审计轨迹 |
+| `milestones` | 仅在里程碑节点创建快照（推荐） | 平衡存储与可追溯性 |
+| `smart` | 根据变更幅度智能决定是否创建快照 | 自动化管理 |
+| `off` | 不创建版本快照 | 节省存储空间 |
+
+---
+
+## 十、confirmation - 确认策略
+
+控制用户确认的触发条件和行为。
+
+```json
+"confirmation": {
+  "mode": "threshold",
+  "threshold_score": 9.0,
+  "confirm_at_milestones": true,
+  "confirm_every_n_iterations": null,
+  "require_approval_for_final": true
+}
+```
+
+### 参数说明
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `mode` | string | `"threshold"` | 确认模式：`threshold`（达到阈值时确认）、`always`（每次迭代确认）、`never`（自动通过） |
+| `threshold_score` | float | 9.0 | 触发用户确认的评审分数阈值 |
+| `confirm_at_milestones` | boolean | true | 是否在里程碑节点请求用户确认 |
+| `confirm_every_n_iterations` | int/null | null | 每 N 次迭代请求确认（null = 不按次数确认） |
+| `require_approval_for_final` | boolean | true | 最终版本是否需要用户批准 |
+
+---
+
+## 十一、interaction - 交互管理
+
+控制论文生成过程中的用户交互检查点。
+
+```json
+"interaction": {
+  "mode": "interactive",
+  "required_checkpoints": [
+    "phase0_venue_selection",
+    "phase0_title_confirmation",
+    "phase0_abstract_framework",
+    "phase2_b3_outline_confirmation"
+  ],
+  "optional_checkpoints": [],
+  "allow_skip_optional": true,
+  "feedback_persistence": true,
+  "auto_apply_feedback": true
+}
+```
+
+### 参数说明
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `mode` | string | `"interactive"` | 交互模式：`interactive`（交互式）、`auto`（全自动，跳过所有检查点） |
+| `required_checkpoints` | array | - | 必选检查点列表（不可跳过） |
+| `optional_checkpoints` | array | `[]` | 可选检查点列表 |
+| `allow_skip_optional` | boolean | true | 是否允许跳过可选检查点 |
+| `feedback_persistence` | boolean | true | 是否持久化用户反馈到 `user-feedback.json` |
+| `auto_apply_feedback` | boolean | true | 是否自动将用户反馈应用到后续阶段 |
+
+### 检查点说明
+
+| 检查点 | 阶段 | 说明 |
+|--------|------|------|
+| `phase0_venue_selection` | Phase 0 | 目标期刊/会议选择确认 |
+| `phase0_title_confirmation` | Phase 0 | 论文题目确认 |
+| `phase0_abstract_framework` | Phase 0 | 摘要框架确认 |
+| `phase2_b3_outline_confirmation` | Phase 2 | 论文大纲确认 |
+
+---
+
+## 十二、venue_analysis - 期刊分析
+
+控制期刊/会议分析与匹配行为。
+
+```json
+"venue_analysis": {
+  "enabled": true,
+  "auto_fetch_latest": false,
+  "cache_duration_days": 30,
+  "fallback_to_default": true,
+  "predefined_venues": ["AAAI", "IJCAI", "ISWC", "WWW", "ACL", "EMNLP", "KR", "AAMAS", "TOIS", "TKDE"]
+}
+```
+
+### 参数说明
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `enabled` | boolean | true | 是否启用期刊分析功能 |
+| `auto_fetch_latest` | boolean | false | 是否自动获取最新期刊信息 |
+| `cache_duration_days` | int | 30 | 期刊信息缓存有效天数 |
+| `fallback_to_default` | boolean | true | 未匹配时是否回退到默认期刊（`paper.default_venue`） |
+| `predefined_venues` | array | - | 预定义的期刊/会议列表 |
+
+---
+
+## 十三、codebase_analyzer - 代码库分析
+
+配置代码库分析工具（前置工具），用于从代码库自动生成 `input-context.md`。
+
+```json
+"codebase_analyzer": {
+  "enabled": true,
+  "model": "reasoning",
+  "tools": ["Read", "Glob", "Grep", "Write", "Bash"],
+  "description": "独立的代码库分析工具 — 从代码库自动生成 input-context.md"
+}
+```
+
+### 参数说明
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `enabled` | boolean | true | 是否启用代码库分析工具 |
+| `model` | string | `"reasoning"` | 使用的模型（引用 `models` 中的定义） |
+| `tools` | array | - | 分析器可用的工具列表 |
+| `description` | string | - | 工具描述 |
+
+---
+
+## 十四、feedback - 反馈管理
+
+控制人类审稿员反馈的处理行为。
+
+```json
+"feedback": {
+  "enabled": true,
+  "priority_over_reviewer": true,
+  "track_status": true
+}
+```
+
+### 参数说明
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `enabled` | boolean | true | 是否启用人类反馈功能 |
+| `priority_over_reviewer` | boolean | true | 人类反馈是否优先于 AI 评审意见 |
+| `track_status` | boolean | true | 是否追踪每条反馈的处理状态 |
+
+---
+
+## 十五、常见配置场景
+
+### 场景 1：降低成本
+
+将所有推理任务改用 Sonnet：
 
 ```json
 "models": {
@@ -400,9 +552,9 @@ Phase 4 执行时，系统会多
 }
 ```
 
-### 场景 2多提高质量
+### 场景 2：提高质量
 
-增加文献检索量和评审标准多
+增加文献检索量和评审标准：
 
 ```json
 "quality": {
@@ -412,7 +564,7 @@ Phase 4 执行时，系统会多
 }
 ```
 
-### 场景 3多禁用缓存
+### 场景 3：禁用缓存
 
 ```json
 "cache": {
@@ -420,30 +572,21 @@ Phase 4 执行时，系统会多
 }
 ```
 
-### 场景 4多禁用并行模式
+### 场景 4：新增评审领域
 
-```json
-"parallel": {
-  "phase1_enabled": false
-}
-```
-
-### 场景 5多新增评审领域
-
-1. 创建 `review-your-domain/SKILL.md`
-2. 在 `domain_skills` 中添加映射
-3. 在 `skills` 中注册元数据
+1. 创建 `docs/domain-knowledge/your-domain.md`（包含理论分析 + 评审认知框架）
+2. 在 `domain_skills` 中添加映射（`doc` 指向新文档路径）
 
 ---
 
-## 十、注意事项
+## 十六、注意事项
 
-1. **修改后重启**多修改配置后需要重新启动 Claude Code 才能生效
-2. **JSON 格式**多确保 JSON 格式正确，否则系统无法启动
-3. **Git 追踪**多建议将配置修改纳入 Git 追踪
-4. **成本平衡**多降低模型级别可能影响输出质量
-5. **超时设置**多`timeout_per_agent` 过短可能导致 Agent 被强制终止
+1. **修改后重启**：修改配置后需要重新启动 Claude Code 才能生效
+2. **JSON 格式**：确保 JSON 格式正确，否则系统无法启动
+3. **Git 追踪**：建议将配置修改纳入 Git 追踪
+4. **成本平衡**：降低模型级别可能影响输出质量
+5. **超时设置**：`timeout_per_agent` 过短可能导致 Agent 被强制终止
 
 ---
 
-**最后更新**: 2026-02-14
+**最后更新**: 2026-02-18

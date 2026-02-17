@@ -1,26 +1,24 @@
 # Interaction Manager Skill
 
-> **交互管理器（简化版）** — 管理论文生成流程中的关键交互节点，使用 AskUserQuestion 工具获取用户确认和反馈。
->
-> **V2 新增**多交互式论文生成流程 — 仅支持关键节点确认（Phase 0 期刊/题目/摘要，Phase 2 大纲），自动应用用户反馈。
+> **交互管理器（简化版）** — 管理论文生成流程中的关键交互节点，使用 AskUserQuestion 工具获取用户确认和反馈。仅支持关键节点确认（Phase 0 期刊/题目/摘要，Phase 2 大纲），自动应用用户反馈。
 
 ---
 
 ## Skill 概述
 
-本 Skill 是"人类在环"(Human-in-the-Loop)流程的核心控制器，负责多
+本 Skill 是"人类在环"(Human-in-the-Loop)流程的核心控制器，负责：
 
-1. **管理交互节点**多定义关键确认点和可选确认点
-2. **调用 AskUserQuestion**多在适当时机向用户提问
-3. **收集用户反馈**多结构化存储用户输入
-4. **自动应用反馈**多根据用户选择调整后续策略
+1. **管理交互节点**：定义关键确认点和可选确认点
+2. **调用 AskUserQuestion**：在适当时机向用户提问
+3. **收集用户反馈**：结构化存储用户输入
+4. **自动应用反馈**：根据用户选择调整后续策略
 
 ### 设计原则
 
-根据用户确认的设计决策多
-- **仅关键节点**多不在 Agent 级别打断流程
-- **自动应用反馈**多系统自动解析用户反馈并调整策略
-- **混合期刊支持**多区分预定义期刊和自定义期刊
+根据用户确认的设计决策：
+- **仅关键节点**：不在 Agent 级别打断流程
+- **自动应用反馈**：系统自动解析用户反馈并调整策略
+- **混合期刊支持**：区分预定义期刊和自定义期刊
 
 ---
 
@@ -36,7 +34,7 @@
 
 ## 支持的交互节点
 
-### Phase 0多启动确认阶段
+### Phase 0：启动确认阶段
 
 #### phase0_venue_selection
 
@@ -50,7 +48,7 @@
 }
 ```
 
-**行为**多
+**行为**：
 1. 从 config.json 读取 `venue_analysis.defined_venues` 列表
 2. 生成选项列表（AAAI, IJCAI, ... + Other）
 3. 如果用户选择 "Other"，提示输入自定义期刊 ID
@@ -69,8 +67,8 @@
 }
 ```
 
-**行为**多
-1. 读取 Phase 1 A4 生成的候选题目（`phase1/a4-innovations.json`）
+**行为**：
+1. 读取 Phase 1 创新聚合的输出（`phase1/innovation-synthesis.json`）
 2. 生成 3-5 个候选题目选项
 3. 提供用户选择或自定义
 4. 写入 `workspace/{project}/input-context.md` 的 `paper_title` 字段
@@ -87,12 +85,12 @@
 }
 ```
 
-**行为**多
+**行为**：
 1. 基于 `venue-style-guide.md` 中的摘要结构生成框架
 2. 用户可编辑确认
 3. 保存到 `workspace/{project}/phase0/abstract-framework.md`
 
-### Phase 2多设计阶段
+### Phase 2：设计阶段
 
 #### phase2_b3_outline_confirmation
 
@@ -106,7 +104,7 @@
 }
 ```
 
-**行为**多
+**行为**：
 1. 读取 B3 生成的论文大纲（`phase2/b3-paper-outline.json`）
 2. 展示章节结构
 3. 用户可接受、修改或重新生成
@@ -151,16 +149,16 @@
 
 ## phase0_venue_selection
 
-**时间**多2026-02-14 10:30:00
-**选择**多AAAI（预定义期刊）
+**时间**：2026-02-14 10:30:00
+**选择**：AAAI（预定义期刊）
 
 ---
 
 ## phase0_title_confirmation
 
-**时间**多2026-02-14 10:32:15
-**选择**多option_2
-**自定义输入**多Multi-Agent Coordination for Adaptive Task Allocation: A Neuro-Symbolic Approach
+**时间**：2026-02-14 10:32:15
+**选择**：option_2
+**自定义输入**：Multi-Agent Coordination for Adaptive Task Allocation: A Neuro-Symbolic Approach
 
 ---
 
@@ -183,7 +181,7 @@
 
 ## 执行流程
 
-### Step 1多初始化
+### Step 1：初始化
 
 ```bash
 project_dir="/Users/yyzz/Desktop/MyClaudeCode/paper-factory/workspace/${project}"
@@ -194,11 +192,11 @@ history_file="${project_dir}/feedback-history.md"
 mkdir -p "${project_dir}/phase0"
 ```
 
-### Step 2多加载现有反馈（如果存在）
+### Step 2：加载现有反馈（如果存在）
 
 使用 Read 工具读取 `user-feedback.json`，获取已完成的交互节点和历史反馈。
 
-### Step 3多根据 checkpoint 类型调用 AskUserQuestion
+### Step 3：根据 checkpoint 类型调用 AskUserQuestion
 
 #### phase0_venue_selection
 
@@ -242,8 +240,8 @@ update_input_context(project, "target_venue", custom_venue_id)
 
 ```python
 # 伪代码
-# 读取 A4 生成的候选题目
-innovations_file = f"{project_dir}/phase1/a4-innovations.json"
+# 读取创新聚合生成的候选题目
+innovations_file = f"{project_dir}/phase1/innovation-synthesis.json"
 innovations = read_json(innovations_file)
 
 candidate_titles = generate_candidate_titles(innovations)
@@ -290,7 +288,7 @@ framework = generate_abstract_framework(abstract_structure)
 # 展示框架并允许编辑
 user_confirmed_framework = AskUserQuestion(
   questions=[{
-    "question": f"请确认摘要框架多\n\n{framework}",
+    "question": f"请确认摘要框架：\n\n{framework}",
     "header": "摘要框架确认",
     "options": [
       {"label": "接受", "description": "使用此框架生成摘要"},
@@ -317,7 +315,7 @@ outline_summary = format_outline_for_display(outline)
 
 user_response = AskUserQuestion(
   questions=[{
-    "question": f"请确认论文章节大纲多\n\n{outline_summary}",
+    "question": f"请确认论文章节大纲：\n\n{outline_summary}",
     "header": "大纲确认",
     "options": [
       {"label": "接受", "description": "接受此大纲结构"},
@@ -332,13 +330,13 @@ user_response = AskUserQuestion(
 save_feedback(project, "phase2_b3_outline_confirmation", user_response)
 ```
 
-### Step 4多保存反馈
+### Step 4：保存反馈
 
 将用户的选择和反馈写入 `user-feedback.json` 和 `feedback-history.md`。
 
-### Step 5多自动应用反馈
+### Step 5：自动应用反馈
 
-根据用户选择自动调整后续策略多
+根据用户选择自动调整后续策略：
 
 ```python
 # 伪代码
@@ -374,7 +372,7 @@ def auto_apply_feedback(checkpoint, user_choice, project):
       trigger_outline_regeneration(project)
 ```
 
-### Step 6多返回结果
+### Step 6：返回结果
 
 ---
 
@@ -382,26 +380,26 @@ def auto_apply_feedback(checkpoint, user_choice, project):
 
 ### 期刊选择反馈
 
-- **预定义期刊**多直接调用 venue-analyzer，生成完整风格指南
-- **自定义期刊**多
-  - 如果在 venues.md 中多调用 venue-analyzer（可能有警告）
-  - 如果不在多提示用户添加配置，使用默认风格指南
+- **预定义期刊**：直接调用 venue-analyzer，生成完整风格指南
+- **自定义期刊**：
+  - 如果在 venues.md 中：调用 venue-analyzer（可能有警告）
+  - 如果不在：提示用户添加配置，使用默认风格指南
 
 ### 题目确认反馈
 
-- **选择候选题目**多更新 input-context.md，通知所有后续 Agent
-- **自定义题目**多更新 input-context.md，触发 A4 重新形式化创新点
+- **选择候选题目**：更新 input-context.md，通知所有后续 Agent
+- **自定义题目**：更新 input-context.md，触发创新聚合重新整理创新点
 
 ### 摘要框架反馈
 
-- **接受**多保存框架供 Phase 3 C1 参考
-- **编辑**多保存用户编辑的框架，C1 使用编辑后的版本
+- **接受**：保存框架供 Phase 3 C1 参考
+- **编辑**：保存用户编辑的框架，C1 使用编辑后的版本
 
 ### 大纲确认反馈
 
-- **接受**多标记大纲已接受，Phase 3 C1 按大纲撰写
-- **修改**多收集修改意见，B3 调整大纲
-- **重新生成**多使用不同配置触发 B3 重新运行
+- **接受**：标记大纲已接受，Phase 3 C1 按大纲撰写
+- **修改**：收集修改意见，B3 调整大纲
+- **重新生成**：使用不同配置触发 B3 重新运行
 
 ---
 
@@ -441,10 +439,10 @@ def auto_apply_feedback(checkpoint, user_choice, project):
 
 ## 与其他 Skill 的集成
 
-1. **paper-generation**多在 Phase 0 之前按顺序调用本 Skill 的各个 checkpoint
-2. **venue-analyzer**多在 phase0_venue_selection 后自动调用
-3. **feedback-collector**多（可选）如果需要更复杂的反馈处理，调用 feedback-collector
-4. **Phase Skills**多读取 user-feedback.json 获取用户决策
+1. **paper-generation**：在 Phase 0 之前按顺序调用本 Skill 的各个 checkpoint
+2. **venue-analyzer**：在 phase0_venue_selection 后自动调用
+3. **feedback-collector**：（可选）如果需要更复杂的反馈处理，调用 feedback-collector
+4. **Phase Skills**：读取 user-feedback.json 获取用户决策
 
 ---
 
@@ -465,7 +463,7 @@ def auto_apply_feedback(checkpoint, user_choice, project):
 # 期刊选择
 Skill(skill="interaction-manager", args="my-project,phase0_venue_selection")
 
-# 题目确认（需要先完成 Phase 1 A4）
+# 题目确认（需要先完成 Phase 1 创新聚合）
 Skill(skill="interaction-manager", args="my-project,phase0_title_confirmation")
 
 # 大纲确认（需要先完成 Phase 2 B3）

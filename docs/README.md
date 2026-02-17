@@ -1,6 +1,6 @@
-# 论文工工 — 文档中心
+# 论文工厂 — 文档中心
 
-论文工工是一个基于 Claude Code Agent Teams 的多智能体学术论文生成系统。
+论文工厂是一个基于 Claude Code Agent Teams 的多智能体学术论文生成系统。
 
 ---
 
@@ -11,12 +11,12 @@
 
 ## 系统架构
 
-- [架构详解](architecture.md) — 4 阶段 Pipeline、11 个 Agent、Quality Gates
+- [架构详解](architecture.md) — 4 阶段 Pipeline、10 个 Agent、Quality Gates
 
 ## 工具与技能
 
-- [配置参考](config-reference.md) — config.json 完整配置指南（模型、质量阈值、并行执行、缓存策略、版本管理、用户确认、领域映射）
-- [已安装技能目录](skills-catalog.md) — 25+ 个专业技能的分类索引（含 7 个领域评审框架、4 个领域理论分析、版本管理器、并行执行增强）
+- [配置参考](config-reference.md) — config.json 完整配置指南（模型、质量阈值、缓存策略、版本管理、用户确认、领域映射）
+- [已安装技能目录](skills-catalog.md) — 专业技能的分类索引（含 5 个领域知识文档、版本管理器）
 - [MCP 工具参考](mcp-tools.md) — Chrome MCP Server 工具集
 
 ## 论文成果
@@ -31,10 +31,8 @@
 |------|------|
 | `CLAUDE.md` | 系统 编排指令（系统核心） |
 | `config.json` | 模型、预算、质量阈值、并行执行配置 |
-| `.claude/skills/` | Skill 层 — 编排、理论分析、领域知识 |
-| `agents/` | Agent 层 — 11 个 Agent 系统提示定义 |
+| `.claude/skills/` | Skill 层 — 11 个 Agent Skill + 5 个编排器 + 9 个工具 Skill |
 | `workspace/` | 运行时产物（按项目组织） |
-| `papers/` | 历史论文存档 |
 
 ---
 

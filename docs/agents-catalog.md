@@ -1,6 +1,6 @@
 # Agent 目录
 
-本文档列出 Paper Factory 系统中所有 11 个 Agent 的完整定义、职责和配置信息。
+本文档列出 Paper Factory 系统中所有 10 个 Agent 的完整定义、职责和配置信息。
 
 ---
 
@@ -8,24 +8,19 @@
 
 | Phase | Agent | 角色 | 模型 | 预算 |
 |-------|--------|------|------|----------|
-| Phase 1 | A1 | 文献调研 | Sonnet | $3 |
-| Phase 1 | A3 | MAS 文献调研 | Opus | $4 |
-| Phase 1 | A4 | 创新形式化 | Opus | $3 |
-| Phase 2 | B1 | 相关工作分析 | Opus | $3 |
+| Phase 1 | A1 | 文献调研 | Opus | $3 |
+| Phase 1 | B1 | 相关工作分析 | Opus | $3 |
 | Phase 2 | B2 | 实验设计 | Opus | $3 |
 | Phase 2 | B3 | 论文架构设计 | Opus | $4 |
 | Phase 3 | C1 | 章节撰写 | Sonnet | $2 |
 | Phase 3 | C2 | 可视化设计 | Sonnet | $3 |
 | Phase 3 | C3 | 学术格式化 | Sonnet | $2 |
+| Phase 3 | C4 | LaTeX 编译 | Sonnet | $2 |
 | Phase 4 | D1 | 同行评审 | Opus | $5 |
+| Phase 4 | D1-Domain-Expert | 领域评审专家（动态选择） | Opus | $3 |
 | Phase 4 | D2 | 修订执行 | Opus | $4 |
-| Phase 4 | D1-Technical-Expert | 技术评审专家 | Opus | $5 |
-| Phase 4 | D1-Domain-Expert | 领域评审专家 | Opus | $5 |
-| Phase 4 | D1-Clarity-Expert | 清晰度评审专家 | Opus | $5 |
-| Phase 4 | D1-Significance-Expert | 重要性评审专家 | Opus | $5 |
-| Phase 4 | D1-Writing-Quality-Expert | 写作质量评审专家 | Opus | $5 |
 
-> **前置工具**：A2（代码库分析师）已从 Phase 1 移至独立的 `codebase-analyzer` Skill，不计入流水线 Agent。
+> **前置工具**：codebase-analyzer 已从 Phase 1 移至独立的 Skill，不计入流水线 Agent。
 
 ---
 
@@ -33,368 +28,306 @@
 
 ### A1 - Literature Surveyor（文献调研专家）
 
-**Prompt 文件**多`agents/phase1/a1-literature-surveyor.md`
+**Skill**：`Skill(skill="a1-literature-surveyor", args="{project}")`
 
-**核心职责**多
-- 搜索并分类整理 30+ 篇相关学术论文
-- 提取文献元数据多标题、作者、会议/期刊、年份、引用
+**核心职责**：
+- 搜索并分类整理 40+ 篇相关学术论文
+- 提取文献元数据：标题、作者、会议/期刊、年份、引用
 - 输出结构化的文献调研报告供下游使用
 
-**输入**多
+**输入**：
 - `workspace/{project}/input-context.md`
 
-**输出**多
+**输出**：
 - `workspace/{project}/phase1/a1-literature-survey.json`
 - `workspace/{project}/phase1/a1-literature-survey.md`
 
-**工具**多WebSearch, WebFetch, Read, Write
+**工具**：WebSearch, WebFetch, Read, Write
 
-**激活**多必选（始终启动）
-
----
-
-### A2 - Codebase Analyzer（代码库分析师）— 独立前置工具
-
-> A2 已从 Phase 1 的条件性研究 Agent 重新定位为独立的前置工具 `codebase-analyzer` Skill。
-> 它不再参与 Phase 1 流水线，而是在用户没有 `input-context.md` 但有代码库时使用。
->
-> **调用方式**：`Skill(skill="codebase-analyzer", args="{project},{codebase_path}")`
->
-> **Prompt 文件**：`agents/phase1/a2-engineering-analyst.md`（保留作为 Skill 的执行 Agent）
+**激活**：必选（始终启动）
 
 ---
+### B1 - Related Work Analyst（相关工作分析专家）
 
-### A3 - MAS Literature Researcher（MAS 文献调研）
+**Skill**：`Skill(skill="b1-related-work-analyst", args="{project}")`
 
-**Prompt 文件**多`agents/phase1/a3-mas-theorist.md`
+**核心职责**：
+- 对比分析现有工作，定位本研究的创新点
+- 识别研究空白和机会
+- 构建相关工作章节的学术叙事
 
-**核心职责**多
-- 研究最新多智能体系统文献（AutoGen, CrewAI, MetaGPT 等）
-- 分析 MAS 领域的理论进展和实际应用
-- 提供 MAS 相关文献的理论支撑
-
-**输入**多
+**输入**：
+- `workspace/{project}/phase1/a1-literature-survey.json`
 - `workspace/{project}/input-context.md`
 
-**输出**多
-- `workspace/{project}/phase1/a3-mas-literature.json`
-- `workspace/{project}/phase1/a3-mas-literature.md`
+**输出**：
+- `workspace/{project}/phase1/b1-related-work.json`
+- `workspace/{project}/phase1/b1-related-work.md`
 
-**工具**多WebSearch, WebFetch, Read, Write
+**工具**：Read, Write, WebSearch
 
-**激活**多条件（当项目深度涉及多智能体架构且需要最新文献支撑时）
-
----
-
-### A4 - Innovation Formalizer（创新形式化专家）
-
-**Prompt 文件**多`agents/phase1/a4-innovation-formalizer.md`
-
-**核心职责**多
-- 将工程创新点转化为学术贡献声明
-- 综合所有分析结果，提炼核心创新
-- 映射创新点到学术价值和影响
-
-**输入**多
-- `workspace/{project}/input-context.md`
-- 所有可用的 Phase 1 分析文件（通过 Glob 发现）
-
-**输出**多
-- `workspace/{project}/phase1/a4-innovations.json`
-- `workspace/{project}/phase1/a4-innovations.md`
-
-**工具**多Read, Write, Glob
-
-**激活**多必选（Phase 1 聚合点）
+**激活**：必选（始终启动）
 
 ---
 
 ## Phase 2: Design Agents
 
-### B1 - Related Work Analyst（相关工作分析专家）
-
-**Prompt 文件**多`agents/phase2/b1-related-work-analyst.md`
-
-**核心职责**多
-- 对比分析现有工作，定位本研究的创新点
-- 识别研究空白和机会
-- 构建相关工作章节的学术叙事
-
-**输入**多
-- `workspace/{project}/phase1/a1-literature-survey.json`
-- `workspace/{project}/phase1/a4-innovations.json`
-
-**输出**多
-- `workspace/{project}/phase2/b1-related-work.json`
-- `workspace/{project}/phase2/b1-related-work.md`
-
-**工具**多Read, Write, WebSearch
-
-**激活**多必选
-
----
-
 ### B2 - Experiment Designer（实验设计专家）
 
-**Prompt 文件**多`agents/phase2/b2-experiment-designer.md`
+**Skill**：`Skill(skill="b2-experiment-designer", args="{project}")`
 
-**核心职责**多
-- 设计实验方案验证每个创新点
-- 定义评估指标和基线对比
-- 指定数据集、参数和实验流程
+**核心职责**：
+- 设计对比实验方案
+- 选择评价指标和基线方法
+- 预测实验结果趋势
 
-**输入**多
-- `workspace/{project}/phase1/a4-innovations.json`
+**输入**：
+- Phase 1 全部输出
 - `workspace/{project}/input-context.md`
-- 所有可用的 Phase 1 分析文件（通过 Glob 发现）
 
-**输出**多
+**输出**：
 - `workspace/{project}/phase2/b2-experiment-design.json`
 - `workspace/{project}/phase2/b2-experiment-design.md`
 
-**工具**多Read, Write
+**工具**：Read, Write, Glob
 
-**激活**多必选
+**激活**：必选（始终启动）
 
 ---
 
 ### B3 - Paper Architect（论文架构设计专家）
 
-**Prompt 文件**多`agents/phase2/b3-paper-architect.md`
+**Skill**：`Skill(skill="b3-paper-architect", args="{project}")`
 
-**核心职责**多
-- 设计论文整体结构、章节划分、内容分配
-- 指定图表、表格及其在论文中的位置
-- 确保逻辑流程和论证链的完整性
+**核心职责**：
+- 设计论文整体结构和章节大纲
+- 分配各章节的内容要点和字数
+- 确保论文逻辑流畅、结构完整
 
-**输入**多
-- 所有 Phase 1 + Phase 2 前序输出（通过 Glob 发现）
+**输入**：
+- Phase 1 全部输出
+- `workspace/{project}/phase2/b2-experiment-design.json`
 
-**输出**多
+**输出**：
 - `workspace/{project}/phase2/b3-paper-outline.json`
 - `workspace/{project}/phase2/b3-paper-outline.md`
 
-**工具**多Read, Write
+**工具**：Read, Write, Glob
 
-**激活**多必选
+**激活**：必选（始终启动）
 
 ---
-
 ## Phase 3: Writing Agents
 
 ### C1 - Section Writer（章节撰写专家）
 
-**Prompt 文件**多`agents/phase3/c1-section-writer.md`
+**Skill**：`Skill(skill="c1-section-writer", args="{project}")`
 
-**核心职责**多
-- 根据 `b3-paper-outline.json` 逐章节撰写内容
-- 保持学术写作规范和术语一致性
-- 确保章节间的逻辑连贯性
+**核心职责**：
+- 按照 B3 大纲逐章节撰写论文内容
+- 确保学术语言规范、论证逻辑严密
+- 适配目标会议/期刊的写作风格
 
-**输入**多
-- `workspace/{project}/phase2/b3-paper-outline.json`
-- 对应章节所需的源材料
+**输入**：
+- Phase 1 + Phase 2 全部输出
+- `workspace/{project}/venue-style-guide.md`（如有）
 
-**输出**多
-- `workspace/{project}/phase3/sections/{section_id}-{section_name}.md`
-- 例如多`01-introduction.md`, `02-related-work.md`, `03-methodology.md` ...
+**输出**：
+- `workspace/{project}/phase3/sections/sec{N}-{name}.md`
 
-**工具**多Read, Write
+**工具**：Read, Write
 
-**激活**多必选（按章节数多次调用）
+**激活**：必选（始终启动）
 
 ---
 
 ### C2 - Visualization Designer（可视化设计专家）
 
-**Prompt 文件**多`agents/phase3/c2-visualization-designer.md`
+**Skill**：`Skill(skill="c2-visualization-designer", args="{project}")`
 
-**核心职责**多
-- 设计论文所需的图表、表格、算法伪代码
-- 确保可视化元素与论文内容一致
-- 生成图表描述供绘图工具使用
+**核心职责**：
+- 设计论文中的图表和可视化
+- 生成图表描述和数据表格
+- 确保图表与文本内容一致
 
-**输入**多
-- `workspace/{project}/phase2/b3-paper-outline.json`
-- 相关数据文件
+**输入**：
+- Phase 2 实验设计
+- Phase 3 章节内容
 
-**输出**多
+**输出**：
 - `workspace/{project}/phase3/figures/all-figures.md`
 - `workspace/{project}/phase3/figures/all-tables.md`
 
-**工具**多Read, Write
+**工具**：Read, Write
 
-**激活**多必选
+**激活**：必选（始终启动）
 
 ---
 
 ### C3 - Academic Formatter（学术格式化专家）
 
-**Prompt 文件**多`agents/phase3/c3-academic-formatter.md`
+**Skill**：`Skill(skill="c3-academic-formatter", args="{project}")`
 
-**核心职责**多
-- 组装所有章节、图表、参考文献，生成最终论文
-- 应用目标会议/期刊的格式规范
-- 生成完整的引用列表和交叉引用
+**核心职责**：
+- 将各章节和图表整合为完整论文
+- 统一格式、引用风格、术语
+- 生成最终的 `output/paper.md`
 
-**输入**多
-- 所有章节文件多`workspace/{project}/phase3/sections/*.md`
-- 图表文件多`workspace/{project}/phase3/figures/*.md`
-- 文献数据多`workspace/{project}/phase1/a1-literature-survey.json`
+**输入**：
+- `workspace/{project}/phase3/sections/`
+- `workspace/{project}/phase3/figures/`
 
-**输出**多
+**输出**：
 - `workspace/{project}/output/paper.md`
 
-**工具**多Read, Write, Glob
+**工具**：Read, Write, Glob
 
-**激活**多必选
+**激活**：必选（始终启动）
 
 ---
 
+### C4 - LaTeX Compiler（LaTeX 编译专家）
+
+**Skill**：`Skill(skill="c4-latex-compiler", args="{project}")`
+
+**核心职责**：
+- 将 Markdown 论文转换为 LaTeX 源码
+- 根据目标会议/期刊选择正确的 LaTeX 模板
+- 编译生成 PDF，支持多引擎和自动诊断修复
+
+**输入**：
+- `workspace/{project}/output/paper.md`
+- `templates/manifest.json`（模板查找）
+
+**输出**：
+- `workspace/{project}/output/paper.tex`
+- `workspace/{project}/output/references.bib`
+- `workspace/{project}/output/paper.pdf`（如编译成功）
+- `workspace/{project}/output/compile-log.json`
+
+**工具**：Read, Write, Bash
+
+**激活**：必选（始终启动）
+
+---
 ## Phase 4: Quality Agents
 
-### D1 - Multi-Perspective Reviewer（多视角评审架构）
+### D1 - General Reviewer（通用评审专家）
 
-**注意**多D1 已扩展为多视角评审机制，支持两种执行模式多
+**Skill**：`Skill(skill="d1-general-reviewer", args="{project}")`
 
-**模式 A多多专家评审（推荐用于专家回复协调）**
-评审包含两类专家多
-- **通用评审专家**（内嵌于 `agents/phase4/d1-peer-reviewer.md`）多
-  - **R1-Technical-Expert**多技术评审专家 — 技术实现、算法设计、系统架构
-  - **R2-Novelty-Expert**多新颖性评审专家 — 学术价值、原创性、贡献影响力
-  - **R3-Clarity-Expert**多清晰度评审专家 — 表述清晰度、逻辑流畅性、组织结构
-- **D1-Domain-Expert**多领域评审专家（动态选择） — `agents/phase4/d1-reviewer-domain-expert.md`
+**核心职责**：
+- 协调多视角评审，从 5 个通用维度评分（技术、新颖性、清晰度、重要性、实验严谨性）
+- 输出结构化评审报告（JSON + Markdown）
+- 与 D2 形成迭代修订循环
 
-**新模式关键特性**多
-- **Domain-Expert**（动态选择）多根据论文内容，选择最相关的 1-2 个领域专家，确保评审有针对性
-- **其他专家**（固定启用）多Technical、Clarity、Writing 始终启用，提供基础评审维度
-- **领域知识准备**多选中的领域专家先通过 `domain-knowledge-prep` Skill 准备知识
-- **资源优化**多不启动低相关度的领域专家，避免无关专家给出低质量反馈
+**评审维度**：
+1. Technical Soundness（技术严谨性）
+2. Novelty（新颖性）
+3. Clarity（清晰度）
+4. Significance（重要性与影响力）
+5. Experimental Rigor（实验严谨性）
 
-**专家选择逻辑**多
-| 论文类型 | Domain-Expert | 其他专家 |
-|----------|-------------|-----------|
-| KG 本体论文 | Domain-KG (相关度高) | Technical, Clarity, Writing |
-| MAS 系统论文 | Domain-MAS (相关度高) | Technical, Clarity, Writing, Significance (条件) |
-| 纯算法论文（无特定领域） | 不选择 Domain | Technical, Clarity, Writing, Significance (条件) |
-| 桥梁检测论文 | Domain-Bridge (相关度高) | Technical, Clarity, Writing, Significance (条件) |
+**内置评审视角**：
+- R1-Technical：技术深度与方法论严谨性
+- R2-Novelty：创新性与学术贡献
+- R3-Clarity：表达清晰度与可读性
+- R4-Significance：研究重要性与影响力
+- R5-Experimental Rigor：实验设计与评估严谨性
 
-**模式 B多单一综合评审**
-- **原 D1 Agent**多`agents/phase4/d1-peer-reviewer.md`（已保留作为参考）
+**动态领域评审**：Phase 4 编排器会根据论文领域动态 spawn `d1-reviewer-domain-expert` Agent，选择匹配的领域专家进行评审。
 
-**Prompt 文件**多`agents/phase4/d1-peer-reviewer.md`
-
-**核心职责**多
-- 从创新性、严谨性、可读性等维度评审论文
-- 提供具体的修订建议和优先级
-- 给出量化评分和总体质量判断
-
-**评审维度**多
-- Originality（原创性）
-- Significance（学术价值）
-- Methodology（方法论严谨性）
-- Clarity（表述清晰度）
-- Writing Quality（写作质量）
-- Technical Soundness（技术合理性）
-
-**输入**多
+**输入**：
 - `workspace/{project}/output/paper.md`
-- `workspace/{project}/phase1/a4-innovations.json`
 
-**输出**多
+**输出**：
 - `workspace/{project}/phase4/d1-review-report.json`
 - `workspace/{project}/phase4/d1-review-report.md`
 
-**工具**多Read, Write
+**工具**：Read, Write
 
-**激活**多必选（循环调用）
+**激活**：必选（始终启动）
+
+**质量阈值**：`average_score >= 9.0`（可在 config.json 中调整）
+
+---
+
+### D1-Domain-Expert（领域评审专家）
+
+**Skill**：`Skill(skill="d1-reviewer-domain-expert", args="{project}:{domain}")`
+
+**核心职责**：
+- 提供特定领域的专业评审视角
+- 评估论文在该领域的学术贡献和技术准确性
+- 参考 `docs/domain-knowledge/{domain}.md` 中的领域知识
+
+**支持领域**：
+- `kg` — 知识图谱
+- `mas` — 多智能体系统
+- `nl2sql` — 自然语言到 SQL
+- `bridge` — 桥梁工程
+- `data` — 数据分析与机器学习
+
+**激活**：由 D1 动态选择（基于论文领域自动匹配）
 
 ---
 
 ### D2 - Revision Specialist（修订执行专家）
 
-**Prompt 文件**多`agents/phase4/d2-revision-specialist.md`
+**Skill**：`Skill(skill="d2-revision-specialist", args="{project}")`
 
-**核心职责**多
-- 根据评审意见修订论文
-- 保持学术语气和论证连贯性
-- 记录所有修改内容
-- **专家辩论协调**多向 5 个评审专家发送个性化回复并处理反馈
+**核心职责**：
+- 读取 D1 评审报告，逐条修复问题
+- 修改 `output/paper.md`
+- 记录修订日志
 
-**输入**多
-- `workspace/{project}/output/paper.md`
+**输入**：
 - `workspace/{project}/phase4/d1-review-report.json`
-- 5 个评审专家的报告
+- `workspace/{project}/output/paper.md`
 
-**输出**多
-- 修订后的 `workspace/{project}/output/paper.md`
+**输出**：
+- 更新后的 `workspace/{project}/output/paper.md`
 - `workspace/{project}/phase4/d2-revision-log.json`
 - `workspace/{project}/phase4/d2-revision-log.md`
-- `workspace/{project}/phase4/d2-response-log.json`
-- `workspace/{project}/phase4/d2-response-log.md`
 
-**工具**多Read, Write
+**工具**：Read, Write
 
-**激活**多条件（当评审分数低于阈值且未达到最大迭代次数时）
-
-**专家辩论协调模式**（始终启用）多
-1. 向 5 个评审专家发送个性化回复
-2. 处理专家反馈，如需修改则立即执行
-3. 最多执行 `quality.max_response_rounds` 轮回复
-4. 通过多轮辩论确保修订真正解决问题
+**激活**：条件执行（仅当 D1 评分 < 9.0 时启动）
 
 ---
 
-## Agent 工具权限汇总
+## 工具权限矩阵
 
-| 工具 | 主要使用 Agent |
-|-------|----------------|
-| WebSearch, WebFetch | A1, A3, B1 |
-| Read, Glob, Grep, Write, Bash | B2, B3, C3 |
-| Read, Write | A4, C1, C2, C3, D1, D2 |
-
----
-
-## 输出文件命名规范
-
-所有 Agent 输出文件遵循统一命名规范多
-
-```
-{agent_id}-{output-type}.{json|md}
-```
-
-例如多
-- `a1-literature-survey.json` + `.md`
-- `b1-related-work.json` + `.md`
-- `c3-academic-formatter` 不输出（其工作体现在组装的 paper.md）
-
----
-
-## 激活条件总结
-
-| Agent | 激活条件 | 说明 |
-|-------|----------|------|
-| A1 | 必选 | 文献调研是所有论文的基础 |
-| A3 | 涉及 MAS 且需文献 | 仅在项目深度涉及 MAS 时启动 |
-| A4 | 必选 | 创新形式化是 Phase 1 聚合点 |
-| B1-B3 | 必选 | Design 阶段的三个 Agent 构成论文设计骨架 |
-| C1-C3 | 必选 | Writing 阶段的三个 Agent 完成论文撰写 |
-| D1 | 必选 | 评审是质量保障的必需环节 |
-| D1-Technical-Expert | 必选 | 技术实现、算法设计、系统架构评审 |
-| D1-Domain-Expert | 必选 | 知识图谱、本体工程、应用领域评审 |
-| D1-Clarity-Expert | 必选 | 表述清晰度、逻辑流畅性、组织结构评审 |
-| D1-Significance-Expert | 必选 | 学术价值、原创性、贡献影响力评审 |
-| D1-Writing-Quality-Expert | 必选 | 写作风格、术语使用、语言规范评审 |
-| D2 | 分数 < 阈值 | 仅在评审不达标时启动 |
+| Agent | Read | Write | WebSearch | WebFetch | Glob | Bash |
+|-------|------|-------|-----------|----------|------|------|
+| A1 | ✅ | ✅ | ✅ | ✅ | - | - |
+| B1 | ✅ | ✅ | ✅ | - | - | - |
+| B2 | ✅ | ✅ | - | - | ✅ | - |
+| B3 | ✅ | ✅ | - | - | ✅ | - |
+| C1 | ✅ | ✅ | - | - | - | - |
+| C2 | ✅ | ✅ | - | - | - | - |
+| C3 | ✅ | ✅ | - | - | ✅ | - |
+| C4 | ✅ | ✅ | - | - | - | ✅ |
+| D1 | ✅ | ✅ | - | - | - | - |
+| D2 | ✅ | ✅ | - | - | - | - |
 
 ---
 
 ## 扩展指南
 
-添加新 Agent 时，需要同步更新以下文件多
+### 添加新 Agent
 
-1. **创建 Prompt 文件**多在 `agents/{phase}/` 下创建 `{agent-id}-{name}.md`
-2. **更新配置**多在 `config.json` 中添加模型和预算配置
-3. **更新本目录**多在上述表格中添加新 Agent 的定义
-4. **更新架构图**多在 `docs/architecture.md` 中更新数据流图
-5. **更新 Quality Gate**多在对应 Phase 的 Gate 检查中添加新输出文件
+1. 在 `.claude/skills/` 下创建新的 Skill 目录
+2. 编写 `SKILL.md`，定义角色、输入、输出、工具权限
+3. 在 `config.json` 的 `agents` 节中注册
+4. 在对应 Phase Skill 中添加调用逻辑
+
+### 添加新领域评审
+
+1. 在 `docs/domain-knowledge/` 下创建新的领域知识文档
+2. 在 `config.json` 的 `domain_skills` 中注册领域映射
+3. D1 会自动根据关键词匹配新领域
+
+---
+
+**最后更新**: 2026-02-18

@@ -7,33 +7,33 @@ description: "论文缓存管理 —— 从指定目录读取论文文件并生�
 
 ## 概述
 
-将本地论文文件（PDF 或目录）转换为论文工工缓存系统可识别的 Markdown 格式。
+将本地论文文件（PDF 或目录）转换为论文工厂缓存系统可识别的 Markdown 格式。
 
-**调用方式多** `Skill(skill="paper-cacher", args="{project}", source_dir="/path/to/papers", domain="{domain}")`
+**调用方式：** `Skill(skill="paper-cacher", args="{project}", source_dir="/path/to/papers", domain="{domain}")`
 
-**核心功能多**
-- **灵活输入**多支持单个 PDF 文件或整个目录
-- **自动识别**多从目录结构推断论文元数据
-- **格式转换**多生成 Markdown + Frontmatter 缓存格式
-- **自动集成**多输出文件自动被 `cache-utils` 识别
+**核心功能：**
+- **灵活输入**：支持单个 PDF 文件或整个目录
+- **自动识别**：从目录结构推断论文元数据
+- **格式转换**：生成 Markdown + Frontmatter 缓存格式
+- **自动集成**：输出文件自动被 `cache-utils` 识别
 
 ---
 
 ## 使用场景
 
-### 场景 1多单个 PDF 文件
+### 场景 1：单个 PDF 文件
 
 ```
 Skill(skill="paper-cacher", args="my-project", source_dir="/Users/username/Papers/important.pdf", domain="multi_agent_systems")
 ```
 
-### 场景 2多整个目录
+### 场景 2：整个目录
 
 ```
 Skill(skill="paper-cacher", args="my-project", source_dir="/Users/username/Papers/MAS-2024/", domain="multi_agent_systems")
 ```
 
-目录结构示例多
+目录结构示例：
 ```
 /Papers/MAS-2024/
 ├── Smith2024-BDI.pdf
@@ -41,7 +41,7 @@ Skill(skill="paper-cacher", args="my-project", source_dir="/Users/username/Paper
 └── Lee2024-Communication.pdf
 ```
 
-### 场景 3多子目录分组
+### 场景 3：子目录分组
 
 ```
 /Papers/
@@ -123,26 +123,26 @@ status: "read"  # read | skim | todo
 
 ### Step 1: 验证输入
 
-1. **检查参数**多`project`, `source_dir`, `domain` 必须提供
-2. **验证源路径**多使用 `Glob` 检查路径存在
-3. **确定领域**多验证 `domain` 是有效的领域标识
+1. **检查参数**：`project`, `source_dir`, `domain` 必须提供
+2. **验证源路径**：使用 `Glob` 检查路径存在
+3. **确定领域**：验证 `domain` 是有效的领域标识
 
 ### Step 2: 扫描源目录
 
-**对于单个文件多**
+**对于单个文件：**
 - 验证文件存在
 - 检查文件扩展名 (`.pdf`)
 
-**对于目录多**
+**对于目录：**
 - 使用 `Glob` 扫描所有 `.pdf` 文件
 - 如果 `recursive=true`，递归扫描子目录
 - 构建文件列表
 
 ### Step 3: 提取论文元数据
 
-对于每个源文件多
+对于每个源文件：
 
-**从文件名推断（如果无元数据）多**
+**从文件名推断（如果无元数据）：**
 ```
 Smith2024-BDI.pdf
 │     │     │    └─┘
@@ -151,37 +151,37 @@ Smith2024-BDI.pdf
       └─ 标题关键词
 ```
 
-**尝试读取 PDF 元数据（如果可用）多**
+**尝试读取 PDF 元数据（如果可用）：**
 - 使用 `Read` 工具读取 PDF
-- 提取多标题、作者、年份
+- 提取：标题、作者、年份
 - 依赖 PDF 工具能力
 
-**用户交互（如果推断失败）多**
+**用户交互（如果推断失败）：**
 - 询问用户确认或补充元数据
 - 提供合理默认值
 
 ### Step 4: 生成缓存文件
 
-1. **生成唯一 ID**多
+1. **生成唯一 ID**：
    ```
    format: "manual-{year}-{count}"
    example: "manual-2024-001"
    ```
 
-2. **生成 Frontmatter**多
+2. **生成 Frontmatter**：
    - 填充所有已知字段
    - 未知字段使用默认值或询问用户
 
-3. **生成正文**多
-   - `## Summary`多论文摘要或用户输入
-   - `## Key Contributions`多主要贡献点
-   - `## Relevance to Current Project`多与当前项目关联
+3. **生成正文**：
+   - `## Summary`：论文摘要或用户输入
+   - `## Key Contributions`：主要贡献点
+   - `## Relevance to Current Project`：与当前项目关联
 
-4. **写入文件**多
-   - 目标多`workspace/{project}/.cache/papers/{domain}/{id}.md`
+4. **写入文件**：
+   - 目标：`workspace/{project}/.cache/papers/{domain}/{id}.md`
    - 使用 `Write` 工具
 
-5. **更新索引**多
+5. **更新索引**：
    - 将 `id` 添加到 `processed-ids.txt`
 
 ---
@@ -231,23 +231,23 @@ ERROR: Failed to write cache file: {filename}
 
 ## 使用示例
 
-### 示例 1多添加单篇论文
+### 示例 1：添加单篇论文
 
 ```
 Skill(skill="paper-cacher", args="test-project", source_dir="/Users/username/Downloads/Smith2024.pdf", domain="multi_agent_systems")
 ```
 
-**输出多**
+**输出：**
 - 创建 `workspace/test-project/.cache/papers/multi_agent_systems/2024-Smith-Cognitive.md`
 - 更新 `workspace/test-project/.cache/search-history/multi_agent_systems/processed-ids.txt`
 
-### 示例 2多批量添加目录
+### 示例 2：批量添加目录
 
 ```
 Skill(skill="paper-cacher", args="test-project", source_dir="/Users/username/Papers/MAS-2024/", domain="multi_agent_systems")
 ```
 
-**输出多**
+**输出：**
 - 扫描目录中所有 PDF
 - 为每个 PDF 创建对应的 `.md` 缓存文件
 - 所有文件自动纳入下次文献检索
@@ -256,35 +256,35 @@ Skill(skill="paper-cacher", args="test-project", source_dir="/Users/username/Pap
 
 ## 与缓存系统集成
 
-生成的文件会自动被 `cache-utils` Skill 识别多
+生成的文件会自动被 `cache-utils` Skill 识别：
 
-1. **自动读取**多下次 `readPaperCache()` 调用会包含新文件
-2. **自动检索**多WebSearch 时会跳过已处理的 ID
-3. **零配置集成**多无需额外配置，开箱即用
+1. **自动读取**：下次 `readPaperCache()` 调用会包含新文件
+2. **自动检索**：WebSearch 时会跳过已处理的 ID
+3. **零配置集成**：无需额外配置，开箱即用
 
 ---
 
 ## 验证测试
 
-### 测试 1多单个文件
+### 测试 1：单个文件
 
 1. 准备测试 PDF 文件
 2. 执行 Skill 调用
-3. 验证多
+3. 验证：
    - `.md` 文件已创建
    - Frontmatter 格式正确
    - 文件位于正确目录
 
-### 测试 2多目录扫描
+### 测试 2：目录扫描
 
 1. 准备包含多个 PDF 的目录
 2. 执行带 `source_dir` 的目录扫描
-3. 验证多
+3. 验证：
    - 所有 PDF 都有对应 `.md` 文件
    - `processed-ids.txt` 已更新
    - 文件命名合理
 
-### 测试 3多集成验证
+### 测试 3：集成验证
 
 1. 执行 `paper-cacher` 添加论文
 2. 执行 `cache-utils` 的 `readPaperCache`
@@ -296,31 +296,31 @@ Skill(skill="paper-cacher", args="test-project", source_dir="/Users/username/Pap
 
 ### PDF 元数据提取
 
-**方法 A多文件名解析（默认）**
-- 优点多无需额外工具
-- 缺点多信息有限
+**方法 A：文件名解析（默认）**
+- 优点：无需额外工具
+- 缺点：信息有限
 
-**方法 B多PDF 工具读取**
+**方法 B：PDF 工具读取**
 - 使用 PDF Skill 或 MCP 工具
 - 提取完整元数据
 - 依赖工具可用性
 
-**方法 C多用户输入**
+**方法 C：用户输入**
 - 最准确
 - 需要用户交互
 
 ### 文件命名冲突
 
-如果目标文件名已存在多
+如果目标文件名已存在：
 
-1. **同源同名**多覆盖旧文件（用户更新了论文）
-2. **不同源同名**多添加计数后缀 (`_v2`, `_v3`)
+1. **同源同名**：覆盖旧文件（用户更新了论文）
+2. **不同源同名**：添加计数后缀 (`_v2`, `_v3`)
 
 ---
 
 ## 配置建议
 
-在 `config.json` 中添加多
+在 `config.json` 中添加：
 
 ```json
 "skills": {
@@ -337,8 +337,8 @@ Skill(skill="paper-cacher", args="test-project", source_dir="/Users/username/Pap
 
 ## 最佳实践
 
-1. **组织源文件**多按领域/年份组织 PDF 文件
-2. **命名规范**多使用 `{年份}{作者}{主题}.pdf` 格式
-3. **批量添加**多优先使用目录扫描而非单个文件
-4. **验证结果**多添加后检查生成的 `.md` 文件内容
-5. **定期清理**多删除重复或过时的缓存文件
+1. **组织源文件**：按领域/年份组织 PDF 文件
+2. **命名规范**：使用 `{年份}{作者}{主题}.pdf` 格式
+3. **批量添加**：优先使用目录扫描而非单个文件
+4. **验证结果**：添加后检查生成的 `.md` 文件内容
+5. **定期清理**：删除重复或过时的缓存文件
