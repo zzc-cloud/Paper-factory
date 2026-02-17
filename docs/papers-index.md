@@ -59,10 +59,12 @@ git show <commit-hash>:workspace/{project}/output/paper.md
 
 ### 原始文件位置
 
-- 工作空间: `workspace/smart-query/`（已重命名为 `smart-query-OLD/`）
-- 输入素材: `workspace/smart-query/phase1/input-context.md`
-- 评审报告: `workspace/smart-query/phase4/d1-review-report.md`
+- 工作空间: `workspace/smart-query-OLD/`（首篇论文的历史工作空间）
+- 输入素材: `workspace/smart-query-OLD/phase1/input-context.md`
+- 评审报告: `workspace/smart-query-OLD/phase4/d1-review-report.md`
+
+> 注意：首篇论文的工作空间文件已通过 git 清理。可通过 `git log --all -- workspace/smart-query-OLD/` 查看历史记录。
 
 ---
 
-**最后更新**: 2026-02-13
+**最后更新**: 2026-02-18

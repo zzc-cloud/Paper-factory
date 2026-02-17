@@ -297,6 +297,7 @@ description: "版本快照与版本管理 — 为论文迭代创建版本快照�
 | iterative-retrieval | [.claude/skills/iterative-retrieval/](../iterative-retrieval/SKILL.md) | 渐进式检索 |
 | systematic-debugging | [.claude/skills/systematic-debugging/](../systematic-debugging/SKILL.md) | 系统化调试 |
 | verification-before-completion | [.claude/skills/verification-before-completion/](../verification-before-completion/SKILL.md) | 完成前验证 |
+| version-manager | [.claude/skills/version-manager/](../version-manager/SKILL.md) | 版本快照与版本管理 |
 
 ### 4. 通用工具技能
 
@@ -307,6 +308,11 @@ description: "版本快照与版本管理 — 为论文迭代创建版本快照�
 | executing-plans | [.claude/skills/executing-plans/](../executing-plans/SKILL.md) | 执行计划 |
 | subagent-driven-development | [.claude/skills/subagent-driven-development/](../subagent-driven-development/SKILL.md) | 子 Agent 驱动开发 |
 | using-superpowers | - | Superpowers 仓库技能 |
+| writing-skills | [.claude/skills/writing-skills/](../writing-skills/SKILL.md) | 技能编写指南 |
+| finishing-a-development-branch | [.claude/skills/finishing-a-development-branch/](../finishing-a-development-branch/SKILL.md) | 开发分支完成 |
+| requesting-code-review | [.claude/skills/requesting-code-review/](../requesting-code-review/SKILL.md) | 请求代码审查 |
+| receiving-code-review | [.claude/skills/receiving-code-review/](../receiving-code-review/SKILL.md) | 接收代码审查 |
+| pdf | [.claude/skills/pdf/](../pdf/SKILL.md) | PDF 文件处理 |
 
 ### 5. 交互式论文生成技能
 
@@ -316,6 +322,8 @@ description: "版本快照与版本管理 — 为论文迭代创建版本快照�
 | **interaction-manager** | [.claude/skills/interaction-manager/](../interaction-manager/SKILL.md) | 交互管理器（简化版）— 管理关键交互节点：Phase 0（期刊选择、题目确认、摘要框架）、Phase 2（大纲确认），使用 AskUserQuestion 工具获取用户确认和反馈 |
 | **feedback-collector** | [.claude/skills/feedback-collector/](../feedback-collector/SKILL.md) | 反馈收集器 — 收集用户在各交互节点的反馈，结构化存储到 workspace/{project}/user-feedback.json，自动解析用户反馈并智能调整后续策略 |
 | **template-transfer** | [.claude/skills/template-transfer/](.claude/skills/template-transfer/SKILL.md) | 模板转换专家 — 将论文从一个会议/期刊格式转换为另一个格式，支持 LaTeX→LaTeX 迁移 |
+| **paper-cacher** | [.claude/skills/paper-cacher/](../paper-cacher/SKILL.md) | 论文缓存管理 — 从指定目录读取论文文件并生成缓存格式的 Markdown 文件，支持增量检索 |
+| **cache-utils** | [.claude/skills/cache-utils/](../cache-utils/SKILL.md) | 论文缓存工具集 — 提供论文缓存的读写、搜索、更新等核心功能 |
 
 ### 6. 前置工具技能
 

@@ -18,6 +18,8 @@
 - [配置参考](config-reference.md) — config.json 完整配置指南（模型、质量阈值、缓存策略、版本管理、用户确认、领域映射）
 - [已安装技能目录](skills-catalog.md) — 专业技能的分类索引（含 5 个领域知识文档、版本管理器）
 - [MCP 工具参考](mcp-tools.md) — Chrome MCP Server 工具集
+- [Agent 目录](agents-catalog.md) — 10 个 Agent 的完整定义与配置
+- [Prompt 工程历史](prompt-engineering.md) — 项目构建过程中的关键 prompt 汇总
 
 ## 论文成果
 
@@ -31,7 +33,7 @@
 |------|------|
 | `CLAUDE.md` | 系统 编排指令（系统核心） |
 | `config.json` | 模型、预算、质量阈值、并行执行配置 |
-| `.claude/skills/` | Skill 层 — 11 个 Agent Skill + 5 个编排器 + 9 个工具 Skill |
+| `.claude/skills/` | Skill 层 — 11 个 Agent Skill + 5 个编排器 + 31 个辅助/工具 Skill |
 | `workspace/` | 运行时产物（按项目组织） |
 
 ---

@@ -76,6 +76,9 @@ paper-factory/
 │   ├── cvpr/              # CVPR/ICCV/ECCV 模板
 │   ├── neurips/           # NeurIPS 模板
 │   ├── icml/              # ICML 模板
+│   ├── lncs/              # Springer LNCS 模板（ISWC/ESWC/K-CAP）
+│   ├── aaai/              # AAAI Press 模板（AAAI/IJCAI/KR）
+│   ├── acm/               # ACM 模板（WWW/KDD/TOIS/TKDE/SIGMOD）
 │   └── arxiv/             # arXiv 通用模板（默认）
 ├── .claude/
 │   └── skills/           # 技能模块
@@ -160,8 +163,6 @@ paper-factory/
 | [技能目录](docs/skills-catalog.md) | 已安装技能的分类索引（含 5 个领域知识文档） |
 | [MCP 工具](docs/mcp-tools.md) | Chrome MCP Server 工具集 |
 | [论文索引](docs/papers-index.md) | 历史论文列表与详细信息 |
-| [用户职责](docs/user-responsibilities.md) | 论文生成前的必要准备 |
-| [生成前检查](docs/pre-generation-checklist.md) | 论文生成前的检查清单和用户准备指南 |
 
 ---
 
