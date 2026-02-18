@@ -4,12 +4,6 @@
 
 ---
 
-## 一句话介绍
-
-通过 **10 个专业化智能体** 分 **4 个阶段** 完成学术论文的全流程生成——从文献调研到同行评审。
-
----
-
 ## 快速开始
 
 1. **准备素材** — 在 `workspace/{project}/input-context.md` 描述项目背景和创新点
@@ -23,18 +17,20 @@
 ## 系统架构
 
 ```
-[前置工具] codebase-analyzer → 生成 input-context.md（可选，当无素材时使用）
+[前置工具] codebase-analyzer / research-ideation / research-interview → 生成 input-context.md（可选）
+                                    ↓
+[Pre-Phase 0] requirements-spec → 需求澄清（可选，当指令模糊时触发）
                                     ↓
 Phase 0: Startup   →  期刊选择 → 题目确认 → 摘要框架确认（交互式）
                       ════ 用户确认 ════
 Phase 1: Research  →  A1 文献调研 → B1 相关工作分析 → 创新聚合（内联）
-                      ════ Quality Gate 1 ════
-Phase 2: Design    →  B2 实验设计 → B3 结构设计（串行）
-                      ════ Quality Gate 2 ════ + 大纲确认
+                      ════ Quality Gate 1 (quality-scorer) ════
+Phase 2: Design    →  B2 实验设计 → B3 结构设计 → 大纲确认 → devils-advocate
+                      ════ Quality Gate 2 (quality-scorer) ════
 Phase 3: Writing   →  C1 章节撰写 → C2 图表设计 → C3 格式整合 → C4 LaTeX编译（串行）
-                      ════ Quality Gate 3 ════
+                      ════ Quality Gate 3 (quality-scorer) ════
 Phase 4: Quality   →  D1 同行评审 ⇄ D2 修订执行（迭代循环）
-                      ════ Quality Gate 4 ════
+                      ════ Quality Gate 4 (quality-scorer) ════
                               ▼
                     output/paper.md + paper.tex + paper.pdf
 ```
@@ -62,6 +58,8 @@ Phase 4: Quality   →  D1 同行评审 ⇄ D2 修订执行（迭代循环）
 
 > **前置工具**：`codebase-analyzer` — 从代码库自动生成 input-context.md（独立 Skill，不计入流水线 Agent）
 > **后置工具**：`template-transfer` — 将论文从一个会议格式转换为另一个格式（独立 Skill，按需调用）
+> **研究增强**：`research-ideation` — 从模糊主题生成研究方向 | `research-interview` — 结构化访谈提炼研究规范 | `requirements-spec` — 需求澄清协议
+> **质量增强**：`quality-scorer` — 量化评分引擎 | `devils-advocate` — 批判性审查 | `exploration-manager` — 探索沙箱
 
 ---
 
@@ -78,9 +76,9 @@ paper-factory/
 │   ├── cvpr/              # CVPR/ICCV/ECCV 模板
 │   ├── neurips/           # NeurIPS 模板
 │   ├── icml/              # ICML 模板
-│   ├── lncs/              # Springer LNCS 模板（ISWC/ESWC）
+│   ├── lncs/              # Springer LNCS 模板（ISWC/ESWC/K-CAP）
 │   ├── aaai/              # AAAI Press 模板（AAAI/IJCAI/KR）
-│   ├── acm/               # ACM 模板（WWW/KDD/TOIS/TKDE）
+│   ├── acm/               # ACM 模板（WWW/KDD/TOIS/TKDE/SIGMOD）
 │   └── arxiv/             # arXiv 通用模板（默认）
 ├── .claude/
 │   └── skills/           # 技能模块
@@ -149,22 +147,6 @@ paper-factory/
 
 ---
 
-## 技术亮点
-
-- **CLAUDE.md 驱动** — 系统 自主编排，无需外部脚本
-- **串行执行** — Phase 1 采用串行模式，简化架构，提高可靠性
-- **质量门控** — 每阶段自动验证输出完整性
-- **动态调整** — 根据中间结果调整策略（补充搜索、额外修订等）
-- **通用框架** — 不绑定特定论文主题，通过 `input-context.md` 适配
-- **论文缓存系统** — 支持增量检索和手动添加，第二次生成速度提升 60-80%
-- **版本管理与用户确认** — Phase 4 支持版本快照（V1/V2/V3...）、里程碑确认和人类审稿员反馈注入
-- **交互式启动** — Phase 0 支持期刊选择、题目确认、摘要框架确认，减少后期返工
-- **领域知识统一** — 5 个领域知识文档同时服务于理论分析和领域评审
-- **LaTeX 编译系统** — C4 自动将 Markdown 转换为 LaTeX，支持编译诊断与自动修复
-- **多模板支持** — 内置 8 套会议/期刊 LaTeX 模板，支持 template-transfer 一键格式切换
-
----
-
 ## 文档导航
 
 | 文档 | 说明 |
@@ -177,8 +159,6 @@ paper-factory/
 | [技能目录](docs/skills-catalog.md) | 已安装技能的分类索引 |
 | [MCP 工具](docs/mcp-tools.md) | Chrome MCP Server 工具集 |
 | [论文索引](docs/papers-index.md) | 历史论文列表与详细信息 |
-| [用户职责](docs/user-responsibilities.md) | 论文生成前的必要准备 |
-| [生成前检查](docs/pre-generation-checklist.md) | 论文生成前的检查清单和用户准备指南 |
 
 ---
 
